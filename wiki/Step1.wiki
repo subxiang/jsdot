@@ -1,0 +1,27 @@
+#summary SVG representation of a very simple graph
+
+= DOT =
+
+{{{
+graph graphname { a -- b; }
+}}}
+
+
+= JSON =
+
+{{{
+graph = {
+ name: "graphname",
+ nodes: [
+  {name: "a"},
+  {name: "b"}],
+ edges: [
+  {src: "a", dst: "b", directed: false}]
+};
+}}}
+
+= SVG =
+
+{{{
+TBD
+}}}
