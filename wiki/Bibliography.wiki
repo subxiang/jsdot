@@ -1,0 +1,13 @@
+#summary References on arguments of interest
+
+= DOT =
+
+  * The DOT Language [http://www.graphviz.org/doc/info/lang.html]
+  * Node, Edge and Graph Attributes [http://www.graphviz.org/doc/info/attrs.html]
+
+= SVG =
+
+  * w3schools SVG Tutorial [http://www.w3schools.com/svg/default.asp]
+  * Adobe SVG intro [http://www.adobe.com/svg/basics/intro.html]
+
+= JavaScript =
