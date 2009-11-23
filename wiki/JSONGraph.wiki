@@ -1,0 +1,44 @@
+#summary JSON representation of a graph
+#labels Phase-Design
+= Introduction =
+
+This shall be able to include any DOT representation.
+
+DOT is powerful enough to describe anything we may ever want to represent.
+Still we want to attach event handlers to nodes and edges, *should they be part of the graph?*
+
+
+= Details =
+{{{
+graph = {
+  name,      // string
+  label,     // string
+  nodes,     // array(node)
+  edges,     // array(edge)
+  attributes // array(attribute)
+};
+
+node: {
+  name,      // string
+  label,     // string
+  attributes // array(attribute)
+};
+
+edge: {
+  src,       // string
+  dst,       // string
+  label,     // string
+  directed,  // bool
+  attributes // array(attribute)
+};
+
+attribute: {
+  color,
+  style,
+  pos
+};
+}}}
+
+= See also =
+  * [Bibliography#DOT DOT references]
+    * in particular [http://www.graphviz.org/doc/info/attrs.html attributes]
