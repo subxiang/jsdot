@@ -32,7 +32,8 @@
 
 		function add(evt){
 		
-		if (figure =="null") { return; }
+		if (figure =="null")  { return; }
+		else if(evt.clientX - window.innerWidth * 0.2 < 0) { return; }
 	
 		else if(figure == "rectangle") {
 			var r=document.createElementNS(xmlns,"rect");
