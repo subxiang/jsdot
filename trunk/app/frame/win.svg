@@ -32,7 +32,7 @@
 
 		function add(evt){
 		
-		if (figure =="null" && evt.clientX < window.clientWidth * 0.2) { return; }
+		if (figure =="null") { return; }
 	
 		else if(figure == "rectangle") {
 			var r=document.createElementNS(xmlns,"rect");
