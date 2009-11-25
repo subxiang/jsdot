@@ -1,99 +1,169 @@
-
-<svg id="main" width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <g id="layer1">
-        <rect width="20%" height="100%" x="0" y="0" id="leftMenu" style="fill:#333;stroke:#000000;" />
-        <rect width="80%" height="100%" x="20%" y="0" id="designArea" style="fill:#eee;stroke:#000000;" onclick="add(this.event)"/>
-        <rect width="5em" height="5em" x="2em" y="2em" id="rectBtn" style="fill:yellow;stroke:red;" rx="5" ry="5" onclick="add_figure('rectangle')"/>
-		<circle cx="12em" cy="4.5em" r="2.5em" style="stroke:red; fill:yellow" onclick="add_figure('circle')"/>
-		<line x1="2em" y1="9em" x2="7em" y2="14em" style="stroke:yellow;stroke-width:0.5em" onclick="add_figure('line')"/>
-    </g>  
-  
-    <script><![CDATA[
-	/* Idea: http://srufaculty.sru.edu/david.dailey/svg/makeDragDrop.svg */
-		
-		var	xmlns="http://www.w3.org/2000/svg"
-		xlink="http://www.w3.org/1999/xlink" 
-		Root=document.documentElement
-		standardize(Root)
-		figure= null;
-		
-
-		function standardize(R){
-			var Attr={
-				"onmouseup":"add(evt)",
-			}
-			assignAttr(R,Attr);
-		}
-		
-		function add_figure(name) {
-		figure = name;
-		}
-
-
-		function add(evt){
-		
-		if (figure =="null")  { return; }
-		else if(evt.clientX - window.innerWidth * 0.2 < 0) { return; }
+<?xml version="1.0" standalone="yes"?>
+<svg xmlns = "http://www.w3.org/2000/svg">
+<script type="text/javascript">
+	<![CDATA[
 	
-		else if(figure == "rectangle") {
-			var r=document.createElementNS(xmlns,"rect");
-			var stroke=Color();
-			var Attr={
-				"height":"5em",
-				"width":"5em",
-				"x": evt.clientX,
-				"y": evt.clientY,
-				"fill": Color(),
-				"fill-opacity":.75,
-				"stroke": stroke,
-				"stroke-opacity":.5,
-				"id":stroke,
-			}
-			assignAttr(r,Attr);
-			Root.appendChild(r);
+	xmlns = "http://www.w3.org/2000/svg";
+	xlink = "http://www.w3.org/1999/xlink";
+	
+	function $e(i){ return document.createElementNS(xmlns, i); }
+	function Class(){ return function(arguments){ this.init(arguments); } }
+	function setAttrs(obj, values){ for (i in values) { obj.setAttributeNS(null, i, values[i]); } }
+	function randColor(){ return "rgb(" + parseInt(Math.random() * 255) + "," + parseInt(Math.random() * 255) + "," + parseInt(Math.random() * 255) + ")"; }
+	
+	var JSVG = new Class();
+	
+	JSVG.prototype = {
+	
+		root: null,
+		designArea:null,
+		
+		init: function(){
+			
+			JSVG.root = document.documentElement;
+			this.buildMenu();
+			this.buildDesignArea();
 		}
 		
-		else if(figure == "circle") {
-			var c=document.createElementNS(xmlns,"circle");
-			var stroke=Color();
-			var rad=10+Math.random()*50;
-			var Attr={
-				"r":rad,
-				"cx": evt.clientX,
-				"cy": evt.clientY,
-				"fill": Color(),
-				"fill-opacity":.75,
-				"stroke": stroke,
-				"stroke-opacity":.5,
-				"id":stroke,
-			}
-			assignAttr(c,Attr);
-			Root.appendChild(c);
-		}
-		
-		else if(figure == "line") {
-			var l=document.createElementNS(xmlns,"line");
-			var stroke=Color();
-			var Attr={
-				"x1": evt.clientX,
-				"y1": evt.clientY,
-				"x2": evt.clientX + 100,
-				"y2": evt.clientY + 100,
-				"fill": "blue",
-				"stroke": stroke
-			}
-			assignAttr(l,Attr);
-			Root.appendChild(l);
-		}
 	}
 
-	function assignAttr(O,A){
-		for (i in A) O.setAttributeNS(null,i, A[i]);
+	JSVG.prototype.buildDesignArea = function(){
+
+		JSVG.designArea = new this.Element('rect', {
+			"height": "100%",
+			"width": "85%",
+			"x": "15%",
+			"y": 0,
+			"fill": "#eee",
+			"id": "designArea"
+		});
+	};
+		
+	JSVG.prototype.buildMenu = function(){
+			
+			var self = this; this.toggle = false;
+								
+			this.bg = new this.Element('rect',{
+				"height": "100%",
+				"width": "14.8%",
+				"x": 0,
+				"y": 0,
+				"fill": "#333",
+				"id": "mainLeftMenu"
+			});
+
+			// Rectangle in the left menu
+			this.RectBtn = new this.Element('rect',{
+				"height": "5em",
+				"width": "5em",
+				"x": "2em",
+				"y": "2em",
+				"fill": "#ddd",
+				"id": "rectBtn"
+			});	
+			
+			// Select A rectangle
+			this.RectBtn.addEventListener('click',function(evt){
+				
+				setAttrs(this,{
+					"fill":"yellow",
+					"stroke": "blue"
+				});
+				
+				JSVG.designArea.addEventListener('click',function(evt){
+					
+					var newElement = new self.Element('rect', {
+						"height": "5em",
+						"width": "5em",
+						"x": evt.clientX,
+						"y": evt.clientY,
+						"fill": "#ff0000",
+						"id": this.toString()
+					});
+					
+					// For each new element 
+					newElement.addEventListener('click',function(evt){
+						
+						setAttrs(this, {
+							"fill": "yellow",
+							"stroke": "blue"
+						});
+					},false);
+					
+				},false);	
+				
+			},false);		
+
+
+			// Circle in the left menu
+			this.CircleBtn = new this.Element('circle', {
+				"r": "2.5em",
+				"cx": "11.5em",
+				"cy": "4.5em",
+				"fill": "#ddd",
+				"fill-opacity": 0.85,
+				"stroke": "#000",
+				"stroke-opacity": 0.85,
+				"id": this.toString()
+			});	
+			
+			// Select A rectangle
+			this.CircleBtn.addEventListener('click',function(evt){
+				
+				setAttrs(this,{
+					"fill":"yellow",
+					"stroke": "blue"
+				});
+				
+				JSVG.designArea.addEventListener('click',function(evt){
+					
+					new self.Element('circle', {
+						"r": "5em",
+						"cx": evt.clientX,
+						"cy": evt.clientY,
+						"fill": "#ddd",
+						"fill-opacity": 0.85,
+						"stroke": "#000",
+						"stroke-opacity": 0.85,
+						"id": this.toString()
+					});
+				},false);	
+				
+			},false);	
+
+			this.toggle = new this.Element('rect',{
+				"height": "100%",
+				"width": ".2%",
+				"x": "14.8%",
+				"y": 0,
+				"fill": "#000",
+				"id": "toggle"
+			});
+			
+			this.toggle.addEventListener('click',function(){
+				self.bg.setAttribute("x", self.toogle ? "0" : "-15%");
+				self.toggle.setAttribute("x", self.toogle ? "14.8%" : "0");
+				JSVG.designArea.setAttribute("x", self.toogle ? "15%" : "0");
+				JSVG.designArea.setAttribute("width", self.toogle ? "85%" : "100%");
+				self.toogle = !self.toogle;
+			},false);
+
 	}
-	function Color(){
-		return "rgb("+parseInt(Math.random()*255)+","+parseInt(Math.random()*255)+","+parseInt(Math.random()*255)+")";
+
+	JSVG.prototype.Element = function(element, attrs){
+		
+	    var el = $e(element);
+	    setAttrs(el, attrs);
+	    JSVG.root.appendChild(el);
+		
+		return el;
 	}
+	
+	
+	
+	
+	new JSVG()
+	
 	]]>
-	</script>
-    
+</script>
 </svg>
