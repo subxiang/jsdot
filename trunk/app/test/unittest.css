@@ -1,3 +1,12 @@
+/*
+This file is part of the JSDot library 
+ 
+http://code.google.com/p/jsdot/
+
+source: atelier lecture Fall Semester 2009 - USI Lugano Faculty of informatics
+
+*/
+
 body, div, p, h1, h2, h3, ul, ol, span, a, table, td, form, img, li {
   font-family: sans-serif;
 }
