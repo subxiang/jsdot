@@ -89,46 +89,102 @@ THE SOFTWARE.
 		teardown: function() {
 
 		},
+		
+		countAttr: function(attr) {
+			var count = 0
+			for (var attr in attr1) {
+				count++;
+			}
+			return count;
+		},
+		
+		compareAttributes: function(attr1, attr2) {
+			if(this.countAttr(attr1) != this.countAttr(attr2)) return false;
+			
+			for (var attr in attr1) {
+				if (attr1[attr] != attr2[attr]) return false;
+			} 
+			
+			return true;
+		},
+		
+		compareTwoNodes: function(node1, node2) {
+			if(node1.src != node2.src) return false;
+			else if(node1.dst != node2.dst) return false;
+			else if(! this.compareAttributes(node1.attributes, node2.attributes)) return false;
+			else return true;
+		},
+		
+		compareArrayOfNodes: function(arrayOfNode1, arrayOfNode2) {
+			if(arrayOfNode1.length != arrayOfNode2.length) return false;
+			else {
+				for(var i = 0; i < arrayOfNode1.length; i++) {
+					if(! this.compareTwoNodes(arrayOfNode1[i], arrayOfNode2[i])) return false;
+				}
+				return true;
+			}
+		},
+		
+		compareTwoEdges: function(edge1, edge2) {
+			if(edge1.src != edge2.src) return false;
+			else if(edge1.dst != edge2.dst) return false;
+			else if(! this.compareAttributes(edge1.attributes, edge2.attributes)) return false;
+			else return true;
+		},
+		
+		compareArrayOfEdges: function(arrayOfEdges1, arrayOfEdges2) {
+			if(arrayOfEdges1.length != arrayOfEdges2.length) return false;
+			else {
+				for(var i = 0; i < arrayOfEdges1.length; i++) {
+					if(! this.compareTwoEdges(arrayOfEdges1[i], arrayOfEdges2[i])) return false;
+				}
+				return true;
+			}
+		},
+		
+		compareGraphs: function(graph1, graph2) {
+			if(graph1.name != graph2.name) return false;
+			else if(graph1.directed != graph2.directed) return false;
+			else if(! this.compareAttributes(graph1.attributes, graph2.attributes)) return false;
+			else if(! this.compareArrayOfNodes(graph1.nodes, graph2.nodes)) return false;
+			else if(! this.compareArrayOfEdges(graph1.edges, graph2.edges)) return false;
+			else return true;	
+		},
 
 		testSingleNode: function(){
 			with (this) {
 			
-			//	assert(loadJSON() == );
+			//	assert(this.compareGraphs(loadJSON(graph1), ...));
 			}
 		},
 		
 		testTwoNodesAndAnEdgeUndirected: function(){
 			with (this) {
-			
-			//	assert(loadJSON() == );
-			}
+			//	assert(this.compareGraphs(loadJSON(graph2), ...));	
+			}		
 		},
 		
 		testTwoNodesAndAnEdgeDirected: function(){
 			with (this) {
-			
-			//	assert(loadJSON() == );
+			//	assert(this.compareGraphs(loadJSON(graph3), ...));
 			}
 		},
 		
 		testGraphThatContainsACycle: function(){
 			with (this) {
-			
-			//	assert(loadJSON() == );
+			//	assert(this.compareGraphs(loadJSON(graph4), ...));
 			}
 		},
 		
 		testConnectedGraph: function(){
 			with (this) {
-			
-			//	assert(loadJSON() == );
+			//	assert(this.compareGraphs(loadJSON(graph5), ...));
 			}
 		},
 		
 		testDisconnectedGraph: function(){
 			with (this) {
-			
-			//	assert(loadJSON() == );
+			//	assert(this.compareGraphs(loadJSON(graph6), ...));
 			}
 		},
 	}); 
