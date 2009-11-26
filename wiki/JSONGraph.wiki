@@ -14,6 +14,7 @@ graph = {
   name,      // string
   nodes,     // array(node)
   edges,     // array(edge)
+  directed,  // bool
   attributes // object(attribute)
 };
 
@@ -25,7 +26,6 @@ node: {
 edge: {
   src,       // string
   dst,       // string
-  directed,  // bool
   attributes // object(attribute)
 };
 
