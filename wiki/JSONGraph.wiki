@@ -12,30 +12,28 @@ Still we want to attach event handlers to nodes and edges, *should they be part 
 {{{
 graph = {
   name,      // string
-  label,     // string
   nodes,     // array(node)
   edges,     // array(edge)
-  attributes // array(attribute)
+  attributes // object(attribute)
 };
 
 node: {
   name,      // string
-  label,     // string
-  attributes // array(attribute)
+  attributes // object(attribute)
 };
 
 edge: {
   src,       // string
   dst,       // string
-  label,     // string
   directed,  // bool
-  attributes // array(attribute)
+  attributes // object(attribute)
 };
 
 attribute: {
-  color,
-  style,
-  pos
+  label,     // string
+  color,     // string
+  style,     // string (dotted, dashed, solid)
+  pos        // string "x,y"
 };
 }}}
 
