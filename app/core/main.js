@@ -38,6 +38,7 @@ JSDot.prototype = {
 
     mainWin: null,
 	selected_form: null,
+	graph: null,
     
     init: function(){
         this.mainWin = document.createElement("embed");

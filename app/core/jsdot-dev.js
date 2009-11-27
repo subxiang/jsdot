@@ -26,51 +26,22 @@ THE SOFTWARE.
 */
 
 
-/** Returns a new instance of a GraphItem.
- * GraphItems represent graphs, edges and nodes.
- * Usage: var g = newGraph();
+/**
+ * This file is intended to be included in html for development,
+ * it will throw in all the pieces of JSDOT.
+ * for production you should use the single-file release.
  */
-JSDot.prototype.newGraphItem = function () {
-	var res = {};
-	res.name = "";
-	res.attributes = {};
+var f= function() {
+	var files = ["main.js",
+		"json.js",
+	];
 	
-	return res;
-}
-
-
-/** Load a graph from the JSON representation.
- * @param jg JSON representation of a graph
- */
-JSDot.prototype.loadJSON = function (jg) {
-	var nodes_ref = {};
-	var g = this.newGraphItem();
-	
-	g.name = jg.name;
-	g.directed = jg.directed;
-	g.attributes = new Object(jg.attributes);
-	g.nodes = [];
-	g.edges = [];
-	
-	for (var i=0; i < jg.nodes.length; i++) {
-		var jn = jg.nodes[i];
-		var n = this.newGraphItem();
-		n.name = jn.name;
-		n.attributes = new Object(jn.attributes);
-		g.nodes[i] = n;
-		// FIXME: check if n.name is already defined
-		nodes_ref[n.name] = n;
+	var ip = JSDOT_PATH || "../";
+	var h = document.getElementsByTagName("head").item(0);
+	for (var i = 0; i < files.length; i++) {
+		var e = document.createElement("script");
+		e.setAttribute("type", "text/javascript");
+		e.setAttribute("src", ip+files[i]);
+		h.appendChild(e);
 	}
-	
-	for (var i=0; i < jg.edges.length; i++) {
-		var je = jg.edges[i];
-		var e = this.newGraphItem();
-		// FIXME: check if defined
-		e.src = nodes_ref[je.src];
-		e.dst = nodes_ref[je.dst];
-		n.attributes = new Object(je.attributes);
-		g.edges[i] = e;
-	}
-	
-	this.graph = g;
-}
+}();
