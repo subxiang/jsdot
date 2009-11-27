@@ -79,15 +79,15 @@ var cases = function(){
 	
 	
 	// o 	graph1
-	res.graph1 = {
-		name: "graph1",
-		directed: false,
-		nodes: [node1],
-		edges: [],
-		attributes: {
-			label: "graph with a single node"
-		}
-	};
+	res.graph1 = '{ \
+		name: "graph1", \
+		directed: false, \
+		nodes: [node1], \
+		edges: [], \
+		attributes: { \
+			label: "graph with a single node" \
+		} \
+	}';
 	res.graph1_ref = res.graph1;
 	
 	

@@ -46,6 +46,11 @@ JSDot.prototype.loadJSON = function (jg) {
 	var nodes_ref = {};
 	var g = this.newGraphItem();
 	
+	/*
+	if (jg.constructor == String) {
+		eval("jg =" + jg +";");
+	}*/
+	
 	g.name = jg.name;
 	g.directed = jg.directed;
 	g.attributes = new Object(jg.attributes);
