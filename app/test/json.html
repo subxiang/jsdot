@@ -38,10 +38,11 @@ THE SOFTWARE.
 			// ]]>
 		</script>
 		<script type="text/javascript" src="../core/jsdot-dev.js"></script>
+		<script type="text/javascript" src="json.js"></script>
 	</head>
 	<body>
 		
-		<div id="content">
+	<div id="content">
 
 		<div id="header">
 			<h1>JavaScript unit test file for JSON representation</h1>
@@ -60,36 +61,7 @@ THE SOFTWARE.
 	new Test.Unit.Runner({
 		
 		setup: function() {
-			this.node1 = {name:"node1", attributes:{label:"a", color:"blue", pos:"200,100"}};
-			this.node2 = {name:"node2", attributes:{label:"b", color:"red", pos:"500,100"}};
-			this.node3 = {name:"node3", attributes:{label:"c", color:"yellow", pos:"200,500"}};
-			this.node4 = {name:"node4", attributes:{label:"d", color:"green", pos:"500,500"}};
-			
-			this.edge1 = {src: "node1", dst: "node2", attributes:{label:"edge1", style:"dotted"}};
-			this.edge5 = {src: "node1", dst: "node2", attributes:{label:"edge5", style:"solid"}};
-			
-			this.edge2 = {src: "node2", dst: "node3", attributes:{label:"edge2", style:"dotted"}};
-			this.edge3 = {src: "node3", dst: "node4", attributes:{label:"edge3", style:"dotted"}};
-			this.edge4 = {src: "node4", dst: "node1", attributes:{label:"edge4", style:"dotted"}};
-			
-			// o 	graph1
-			this.graph1 = {name:"graph1", directed: false, nodes:[node1], edges:[], attributes:{label:"graph with a single node"}};
-			// o - o 	graph2
-			this.graph2 = {name: "graph2", directed: false, nodes:[node1, node2], edges:[edge1], attributes:{label:"undirected graph with two nodes and one edge"}};
-			// o -> o 	graph3
-			this.graph3 = {name: "graph3", directed: true, nodes:[node1, node2], edges:[edge5], attributes:{label:"directed graph with two nodes and one edge"}};
-			// o - o
-			// |   | 	graph4
-			// o - o
-			this.graph4 = {name: "graph4", directed: false, nodes:[node1, node2, node3, node4], edges:[edge1, edge2, edge3, edge4], attributes:{label:"unddirected graph with four nodes and four edges"}};
-			// o - o
-			//     |	graph5
-			// o - o
-			this.graph5 = {name: "graph5", directed: false, nodes:[node1, node2, node3, node4], edges:[edge1, edge2, edge3], attributes:{label:"unddirected graph with four nodes and three edges (connected)"}};
-			// o - o 
-			//			graph6
-			// o - o
-			this.graph6 = {name: "graph6", directed: false, nodes:[node1, node2, node3, node4], edges:[edge1, edge3], attributes:{label:"unddirected graph with four nodes and two edges (disconnected)"}};
+			this.jsdot = new JSDot();
 		},
 
 		teardown: function() {
@@ -159,8 +131,8 @@ THE SOFTWARE.
 
 		testSingleNode: function(){
 			with (this) {
-			
-			//	assert(this.compareGraphs(loadJSON(graph1), ...));
+				jsdot.loadJSON(cases.graph1)
+				assert(ops.compareGraphs(jsdot.graph, cases.graph1_ref));
 			}
 		},
 		
