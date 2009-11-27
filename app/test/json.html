@@ -138,7 +138,8 @@ THE SOFTWARE.
 		
 		testTwoNodesAndAnEdgeUndirected: function(){
 			with (this) {
-			//	assert(this.compareGraphs(loadJSON(graph2), ...));	
+				jsdot.loadJSON(cases.graph2)
+				assert(ops.compareGraphs(jsdot.graph, cases.graph2_ref));
 			}		
 		},
 		
