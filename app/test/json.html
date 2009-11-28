@@ -145,25 +145,29 @@ THE SOFTWARE.
 		
 		testTwoNodesAndAnEdgeDirected: function(){
 			with (this) {
-			//	assert(this.compareGraphs(loadJSON(graph3), ...));
+				jsdot.loadJSON(cases.graph3)
+				assert(ops.compareGraphs(jsdot.graph, cases.graph3_ref));
 			}
 		},
 		
 		testGraphThatContainsACycle: function(){
 			with (this) {
-			//	assert(this.compareGraphs(loadJSON(graph4), ...));
+				jsdot.loadJSON(cases.graph4)
+				assert(ops.compareGraphs(jsdot.graph, cases.graph4_ref));
 			}
 		},
 		
 		testConnectedGraph: function(){
 			with (this) {
-			//	assert(this.compareGraphs(loadJSON(graph5), ...));
+				jsdot.loadJSON(cases.graph5)
+				assert(ops.compareGraphs(jsdot.graph, cases.graph5_ref));
 			}
 		},
 		
 		testDisconnectedGraph: function(){
 			with (this) {
-			//	assert(this.compareGraphs(loadJSON(graph6), ...));
+				jsdot.loadJSON(cases.graph6)
+				assert(ops.compareGraphs(jsdot.graph, cases.graph6_ref));
 			}
 		},
 	}); 
