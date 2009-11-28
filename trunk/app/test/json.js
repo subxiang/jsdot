@@ -88,19 +88,19 @@ var cases = function(){
 			label: "graph with a single node" \
 		} \
 	}';
-	res.graph1_ref = res.graph1;
+	res.graph1_ref = new Object(res.graph1);
 	
 	
 	// o - o 	graph2
-	res.graph2 = {
-		name: "graph2",
-		directed: false,
-		nodes: [node1, node2],
-		edges: [edge1],
-		attributes: {
-			label: "undirected graph with two nodes and one edge"
-		}
-	};
+	res.graph2 = '{\
+		name: "graph2",\
+		directed: false,\
+		nodes: [node1, node2],\
+		edges: [edge1],\
+		attributes: {\
+			label: "undirected graph with two nodes and one edge"\
+		}\
+	}';
 	{
 		var g = new Object(res.graph2);
 		g.edges = [{
@@ -116,52 +116,152 @@ var cases = function(){
 	
 	
 	// o -> o 	graph3
-	res.graph3 = {
-		name: "graph3",
-		directed: true,
-		nodes: [node1, node2],
-		edges: [edge5],
-		attributes: {
-			label: "directed graph with two nodes and one edge"
-		}
-	};
+	res.graph3 = '{\
+		name: "graph3",\
+		directed: true,\
+		nodes: [node1, node2],\
+		edges: [edge5],\
+		attributes: {\
+			label: "directed graph with two nodes and one edge"\
+		}\
+	}';
+	{
+		var g = new Object(res.graph3);
+		g.edges = [{
+			src: node1,
+			dst: node2,
+			attributes: {
+				label: "edge5",
+				style: "solid"
+			}
+		}];
+		res.graph3_ref = g;
+	}
+	
+	
 	// o - o
 	// |   | 	graph4
 	// o - o
-	res.graph4 = {
-		name: "graph4",
-		directed: false,
-		nodes: [node1, node2, node3, node4],
-		edges: [edge1, edge2, edge3, edge4],
-		attributes: {
-			label: "unddirected graph with four nodes and four edges"
-		}
-	};
+	res.graph4 = '{\
+		name: "graph4",\
+		directed: false,\
+		nodes: [node1, node2, node3, node4],\
+		edges: [edge1, edge2, edge3, edge4],\
+		attributes: {\
+			label: "unddirected graph with four nodes and four edges"\
+		}\
+	}';
+	{
+		var g = new Object(res.graph4);
+		g.edges = [{
+			src: node1,
+			dst: node2,
+			attributes: {
+				label: "edge1",
+				style: "dotted"
+			}
+		},
+		{
+			src: node2,
+			dst: node3,
+			attributes: {
+				label: "edge2",
+				style: "dotted"
+			}
+		},
+		{
+			src: node3,
+			dst: node4,
+			attributes: {
+				label: "edge3",
+				style: "dotted"
+			}
+		},
+		{
+			src: node4,
+			dst: node1,
+			attributes: {
+				label: "edge4",
+				style: "dotted"
+			}
+		}];
+		res.graph4_ref = g;
+	}
+	
 	// o - o
 	//     |	graph5
 	// o - o
-	res.graph5 = {
-		name: "graph5",
-		directed: false,
-		nodes: [node1, node2, node3, node4],
-		edges: [edge1, edge2, edge3],
-		attributes: {
-			label: "unddirected graph with four nodes and three edges (connected)"
-		}
-	};
+	res.graph5 = '{\
+		name: "graph5",\
+		directed: false,\
+		nodes: [node1, node2, node3, node4],\
+		edges: [edge1, edge2, edge3],\
+		attributes: {\
+			label: "unddirected graph with four nodes and three edges (connected)"\
+		}\
+	}';
+	{
+		var g = new Object(res.graph5);
+		g.edges = [{
+			src: node1,
+			dst: node2,
+			attributes: {
+				label: "edge1",
+				style: "dotted"
+			}
+		},
+		{
+			src: node2,
+			dst: node3,
+			attributes: {
+				label: "edge2",
+				style: "dotted"
+			}
+		},
+		{
+			src: node3,
+			dst: node4,
+			attributes: {
+				label: "edge3",
+				style: "dotted"
+			}
+		}];
+		res.graph5_ref = g;
+	}
+	
+	
 	// o - o 
 	//			graph6
 	// o - o
-	res.graph6 = {
-		name: "graph6",
-		directed: false,
-		nodes: [node1, node2, node3, node4],
-		edges: [edge1, edge3],
-		attributes: {
-			label: "unddirected graph with four nodes and two edges (disconnected)"
-		}
-	};
-	
+	res.graph6 = '{\
+		name: "graph6",\
+		directed: false,\
+		nodes: [node1, node2, node3, node4],\
+		edges: [edge1, edge3],\
+		attributes: {\
+			label: "unddirected graph with four nodes and two edges (disconnected)"\
+		}\
+	}';
+	{
+		var g = new Object(res.graph6);
+		g.edges = [{
+			src: node1,
+			dst: node2,
+			attributes: {
+				label: "edge1",
+				style: "dotted"
+			}
+		},
+		{
+			src: node3,
+			dst: node4,
+			attributes: {
+				label: "edge3",
+				style: "dotted"
+			}
+		}];
+		res.graph6_ref = g;
+	}
 	
 	return res;
 } (); // create reference graphs
