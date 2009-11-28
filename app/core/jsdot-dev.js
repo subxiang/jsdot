@@ -32,7 +32,9 @@ THE SOFTWARE.
  * for production you should use the single-file release.
  */
 var f= function() {
-	var files = ["main.js",
+	var files = [
+		"../lib/json_sans_eval.js",
+		"main.js",
 		"json.js",
 	];
 	

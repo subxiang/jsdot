@@ -46,36 +46,52 @@ JSDot.prototype.loadJSON = function (jg) {
 	var nodes_ref = {};
 	var g = this.newGraphItem();
 	
-	/*
 	if (jg.constructor == String) {
-		eval("jg =" + jg +";");
-	}*/
+		if (JSON != undefined)
+			// FIXME: catch exception on malformed json
+			jg = JSON.parse(jg);
+		else
+			jg = jsonParse(jg);
+	}
 	
-	g.name = jg.name;
-	g.directed = jg.directed;
-	g.attributes = new Object(jg.attributes);
+	// helper functions
+	function saneString(str) {
+		return (str != undefined && str.constructor == String) ? str : "";
+	}
+	
+	function saneAttributes(attr) {
+		return (attr != undefined && attr.constructor == Object) ? new Object(attr) : {};
+	}
+	//
+	
+	g.name = saneString(jg.name);
+	g.directed = jg.directed ? true : false;
+	g.attributes = saneAttributes(jg.attributes);
 	g.nodes = [];
 	g.edges = [];
 	
+	if (jg.nodes.constructor == Array) {
 	for (var i=0; i < jg.nodes.length; i++) {
 		var jn = jg.nodes[i];
 		var n = this.newGraphItem();
-		n.name = jn.name;
-		n.attributes = new Object(jn.attributes);
+		// allow the node to be just a string and use it as name
+		n.name = saneString(typeof jn == "string" ? jn : jn.name);
+		n.attributes = saneAttributes(jn.attributes);
 		g.nodes[i] = n;
 		// FIXME: check if n.name is already defined
 		nodes_ref[n.name] = n;
-	}
+	}}
 	
+	if (jg.edges.constructor == Array) {
 	for (var i=0; i < jg.edges.length; i++) {
 		var je = jg.edges[i];
 		var e = this.newGraphItem();
 		// FIXME: check if defined
 		e.src = nodes_ref[je.src];
 		e.dst = nodes_ref[je.dst];
-		n.attributes = new Object(je.attributes);
+		n.attributes = saneAttributes(je.attributes);
 		g.edges[i] = e;
-	}
+	}}
 	
 	this.graph = g;
 }
