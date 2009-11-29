@@ -88,21 +88,32 @@ var cases = function(){
 			"label": "graph with a single node" \
 		} \
 	}';
-	res.graph1_ref = new Object(res.graph1);
+	res.graph1_ref = {
+			name: "graph1",
+			directed: false,
+			nodes: [
+			        {name: "node1", attributes: {}}
+			       ],
+			edges: [],
+			attributes: {label: "graph with a single node"}
+	};
 	
 	
 	// o - o 	graph2
 	res.graph2 = '{\
-		name: "graph2",\
-		directed: false,\
-		nodes: [node1, node2],\
-		edges: [edge1],\
-		attributes: {\
-			label: "undirected graph with two nodes and one edge"\
+		"name": "graph2",\
+		"directed": false,\
+		"nodes": [\
+		          {"name": "node1", "attributes": {"label": "a", "color": "blue", "pos": "200,100"}},\
+		          {"name": "node2", "attributes": {"label": "b", "color": "red", "pos": "500,100"}}\
+		         ],\
+		"edges": [{"src": "node1", "dst": "node2", "attributes": {"label": "edge1", "style": "dotted"}}],\
+		"attributes": {\
+			"label": "undirected graph with two nodes and one edge"\
 		}\
 	}';
 	{
-		var g = new Object(res.graph2);
+		var g = JSON.parse(res.graph2);
 		g.edges = [{
 			src: node1,
 			dst: node2,
@@ -288,8 +299,7 @@ var ops = {
 		},
 		
 		compareTwoNodes: function(node1, node2) {
-			if(node1.src != node2.src) return false;
-			else if(node1.dst != node2.dst) return false;
+			if(node1.name != node2.name) return false;
 			else if(! this.compareAttributes(node1.attributes, node2.attributes)) return false;
 			else return true;
 		},
@@ -305,8 +315,8 @@ var ops = {
 		},
 		
 		compareTwoEdges: function(edge1, edge2) {
-			if(edge1.src != edge2.src) return false;
-			else if(edge1.dst != edge2.dst) return false;
+			if(! this.compareTwoNodes(edge1.src, edge2.src)) return false;
+			else if(! this.compareTwoNodes(edge1.dst, edge2.dst)) return false;
 			else if(! this.compareAttributes(edge1.attributes, edge2.attributes)) return false;
 			else return true;
 		},
