@@ -25,12 +25,7 @@ THE SOFTWARE.
 
 */
 
-
-function Class(){
-    return function(arguments){
-        this.init(arguments);
-    }
-};
+function Class(){ return function(arguments){ this.init(arguments); } }
 
 var JSDot = new Class();
 
@@ -42,7 +37,7 @@ JSDot.prototype = {
     
     init: function(){
         this.mainWin = document.createElement("embed");
-		this.mainWin.style.cssText = "position:absolute;top:0;left:0;right:0;bottom:0;";
+		this.mainWin.style.cssText = "position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%";
 		this.mainWin.src = "app/frame/win.svg";
         document.body.appendChild(this.mainWin);
     },
