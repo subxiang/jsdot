@@ -128,12 +128,17 @@ var cases = function(){
 	
 	// o -> o 	graph3
 	res.graph3 = '{\
-		name: "graph3",\
-		directed: true,\
-		nodes: [node1, node2],\
-		edges: [edge5],\
-		attributes: {\
-			label: "directed graph with two nodes and one edge"\
+		"name": "graph3",\
+		"directed": true,\
+		"nodes": [\
+				  {"name": "node1", "attributes": {"label": "a", "color": "blue", "pos": "200,100"}},\
+		          {"name": "node2", "attributes": {"label": "b", "color": "red", "pos": "500,100"}}\
+				  ],\
+		"edges": [\
+				  {"src": "node1", "dst": "node2", "attributes": {"label": "edge5", "style": "solid"}}\
+				  ],\
+		"attributes": {\
+			"label": "directed graph with two nodes and one edge"\
 		}\
 	}';
 	{
@@ -154,12 +159,22 @@ var cases = function(){
 	// |   | 	graph4
 	// o - o
 	res.graph4 = '{\
-		name: "graph4",\
-		directed: false,\
-		nodes: [node1, node2, node3, node4],\
-		edges: [edge1, edge2, edge3, edge4],\
-		attributes: {\
-			label: "unddirected graph with four nodes and four edges"\
+		"name": "graph4",\
+		"directed": false,\
+		"nodes": [\
+				  {"name": "node1", "attributes": {"label": "a", "color": "blue", "pos": "200,100"}},\
+		          {"name": "node2", "attributes": {"label": "b", "color": "red", "pos": "500,100"}},\
+				  {"name": "node3", "attributes": {"label": "c", "color": "yellow", "pos": "200,500"}},\
+				  {"name": "node4", "attributes": {"label": "d", "color": "green","pos": "500,500"}}\
+				  ],\
+		"edges": [\
+				  {"src": "node1", "dst": "node2", "attributes": {"label": "edge1", "style": "solid"}},\
+				  {"src": "node2", "dst": "node3", "attributes": {"label": "edge2", "style": "solid"}},\
+				  {"src": "node3", "dst": "node4", "attributes": {"label": "edge3", "style": "solid"}},\
+				  {"src": "node4", "dst": "node1", "attributes": {"label": "edge4", "style": "solid"}}\
+				  ],\
+		"attributes": {\
+			"label": "unddirected graph with four nodes and four edges"\
 		}\
 	}';
 	{
@@ -203,12 +218,21 @@ var cases = function(){
 	//     |	graph5
 	// o - o
 	res.graph5 = '{\
-		name: "graph5",\
-		directed: false,\
-		nodes: [node1, node2, node3, node4],\
-		edges: [edge1, edge2, edge3],\
-		attributes: {\
-			label: "unddirected graph with four nodes and three edges (connected)"\
+		"name": "graph5",\
+		"directed": false,\
+		"nodes": [\
+				  {"name": "node1", "attributes": {"label": "a", "color": "blue", "pos": "200,100"}},\
+		          {"name": "node2", "attributes": {"label": "b", "color": "red", "pos": "500,100"}},\
+				  {"name": "node3", "attributes": {"label": "c", "color": "yellow", "pos": "200,500"}},\
+				  {"name": "node4", "attributes": {"label": "d", "color": "green","pos": "500,500"}}\
+				  ],\
+		"edges": [\
+				  {"src": "node1", "dst": "node2", "attributes": {"label": "edge1", "style": "solid"}},\
+				  {"src": "node2", "dst": "node3", "attributes": {"label": "edge2", "style": "solid"}},\
+				  {"src": "node3", "dst": "node4", "attributes": {"label": "edge3", "style": "solid"}}\
+				  ],\
+		"attributes": {\
+			"label": "unddirected graph with four nodes and three edges (connected)"\
 		}\
 	}';
 	{
@@ -245,12 +269,20 @@ var cases = function(){
 	//			graph6
 	// o - o
 	res.graph6 = '{\
-		name: "graph6",\
-		directed: false,\
-		nodes: [node1, node2, node3, node4],\
-		edges: [edge1, edge3],\
-		attributes: {\
-			label: "unddirected graph with four nodes and two edges (disconnected)"\
+		"name": "graph6",\
+		"directed": false,\
+		"nodes": [\
+				  {"name": "node1", "attributes": {"label": "a", "color": "blue", "pos": "200,100"}},\
+		          {"name": "node2", "attributes": {"label": "b", "color": "red", "pos": "500,100"}},\
+				  {"name": "node3", "attributes": {"label": "c", "color": "yellow", "pos": "200,500"}},\
+				  {"name": "node4", "attributes": {"label": "d", "color": "green","pos": "500,500"}}\
+				  ],\
+		"edges": [\
+				  {"src": "node1", "dst": "node2", "attributes": {"label": "edge1", "style": "solid"}},\
+				  {"src": "node3", "dst": "node4", "attributes": {"label": "edge3", "style": "solid"}}\
+				  ],\
+		"attributes": {\
+			"label": "unddirected graph with four nodes and two edges (disconnected)"\
 		}\
 	}';
 	{
