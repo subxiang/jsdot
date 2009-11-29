@@ -89,7 +89,7 @@ JSDot.prototype.loadJSON = function (jg) {
 		// FIXME: check if defined
 		e.src = nodes_ref[je.src];
 		e.dst = nodes_ref[je.dst];
-		n.attributes = saneAttributes(je.attributes);
+		e.attributes = saneAttributes(je.attributes);
 		g.edges[i] = e;
 	}}
 	
