@@ -20,6 +20,7 @@
 		coords:null,
 		selectedObj: null,
 
+		/** Constructor */
 		init: function(){
 			
 			this.root = document.documentElement;
@@ -32,18 +33,67 @@
 			this.buildDesignArea();
 		},
 		
+		/** Builds the design area and adds event listeners. */
 		buildDesignArea: function(){
 
 			var self = this;
 	
 			this.designArea = new this.Element('rect', { "height": "100%", "width": "85%", "x": "15%", "y": 0, "fill": "#eee", "id": "designArea" });
 			
-			/** Drag and drop listeners */
+			// Drag and drop listeners
 			this.designArea.addEventListener('mousemove', function(evt){ self.drag(evt); },false);
-			this.designArea.addEventListener('mouseup', function(evt){ self.drop(evt); },false);			
+			this.designArea.addEventListener('mouseup', function(evt){ self.drop(evt); },false);
+			// Add elements listener
+			this.designArea.addEventListener('click',function(evt){ self.drawElement(evt); },false);
+						
+		},
+		
+		/**
+		 * Draw an element depending on the selected form
+		 * @param {Object} evt
+		 */
+		drawElement: function(evt){
+		
+			var self = this;
+			
+			switch(this.selectedObj) {
+				
+				// Creates a rectangle in the design area
+				case 'rect':
+				
+					new this.Element('rect', {
+						"height": "5em",
+						"width": "5em",
+						"x": evt.clientX,
+						"y": evt.clientY,
+						"fill": "#ff0000",
+						"id": this.toString()
+						
+					}).addEventListener('mousedown', function(evt){ self.grab(evt); }, false);
+					
+				break;
+				
+				// Creates a circle in the design area
+				case 'circle':
+				
+					new self.Element('circle', {
+							"r": "2.5em",
+							"cx": evt.clientX,
+							"cy": evt.clientY,
+							"fill": "#ddd",
+							"fill-opacity": 0.85,
+							"stroke": "#000",
+							"stroke-opacity": 0.85
+					}).addEventListener('mousedown', function(evt){ self.grab(evt); }, false);
+									
+				break;
+			}
 		},
 
-
+		/**
+		 * Set the element to be dragged.
+		 * @param {Object} evt
+		 */
 		grab: function(evt){
 
 			var targetElement = evt.target;
@@ -61,12 +111,16 @@
 				
 				// Set out target
 				this.dragElement = targetElement;
-				this.dragElement.parentNode.appendChild(this.dragElement);
+				//this.dragElement.parentNode.appendChild(this.dragElement);
 				this.dragElement.setAttributeNS(null, 'pointer-events', 'none');
 
 			}
 		},
 
+		/**
+		 * Drag the element throught the design area
+		 * @param {Object} evt
+		 */
 		drag: function(evt){
 
 	         if (this.dragElement) {
@@ -77,6 +131,10 @@
 	         }
 		},
 
+		/**
+		 * Drop the element after mouseup event
+		 * @param {Object} evt
+		 */
 		drop: function(evt){
 
 			if (this.dragElement != null) {
@@ -86,9 +144,13 @@
 				
 				this.dragElement.setAttributeNS(null, 'pointer-events', 'all');
 				this.dragElement = null, this.selectedObj = null;
-			}
+			} 
 		},
 		
+		/**
+		 * Get and set the true coordinates
+		 * @param {Object} evt
+		 */
 		getCoords: function(evt){
 			
 			var scale = this.root.currentScale, translation = this.root.currentTranslate;
@@ -105,87 +167,64 @@
 			this.cnt = new this.Element('g', { 'id': 'leftMenu', 'width':'20%', 'height':'100%' });			
 			this.bg = new this.Element('rect',{ "height": "100%", "width": "100%", "x": 0, "y": 0, "fill": "#333"},this.cnt);
 
-			// <-- Rectangle button in the left menu
-			this.RectBtn = new this.Element('rect',{ "height": "5em", "width": "5em", "x": ".5em", "y": ".5em", 'stroke':'red', "fill": "#ddd", "id": "rectBtn" }, this.cnt);	
-
-			this.RectBtn.addEventListener('click',function(evt){
+			// <-- Rectangle button
+			new this.Element('rect',{
+				
+				"height": "5em",
+				"width": "5em",
+				"x": ".5em",
+				"y": ".5em",
+				'stroke': 'red',
+				"fill": "#ddd",
+				"id": "rectBtn"
+				
+			}, this.cnt).addEventListener('click',function(evt){
 				
 				if (self.selectedObj) {
 					setAttrs(self.selectedObj, {
 						'stroke': 'red'
 					});
-				} else {
-					self.selectedObj = this;
 				}
-				
 				// Select the object
-				self.selectedObj = this;
+				self.selectedObj = 'rect';
 				setAttrs(this, {"stroke": "yellow"});
 				
-				self.designArea.addEventListener('click',function(evt){
-					
-					if (self.selectedObj == self.RectBtn) {
-						var newElement = new self.Element('rect', {
-							"height": "5em",
-							"width": "5em",
-							"x": evt.clientX,
-							"y": evt.clientY,
-							"fill": "#ff0000",
-							"id": this.toString()
-						});
-						newElement.addEventListener('mousedown', function(evt){
-							self.grab(evt);
-						}, false);
-					}
-				},false);
 			},false);		
 			// -->
 
-			// Circle in the left menu
-			this.CircleBtn = new this.Element('circle', { "r": "2.5em", "cx": "9.5em", "cy": "3em", "fill": "#ddd", "fill-opacity": 0.85,
-														  "stroke": "red", "stroke-opacity": 0.85, "id": this.toString() }, this.cnt);	
-			
-			// Select A circle
-			this.CircleBtn.addEventListener('click',function(evt){
-			
+			// <-- Circle button
+			new this.Element('circle', {
+				"r": "2.5em",
+				"cx": "9.5em",
+				"cy": "3em",
+				"fill": "#ddd",
+				"fill-opacity": 0.85,
+				"stroke": "red",
+				"stroke-opacity": 0.85,
+				"id": this.toString()
+				
+			}, this.cnt).addEventListener('click',function(evt){
+				
 				if (self.selectedObj) {
-					setAttrs(self.selectedObj, {
-						'stroke': 'red'
-					});
-				} else {
-					self.selectedObj = this;
+					setAttrs(self.selectedObj, { 'stroke': 'red' });
 				}
-			
 				// Select the object
-				self.selectedObj = this;
-				setAttrs(this, {"fill-opacity": 0.85,'stroke':'yellow'});
-				
-				self.designArea.addEventListener('click', function(evt){
-				
-					if (self.selectedObj == self.CircleBtn) {
-						
-						var newCircle = new self.Element('circle', {
-							"r": "2.5em",
-							"cx": evt.clientX,
-							"cy": evt.clientY,
-							"fill": "#ddd",
-							"fill-opacity": 0.85,
-							"stroke": "#000",
-							"stroke-opacity": 0.85,
-							"id": this.toString()
-						});
-						
-						newCircle.addEventListener('mousedown', function(evt){
-							self.grab(evt);
-						}, false);
-					}
-				}, false);
+				self.selectedObj = 'circle';
+				setAttrs(this, { "stroke": "yellow" });
 				
 			},false);	
+			// -->
 
-			this.toggle = new this.Element('rect',{ "height": "100%", "width": ".3%", "x": "14.7%", "y": 0, "fill": "#222", "id": "toggle" },this.cnt);
-			
-			this.toggle.addEventListener('click',function(){ 
+			new this.Element('rect',{
+				
+				"height": "100%",
+				"width": ".3%",
+				"x": "14.7%",
+				"y": 0,
+				"fill": "#222",
+				"id": "toggle"
+				
+			},this.cnt).addEventListener('click',function(){ 
 			
 				setAttrs(self.cnt,{'style':'-15%'});
 	
