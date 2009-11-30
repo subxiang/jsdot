@@ -184,7 +184,7 @@ var cases = function(){
 			dst: node2,
 			attributes: {
 				label: "edge1",
-				style: "dotted"
+				style: "solid"
 			}
 		},
 		{
@@ -192,7 +192,7 @@ var cases = function(){
 			dst: node3,
 			attributes: {
 				label: "edge2",
-				style: "dotted"
+				style: "solid"
 			}
 		},
 		{
@@ -200,7 +200,7 @@ var cases = function(){
 			dst: node4,
 			attributes: {
 				label: "edge3",
-				style: "dotted"
+				style: "solid"
 			}
 		},
 		{
@@ -208,7 +208,7 @@ var cases = function(){
 			dst: node1,
 			attributes: {
 				label: "edge4",
-				style: "dotted"
+				style: "solid"
 			}
 		}];
 		res.graph4_ref = g;
@@ -242,7 +242,7 @@ var cases = function(){
 			dst: node2,
 			attributes: {
 				label: "edge1",
-				style: "dotted"
+				style: "solid"
 			}
 		},
 		{
@@ -250,7 +250,7 @@ var cases = function(){
 			dst: node3,
 			attributes: {
 				label: "edge2",
-				style: "dotted"
+				style: "solid"
 			}
 		},
 		{
@@ -258,7 +258,7 @@ var cases = function(){
 			dst: node4,
 			attributes: {
 				label: "edge3",
-				style: "dotted"
+				style: "solid"
 			}
 		}];
 		res.graph5_ref = g;
@@ -292,7 +292,7 @@ var cases = function(){
 			dst: node2,
 			attributes: {
 				label: "edge1",
-				style: "dotted"
+				style: "solid"
 			}
 		},
 		{
@@ -300,7 +300,7 @@ var cases = function(){
 			dst: node4,
 			attributes: {
 				label: "edge3",
-				style: "dotted"
+				style: "solid"
 			}
 		}];
 		res.graph6_ref = g;
