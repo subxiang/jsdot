@@ -98,6 +98,19 @@ var cases = function(){
 			attributes: {label: "graph with a single node"}
 	};
 	
+	// o 	graph1b
+	res.graph1b = '{ \
+		"name": "graph1", \
+		"directed": false, \
+		"nodes": [\
+			{"name": "node1"}\
+			], \
+		"edges": [], \
+		"attributes": { \
+			"label": "graph with a single node" \
+		} \
+	}';
+	
 	
 	// o - o 	graph2
 	res.graph2 = '{\

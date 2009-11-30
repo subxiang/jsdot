@@ -72,13 +72,20 @@ THE SOFTWARE.
 			with (this) {
 				jsdot.loadJSON(cases.graph1)
 				assert(ops.compareGraphs(jsdot.graph, cases.graph1_ref));
+				
+				jsdot.loadJSON(cases.graph1b)
+				assert(ops.compareGraphs(jsdot.graph, cases.graph1_ref));
 			}
 		},
+		
 		
 		testTwoNodesAndAnEdgeUndirected: function(){
 			with (this) {
 				jsdot.loadJSON(cases.graph2)
 				assert(ops.compareGraphs(jsdot.graph, cases.graph2_ref));
+				
+				assert(JSON.stringify(JSON.parse(cases.graph2)) == jsdot.toJSON(cases.graph2));
+				
 			}		
 		},
 		
@@ -86,6 +93,8 @@ THE SOFTWARE.
 			with (this) {
 				jsdot.loadJSON(cases.graph3)
 				assert(ops.compareGraphs(jsdot.graph, cases.graph3_ref));
+				
+				assert(JSON.stringify(JSON.parse(cases.graph3)) == jsdot.toJSON(cases.graph3));
 			}
 		},
 	
@@ -93,6 +102,8 @@ THE SOFTWARE.
 			with (this) {
 				jsdot.loadJSON(cases.graph4)
 				assert(ops.compareGraphs(jsdot.graph, cases.graph4_ref));
+				
+				assert(JSON.stringify(JSON.parse(cases.graph4)) == jsdot.toJSON(cases.graph4));
 			}
 		},
 		
@@ -100,6 +111,8 @@ THE SOFTWARE.
 			with (this) {
 				jsdot.loadJSON(cases.graph5)
 				assert(ops.compareGraphs(jsdot.graph, cases.graph5_ref));
+				
+				assert(JSON.stringify(JSON.parse(cases.graph5)) == jsdot.toJSON(cases.graph5));
 			}
 		},
 		
@@ -107,6 +120,8 @@ THE SOFTWARE.
 			with (this) {
 				jsdot.loadJSON(cases.graph6)
 				assert(ops.compareGraphs(jsdot.graph, cases.graph6_ref));
+				
+				assert(JSON.stringify(JSON.parse(cases.graph6)) == jsdot.toJSON(cases.graph6));
 			}
 		}, 
 	}); 
