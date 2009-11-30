@@ -142,7 +142,7 @@ var cases = function(){
 		}\
 	}';
 	{
-		var g = new Object(res.graph3);
+		var g = JSON.parse(res.graph3);
 		g.edges = [{
 			src: node1,
 			dst: node2,
@@ -178,7 +178,7 @@ var cases = function(){
 		}\
 	}';
 	{
-		var g = new Object(res.graph4);
+		var g = JSON.parse(res.graph4);
 		g.edges = [{
 			src: node1,
 			dst: node2,
@@ -236,7 +236,7 @@ var cases = function(){
 		}\
 	}';
 	{
-		var g = new Object(res.graph5);
+		var g = JSON.parse(res.graph5);
 		g.edges = [{
 			src: node1,
 			dst: node2,
@@ -286,7 +286,7 @@ var cases = function(){
 		}\
 	}';
 	{
-		var g = new Object(res.graph6);
+		var g = JSON.parse(res.graph6);
 		g.edges = [{
 			src: node1,
 			dst: node2,
