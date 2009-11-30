@@ -95,3 +95,22 @@ JSDot.prototype.loadJSON = function (jg) {
 	
 	this.graph = g;
 }
+
+/** Returns a JSON representation of the graph
+ * @return string
+ */
+JSDot.prototype.toJSON = function() {
+	var g = this.graph;
+	var res = {};
+	res.name = g.name;
+	res.attributes = g.attributes;
+	res.nodes = [];
+	res.edges = [];
+	
+	for (var i = 0; i < g.nodes.length; i++) {
+		var n = g.nodes[i];
+//		res.nodes.push()
+	}
+	
+	return JSON.stringify(res);
+}
