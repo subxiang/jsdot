@@ -103,14 +103,24 @@ JSDot.prototype.toJSON = function() {
 	var g = this.graph;
 	var res = {};
 	res.name = g.name;
-	res.attributes = g.attributes;
+	res.directed = g.directed;
 	res.nodes = [];
 	res.edges = [];
 	
 	for (var i = 0; i < g.nodes.length; i++) {
 		var n = g.nodes[i];
-//		res.nodes.push()
+		res.nodes[i] = n;
 	}
+	
+	for (var i = 0; i < g.edges.length; i++) {
+		var edge = g.edges[i];
+		var e = {};
+		e.src = edge.src.name;
+		e.dst = edge.dst.name;
+		e.attributes = edge.attributes;
+		res.edges[i] = e;
+	}
+	res.attributes = g.attributes;
 	
 	return JSON.stringify(res);
 }
