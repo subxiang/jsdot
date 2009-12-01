@@ -73,9 +73,8 @@ JSDot.prototype.loadJSON = function (jg) {
 	if (jg.nodes.constructor == Array) {
 	for (var i=0; i < jg.nodes.length; i++) {
 		var jn = jg.nodes[i];
-		var n = this.newGraphItem();
 		// allow the node to be just a string and use it as name
-		n.name = saneString(typeof jn == "string" ? jn : jn.name);
+		var n = this.newNode(saneString(typeof jn == "string" ? jn : jn.name));
 		n.attributes = saneAttributes(jn.attributes);
 		g.nodes[i] = n;
 		// FIXME: check if n.name is already defined
@@ -85,10 +84,8 @@ JSDot.prototype.loadJSON = function (jg) {
 	if (jg.edges.constructor == Array) {
 	for (var i=0; i < jg.edges.length; i++) {
 		var je = jg.edges[i];
-		var e = this.newGraphItem();
-		// FIXME: check if defined
-		e.src = nodes_ref[je.src];
-		e.dst = nodes_ref[je.dst];
+		// FIXME: check if nodes are defined
+		var e = this.newEdge(nodes_ref[je.src], nodes_ref[je.dst]);
 		e.attributes = saneAttributes(je.attributes);
 		g.edges[i] = e;
 	}}
