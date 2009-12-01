@@ -1,5 +1,5 @@
 <?xml version="1.0" standalone="yes"?>
-<svg xmlns = "http://www.w3.org/2000/svg">
+<svg xmlns = "http://www.w3.org/2000/svg" onload="new JSVG(evt)">
 <script type="text/javascript">
 	<![CDATA[
 	
@@ -18,19 +18,20 @@
 		root: null,
 		designArea:null,
 		coords:null,
-		selectedObj: null,
+		selected: null,
 
 		/** Constructor */
-		init: function(){
-			
-			this.root = document.documentElement;
+		init: function(evt){
+
+			this.root = evt.target.ownerDocument.documentElement;
 			JSVG.root = this.root;
-	
+			this.firstClick = false;
 			this.coords = this.root.createSVGPoint();
          	this.grabPoint = this.root.createSVGPoint();
 
 			this.buildMenu();
 			this.buildDesignArea();
+			
 		},
 		
 		/** Builds the design area and adds event listeners. */
@@ -43,6 +44,7 @@
 			// Drag and drop listeners
 			this.designArea.addEventListener('mousemove', function(evt){ self.drag(evt); },false);
 			this.designArea.addEventListener('mouseup', function(evt){ self.drop(evt); },false);
+
 			// Add elements listener
 			this.designArea.addEventListener('click',function(evt){ self.drawElement(evt); },false);
 						
@@ -54,40 +56,72 @@
 		 */
 		drawElement: function(evt){
 		
-			var self = this;
+			var self = this, newElement;
+			if(!this.selected || !this.selected.name) return;
 			
-			switch(this.selectedObj) {
+			switch(this.selected.name) {
 				
 				// Creates a rectangle in the design area
 				case 'rect':
 				
-					new this.Element('rect', {
+					newElement = new this.Element('rect', {
 						"height": "5em",
 						"width": "5em",
 						"x": evt.clientX,
 						"y": evt.clientY,
-						"fill": "#ff0000",
-						"id": this.toString()
-						
-					}).addEventListener('mousedown', function(evt){ self.grab(evt); }, false);
+						"fill": "#ff0000"
+					});
 					
 				break;
 				
 				// Creates a circle in the design area
 				case 'circle':
 				
-					new self.Element('circle', {
-							"r": "2.5em",
-							"cx": evt.clientX,
-							"cy": evt.clientY,
-							"fill": "#ddd",
-							"fill-opacity": 0.85,
-							"stroke": "#000",
-							"stroke-opacity": 0.85
-					}).addEventListener('mousedown', function(evt){ self.grab(evt); }, false);
+					newElement = new this.Element('circle', {
+						"r": "2.5em",
+						"cx": evt.clientX,
+						"cy": evt.clientY,
+						"fill": "#ddd",
+						"stroke": "#000"
+					
+					})
+					/**
+					 * Needs to find a solution to have different event and function associated
+					.addEventListener('click', function(evt){ 
+					
+						if (self.selected && self.selected.name == 'arrow') {
+							self.drawElement(evt);
+						}
+					}, false);
+					**/
+				
+				break;
+
+
+				// Creates an arrow between two nodes
+				case 'arrow':
+					
+					if (!this.firstClick) {
+						this.x1 = evt.clientX;
+						this.y1 = evt.clientY;
+						this.firstClick = true;
+						return;
+					}
+					
+					new this.Element('line', {
+						"x1": this.x1,
+						"y1": this.y1,
+						"x2": evt.clientX,
+						"y2": evt.clientY,
+						"style": "fill:none;stroke:black;stroke-width:1;"
+					});
+					
+					this.firstClick = false;
 									
 				break;
 			}
+			
+			if(newElement) newElement.addEventListener('mousedown', function(evt){ self.grab(evt); }, false);
 		},
 
 		/**
@@ -100,7 +134,7 @@
 			
 			if (this.designArea != targetElement) {
 
-				this.selectedObj = targetElement;
+				this.selected = targetElement;
 				setAttrs(targetElement, {"fill-opacity": 0.5});
 								
 				// Calculates the element's coords
@@ -111,7 +145,6 @@
 				
 				// Set out target
 				this.dragElement = targetElement;
-				//this.dragElement.parentNode.appendChild(this.dragElement);
 				this.dragElement.setAttributeNS(null, 'pointer-events', 'none');
 
 			}
@@ -140,10 +173,10 @@
 			if (this.dragElement != null) {
 
 				// Set the selected style
-				setAttrs(this.selectedObj, {"fill-opacity": 1});
+				setAttrs(this.selected, {"fill-opacity": 1});
 				
 				this.dragElement.setAttributeNS(null, 'pointer-events', 'all');
-				this.dragElement = null, this.selectedObj = null;
+				this.dragElement = null, this.selected = null;
 			} 
 		},
 		
@@ -176,17 +209,20 @@
 				"y": ".5em",
 				'stroke': 'red',
 				"fill": "#ddd",
-				"id": "rectBtn"
+				"style":"cursor:pointer"
 				
 			}, this.cnt).addEventListener('click',function(evt){
 				
-				if (self.selectedObj) {
-					setAttrs(self.selectedObj, {
+				if (self.selected) {
+					setAttrs(self.selected.obj, {
 						'stroke': 'red'
 					});
 				}
 				// Select the object
-				self.selectedObj = 'rect';
+				self.selected = {
+					name: 'rect',
+					obj: this
+				};
 				setAttrs(this, {"stroke": "yellow"});
 				
 			},false);		
@@ -201,20 +237,49 @@
 				"fill-opacity": 0.85,
 				"stroke": "red",
 				"stroke-opacity": 0.85,
-				"id": this.toString()
+				"style":"cursor:pointer"
 				
 			}, this.cnt).addEventListener('click',function(evt){
 				
-				if (self.selectedObj) {
-					setAttrs(self.selectedObj, { 'stroke': 'red' });
+				if (self.selected) {
+					setAttrs(self.selected.obj, { 'stroke': 'red' });
 				}
 				// Select the object
-				self.selectedObj = 'circle';
+				self.selected = {
+					name: 'circle',
+					obj: this
+				};
 				setAttrs(this, { "stroke": "yellow" });
 				
 			},false);	
 			// -->
 
+
+			// <-- Arrow button
+			new this.Element('line', {
+			
+				"x1": ".5em",
+				"y1": "8em",
+				"x2": "5em",
+				"y2": "12em",
+				"style": "fill:none;stroke:red;fill:#ddd;stroke-width:.2em;cursor:pointer;"
+
+			}, this.cnt).addEventListener('click',function(evt){
+				
+				if (self.selected) {
+					setAttrs(self.selected.obj, { 'stroke': 'red' });
+				}
+				// Select the object
+				self.selected = {
+					name: 'arrow',
+					obj: this
+				};
+				setAttrs(this, { "stroke": "yellow" });
+				
+			},false);	
+			// -->
+
+			// --> Toggle menu bar
 			new this.Element('rect',{
 				
 				"height": "100%",
@@ -222,13 +287,15 @@
 				"x": "14.7%",
 				"y": 0,
 				"fill": "#222",
-				"id": "toggle"
+				"id": "toggle",
+				"style":"cursor:pointer"
 				
 			},this.cnt).addEventListener('click',function(){ 
-			
-				setAttrs(self.cnt,{'style':'-15%'});
+				
+				setAttrs(self.cnt,{'x':'-15%'});
 	
 			},false);
+			// <--
 		},
 	
 		/**
@@ -246,9 +313,8 @@
 			return el;
 		}
 	}
-	
-	new JSVG()
-	
+
 	]]>
 </script>
+
 </svg>
