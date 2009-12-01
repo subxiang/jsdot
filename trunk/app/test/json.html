@@ -128,7 +128,12 @@ THE SOFTWARE.
 		testAddNode: function() {
 			with(this) {
 				var n = jsdot.newNode("the new one");
+				var n2 = jsdot.newNode("second");
+				var e = jsdot.newEdge(n, n2);
 				assert(n.getName() == "the new one");
+				assert(n2.getName() == "second");
+				assert(e.getSrc() == n);
+				assert(e.getDst() == n2);
 			}
 		}
 	}); 
