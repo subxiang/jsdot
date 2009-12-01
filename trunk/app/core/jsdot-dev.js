@@ -35,6 +35,7 @@ var f= function() {
 	var files = [
 		"../lib/json_sans_eval.js",
 		"main.js",
+		"graph.js",
 		"json.js",
 	];
 	
