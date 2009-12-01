@@ -124,6 +124,13 @@ THE SOFTWARE.
 				assert(JSON.stringify(JSON.parse(cases.graph6)) == jsdot.toJSON(cases.graph6));
 			}
 		}, 
+		
+		testAddNode: function() {
+			with(this) {
+				var n = jsdot.newNode("the new one");
+				assert(n.getName() == "the new one");
+			}
+		}
 	}); 
 	// ]]>
 	</script>

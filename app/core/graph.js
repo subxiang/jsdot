@@ -25,28 +25,39 @@ THE SOFTWARE.
 
 */
 
-function Class(){ return function(arguments){ this.init(arguments); } }
+/** The node API
+ * This defines the functions that can be used by a client
+ * to modify a node.
+ */
+	
+	/** Node constructor
+	 * DO NOT USE this, use jsdot.newNode(name)
+	 */
+	JSDot.prototype.Node = function(name) {
+		this.name = name;
+		this.attributes = {};
+		return this;
+	};
+	
+	JSDot.prototype.Node.prototype.getName = function() {
+		return this.name;
+	};
 
-var JSDot = new Class();
-
-JSDot.prototype = {
-
-    mainWin: null,
-	selected_form: null,
-	graph: {name: "", directed: false, nodes: [], edges:[], attributes: {}},
-    
-    init: function(){
-        this.mainWin = document.createElement("embed");
-		this.mainWin.style.cssText = "position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%";
-		this.mainWin.src = "app/frame/win.svg";
-        document.body.appendChild(this.mainWin);
-    },
-    
-	 add_figure: function(form) {
-		selected_form = form;
+	JSDot.prototype.Node.prototype.setAttribute = function(key, value) {
+		this.attributes[key] = value;
+	};
+	
+	JSDot.prototype.Node.prototype.getAttribute = function(key) {
+		return this.attributes[key];
 	}
+
+
+/** Add functionality to JSDot
+ * 
+ */
+JSDot.prototype.newNode = function(name) {
+	//TODO: check if name already exists
+	var n = new this.Node(name);
+	this.graph.nodes.push(n);
+	return n;
 };
-
-
-
-
