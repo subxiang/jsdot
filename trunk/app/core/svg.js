@@ -33,7 +33,7 @@ var xlink = "http://www.w3.org/1999/xlink";
 function $e(i){ return document.createElementNS(xmlns, i); }
 function $(i) { return document.getElementById(i); };
 function Class(){ return function(arguments){ this.init(arguments); } }
-function setAttrs(obj, values){ for (i in values) { obj.setAttributeNS(null, i, values[i]); } }
+function setAttrs(obj, values){ for (i in values) { obj.setAttribute(i, values[i]); } }
 function randColor(){ return "rgb(" + parseInt(Math.random() * 255) + "," + parseInt(Math.random() * 255) + "," + parseInt(Math.random() * 255) + ")"; }
 
 var JSVG = new Class();
@@ -51,13 +51,15 @@ JSVG.prototype = {
 		this.container = $(id);
 		this.svgdoc = this.container.ownerDocument;
 		this.svgroot = this.svgdoc.createElementNS(svgns, "svg");
-		
-		this.svgroot.setAttribute("width", window.innerWidth - 5);
-		this.svgroot.setAttribute("height", window.innerHeight - 5);
-		this.svgroot.setAttribute("id", "svgroot");
-		this.svgroot.setAttribute("xmlns", svgns);
-		this.svgroot.setAttribute("xmlns:xlink", xlinkns);
 		this.container.appendChild(this.svgroot);
+		
+		setAttrs(this.svgroot,{
+			"width": window.innerWidth - 5,
+			"height": window.innerHeight - 5,
+			"id": "svgroot",
+			"xmlns": svgns,
+			"xmlns:xlink": xlinkns
+		});
 		
 		this.root = this.svgroot;
 		JSVG.root = this.root;
