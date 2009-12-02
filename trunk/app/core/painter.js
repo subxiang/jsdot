@@ -25,28 +25,19 @@ THE SOFTWARE.
 
 */
 
-
-/**
- * This file is intended to be included in html for development,
- * it will throw in all the pieces of JSDOT.
- * for production you should use the single-file release.
- */
-var f= function() {
-	var files = [
-		"../lib/json_sans_eval.js",
-		"main.js",
-		"graph.js",
-		"svg.js",
-		"painter.js",
-		"json.js",
-	];
-	
-	var ip = JSDOT_PATH || "../";
-	var h = document.getElementsByTagName("head").item(0);
-	for (var i = 0; i < files.length; i++) {
-		var e = document.createElement("script");
-		e.setAttribute("type", "text/javascript");
-		e.setAttribute("src", ip+files[i]);
-		h.appendChild(e);
-	}
-}();
+	JSDot.prototype.draw = function() {
+		var g = this.graph;
+		for(i in g.nodes) {
+			var n = g.nodes[i];
+			var pos = n.getAttribute("pos");
+			var x = 10, y = 10;
+			if (typeof pos == "string") {
+				pos = pos.split(',');
+				x = pos[0];
+				y = pos[1];
+			}
+			this.svg.Element('circle', {'r': '2.5em', 'cx': x, 'cy': y});
+		}
+//		JSVG.
+		alert(JSON.stringify(g));
+};
