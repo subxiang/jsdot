@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+		<title>Untitled Document</title>
+		<script type="text/javascript">
+			// <![CDATA[
+			var JSDOT_PATH = "../core/";
+			// ]]>
+		</script>
+		<script type="text/javascript" src="../core/jsdot-dev.js"></script>
+	</head>
+	<body>
+		<div id="dest"></div>
+		<script type="text/javascript">
+			var g = new JSDot("dest");
+			var n = g.newNode("a");
+			n.setAttribute("pos", "150,100");
+			var n = g.newNode("b");
+			n.setAttribute("pos", "300,100");
+			g.draw();
+		</script>
+	</body>
+</html>
