@@ -9,5 +9,6 @@
 
   * w3schools SVG Tutorial [http://www.w3schools.com/svg/default.asp]
   * Adobe SVG intro [http://www.adobe.com/svg/basics/intro.html]
+  * SVG-Edit (Client-side editor) [http://code.google.com/p/svg-edit/]
 
 = JavaScript =
