@@ -25,16 +25,6 @@ THE SOFTWARE.
 */	
 
 
-var svgns = "http://www.w3.org/2000/svg";
-var xlinkns = "http://www.w3.org/1999/xlink";	
-var xmlns = "http://www.w3.org/2000/svg";
-var xlink = "http://www.w3.org/1999/xlink";
-
-function $e(i){ return document.createElementNS(xmlns, i); }
-function $(i) { return document.getElementById(i); };
-function Class(){ return function(arguments){ this.init(arguments); } }
-function setAttrs(obj, values){ for (i in values) { obj.setAttribute(i, values[i]); } }
-function randColor(){ return "rgb(" + parseInt(Math.random() * 255) + "," + parseInt(Math.random() * 255) + "," + parseInt(Math.random() * 255) + ")"; }
 
 var JSVG = new Class();
 
@@ -44,6 +34,10 @@ JSVG.prototype = {
 	designArea:null,
 	coords:null,
 	selected: null,
+	
+	defaultCircle : 'this.Element(\'circle\', { "r": "2.5em", "cx": evt.clientX, "cy": evt.clientY, "fill": "#ddd", "stroke": "#000" })',
+	defaultRect: 'this.Element(\'rect\', { "height": "5em", "width": "5em", "x": evt.clientX, "y": evt.clientY, "fill": "#ff0000" })',
+	defaultLine: 'this.Element(\'line\', { "x1": evt.clientX, "y1": evt.clientX,  "x2": evt.clientX + 5, "y2": evt.clientY + 5, "style": "fill:none;stroke:black;stroke-width:1;"})',
 
 	/** Constructor */
 	init: function(id){
@@ -63,13 +57,28 @@ JSVG.prototype = {
 		
 		this.root = this.svgroot;
 		JSVG.root = this.root;
-		
-		this.firstClick = false;
+
 		this.coords = this.root.createSVGPoint();
      	this.grabPoint = this.root.createSVGPoint();
 
 		this.buildMenu();
 		this.buildDesignArea();
+		
+	},
+	
+	/**
+	 * Draw an element depending on the selected form
+	 * @param {Object} evt
+	 */
+	drawElement: function(evt) {
+		
+		var self = this, element;
+		
+		if(this.selected != null) { 
+			
+			element = eval('new ' + this.selected);
+			element.addEventListener('mousedown', function(evt){ self.grab(evt); }, false);
+		}
 		
 	},
 	
@@ -87,80 +96,6 @@ JSVG.prototype = {
 		// Add elements listener
 		this.designArea.addEventListener('click',function(evt){ self.drawElement(evt); },false);
 					
-	},
-	
-	/**
-	 * Draw an element depending on the selected form
-	 * @param {Object} evt
-	 */
-	drawElement: function(evt){
-	
-		var self = this, newElement;
-		if(!this.selected || !this.selected.name) return;
-		
-		switch(this.selected.name) {
-			
-			// Creates a rectangle in the design area
-			case 'rect':
-			
-				newElement = new this.Element('rect', {
-					"height": "5em",
-					"width": "5em",
-					"x": evt.clientX,
-					"y": evt.clientY,
-					"fill": "#ff0000"
-				});
-				
-			break;
-			
-			// Creates a circle in the design area
-			case 'circle':
-			
-				newElement = new this.Element('circle', {
-					"r": "2.5em",
-					"cx": evt.clientX,
-					"cy": evt.clientY,
-					"fill": "#ddd",
-					"stroke": "#000"
-				
-				})
-				/**
-				 * Needs to find a solution to have different event and function associated
-				.addEventListener('click', function(evt){ 
-				
-					if (self.selected && self.selected.name == 'arrow') {
-						self.drawElement(evt);
-					}
-				}, false);
-				**/
-			
-			break;
-
-
-			// Creates an arrow between two nodes
-			case 'arrow':
-				
-				if (!this.firstClick) {
-					this.x1 = evt.clientX;
-					this.y1 = evt.clientY;
-					this.firstClick = true;
-					return;
-				}
-				
-				new this.Element('line', {
-					"x1": this.x1,
-					"y1": this.y1,
-					"x2": evt.clientX,
-					"y2": evt.clientY,
-					"style": "fill:none;stroke:black;stroke-width:1;"
-				});
-				
-				this.firstClick = false;
-								
-			break;
-		}
-		
-		if(newElement) newElement.addEventListener('mousedown', function(evt){ self.grab(evt); }, false);
 	},
 
 	/**
@@ -213,7 +148,6 @@ JSVG.prototype = {
 
 			// Set the selected style
 			setAttrs(this.selected, {"fill-opacity": 1});
-			
 			this.dragElement.setAttributeNS(null, 'pointer-events', 'all');
 			this.dragElement = null; this.selected = null;
 		} 
@@ -224,9 +158,8 @@ JSVG.prototype = {
 	 * @param {Object} evt
 	 */
 	getCoords: function(evt){
-		
+
 		var scale = this.root.currentScale, translation = this.root.currentTranslate;
-		
 		this.coords.x = (evt.clientX - translation.x) / scale;
 		this.coords.y = (evt.clientY - translation.y) / scale;
 	},
@@ -235,105 +168,54 @@ JSVG.prototype = {
 	buildMenu: function(){
 
 		var self = this; this.toggle = false; this.cnt;
-		
 		this.cnt = new this.Element('g', { 'id': 'leftMenu', 'width':'20%', 'height':'100%' });			
-		this.bg = new this.Element('rect',{ "height": "100%", "width": "100%", "x": 0, "y": 0, "fill": "#333"},this.cnt);
+		this.bg = new this.Element('rect',{ "height": "100%", "width": "20%", "x": 0, "y": 0, "fill": "#333"},this.cnt);
 
 		// <-- Rectangle button
 		new this.Element('rect',{
 			
-			"height": "5em",
-			"width": "5em",
-			"x": ".5em",
-			"y": ".5em",
-			'stroke': 'red',
-			"fill": "#ddd",
+			"height": "5em", "width": "5em",
+			"x": ".5em", "y": ".5em",
+			'stroke': 'red', "fill": "#ddd",
 			"style":"cursor:pointer"
 			
-		}, this.cnt).addEventListener('click',function(evt){
-			
-			if (self.selected) {
-				setAttrs(self.selected.obj, {
-					'stroke': 'red'
-				});
-			}
-			// Select the object
-			self.selected = {
-				name: 'rect',
-				obj: this
-			};
-			setAttrs(this, {"stroke": "yellow"});
-			
-		},false);		
+		}, this.cnt).addEventListener('click',function(evt){ setAttrs(this, {"stroke": "yellow"}); self.selected = self.defaultRect; },false);		
 		// -->
 
 		// <-- Circle button
 		new this.Element('circle', {
+			
 			"r": "2.5em",
-			"cx": "9.5em",
-			"cy": "3em",
-			"fill": "#ddd",
-			"fill-opacity": 0.85,
-			"stroke": "red",
-			"stroke-opacity": 0.85,
+			"cx": "9.5em", "cy": "3em",
+			"fill": "#ddd", "fill-opacity": 0.85,
+			"stroke": "red", "stroke-opacity": 0.85,
 			"style":"cursor:pointer"
 			
-		}, this.cnt).addEventListener('click',function(evt){
-			
-			if (self.selected) {
-				setAttrs(self.selected.obj, { 'stroke': 'red' });
-			}
-			// Select the object
-			self.selected = {
-				name: 'circle',
-				obj: this
-			};
-			setAttrs(this, { "stroke": "yellow" });
-			
-		},false);	
+		}, this.cnt).addEventListener('click',function(evt){ setAttrs(this,{"stroke":"yellow"}); self.selected = self.defaultCircle; },false);	
 		// -->
-
 
 		// <-- Arrow button
 		new this.Element('line', {
-		
-			"x1": ".5em",
-			"y1": "8em",
-			"x2": "5em",
-			"y2": "12em",
+			
+			"x1": ".5em", "y1": "8em",
+			"x2": "5em", "y2": "12em",
 			"style": "fill:none;stroke:red;fill:#ddd;stroke-width:.2em;cursor:pointer;"
 
-		}, this.cnt).addEventListener('click',function(evt){
-			
-			if (self.selected) {
-				setAttrs(self.selected.obj, { 'stroke': 'red' });
-			}
-			// Select the object
-			self.selected = {
-				name: 'arrow',
-				obj: this
-			};
-			setAttrs(this, { "stroke": "yellow" });
-			
-		},false);	
+		}, this.cnt).addEventListener('click',function(evt){ self.selected = self.defaultLine; },false);	
 		// -->
 
+
+		new this.Element('text',{"font-size":"14", "dx":"5","dy":5, "x":"14em", "y":".5em"},this.cnt);
+
+		
 		// --> Toggle menu bar
 		new this.Element('rect',{
 			
-			"height": "100%",
-			"width": ".3%",
-			"x": "14.7%",
-			"y": 0,
-			"fill": "#222",
-			"id": "toggle",
-			"style":"cursor:pointer"
+			"height": "100%", "width": ".3%",
+			"x": "14.7%", "y": 0, "fill": "#222",
+			"id": "toggle", "style":"cursor:pointer"
 			
-		},this.cnt).addEventListener('click',function(){ 
-			
-			setAttrs(self.cnt,{'x':'-15%'});
-
-		},false);
+		},this.cnt).addEventListener('click',function(){ setAttrs(self.cnt,{'x':'-15%'}); },false);
 		// <--
 	},
 
@@ -346,9 +228,23 @@ JSVG.prototype = {
 	Element: function(element, attrs){
 
 	    var el = $e(element);
-	    setAttrs(el, attrs);
-	    arguments[2] ? arguments[2].appendChild(el) : JSVG.root.appendChild(el);
+		var cnt = $e('g');
 		
-		return el;
+		setAttrs(cnt, attrs);
+		delete attrs.id;
+	    setAttrs(el, attrs);
+		
+	    arguments[2] ? arguments[2].appendChild(cnt) : JSVG.root.appendChild(cnt);
+		cnt.appendChild(el);
+		
+		return cnt;
+	},
+	
+	drawEdge:function(Edge) {
+		
+	},
+
+	drawNode:function(Node) {
+		
 	}
 }
