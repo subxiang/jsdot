@@ -39,6 +39,20 @@ THE SOFTWARE.
 			var e = this.svg.Element('circle', {'r': '2.5em', 'cx': x, 'cy': y});
 			e.addEventListener('mousedown', function(svg){ return function(evt) {svg.grab(evt);}; }(this.svg), false);
 		}
+		
+		for(i in g.edges) {
+			var e = g.edges[i];
+			var p1 = e.src.getAttribute("pos");
+			var p2 = e.dst.getAttribute("pos");
+			p1 = p1.split(',');
+			p2 = p2.split(',');
+			var x1 = p1[0];
+			var y1 = p1[1];
+			var x2 = p2[0];
+			var y2 = p2[1];
+			
+			var l = this.svg.Element('line', {'x1': x1, 'y1': y1, 'x2': x2, 'y2': y2, "style": "fill:none;stroke:black;stroke-width:1;"});
+		}
 //		JSVG.
 //		alert(JSON.stringify(g));
 };
