@@ -17,10 +17,11 @@
 		<div id="dest"></div>
 		<script type="text/javascript">
 			var g = new JSDot("dest");
-			var n = g.newNode("a");
-			n.setAttribute("pos", "250,100");
-			var n = g.newNode("b");
-			n.setAttribute("pos", "400,100");
+			var n1 = g.newNode("a");
+			n1.setAttribute("pos", "250,100");
+			var n2 = g.newNode("b");
+			n2.setAttribute("pos", "400,100");
+			g.newEdge(n1, n2);
 			g.draw();
 		</script>
 	</body>
