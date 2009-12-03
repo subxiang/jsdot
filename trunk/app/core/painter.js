@@ -36,8 +36,9 @@ THE SOFTWARE.
 				x = pos[0];
 				y = pos[1];
 			}
-			this.svg.Element('circle', {'r': '2.5em', 'cx': x, 'cy': y});
+			var e = this.svg.Element('circle', {'r': '2.5em', 'cx': x, 'cy': y});
+			e.addEventListener('mousedown', function(svg){ return function(evt) {svg.grab(evt);}; }(this.svg), false);
 		}
 //		JSVG.
-		alert(JSON.stringify(g));
+//		alert(JSON.stringify(g));
 };
