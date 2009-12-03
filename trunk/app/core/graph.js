@@ -50,6 +50,91 @@ THE SOFTWARE.
 	JSDot.prototype.Node.prototype.getAttribute = function(key) {
 		return this.attributes[key];
 	}
+	
+	
+	/** Returns the label to display for the node.
+	 * @return {String} label
+	 */
+	JSDot.prototype.Node.prototype.getLabel = function() {
+		var l = this.getAttribute("label");
+		return l ? l : this.name;
+	}
+	
+	/** Set a label for the node.
+	 * If set to null or undefined the name will be used instead.
+	 * 
+	 * @param {String} label
+	 */
+	JSDot.prototype.Node.prototype.setLabel = function(label) {
+		this.setAttribute("label", label);
+	}
+	
+	/** Returns the coordinates of the center where the node should be drawn.
+	 * @return {Array} coordinates [x, y]
+	 */
+	JSDot.prototype.Node.prototype.getPos = function() {
+		var p = this.getAttribute("pos");
+		if (typeof p != "string") return [10, 10];
+		p = p.split(',');
+		if (p.length != 2) return [10, 10];
+		return p;
+		//FIXME: defaults here do not really make sense, and the returned values may still not be numbers
+	}
+	
+	/** Set the coordinates of the center of the node.
+	 * 
+	 * @param {Object} x
+	 * @param {Object} y
+	 */
+	JSDot.prototype.Node.prototype.setPos = function(x, y) {
+		this.setAttrribute("pos", ""+x+","+y);
+	}
+	
+	/** Return the line color.
+	 * @return {String} line color
+	 */
+	JSDot.prototype.Node.prototype.getColor = function() {
+		return this.getAttribute("color") || "black";
+	}
+	
+	/** Set the line color.
+	 * 
+	 * @param {String} color
+	 */
+	JSDot.prototype.Node.prototype.setColor = function(color) {
+		this.setAttribute("color", color);
+	}
+	
+	/** Returns the fill color.
+	 * @return {String} fill color
+	 */
+	JSDot.prototype.Node.prototype.getFillColor = function() {
+		return this.getAttribute("fillcolor") || "lightgrey";
+	}
+	
+	/** Set the fill color.
+	 * 
+	 * @param {String} fill color
+	 */
+	JSDot.prototype.Node.prototype.setFillColor = function(color) {
+		this.setAttribute("fillcolor", color);
+	}
+	
+	/** Return the shape to be drawn.
+	 * The default is "circle".
+	 * @return {String} shape
+	 */
+	JSDot.prototype.Node.prototype.getShape = function() {
+		return this.getAttribute("shape") || "circle";
+	}
+	
+	/** Set the shape.
+	 * 
+	 * @param {String} shape
+	 */
+	JSDot.prototype.Node.prototype.setShape = function(shape) {
+		this.setAttribute("shape", shape);
+	}
 
 
 /** Edges API
