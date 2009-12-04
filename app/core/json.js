@@ -44,7 +44,8 @@ JSDot.prototype.newGraphItem = function () {
  */
 JSDot.prototype.loadJSON = function (jg) {
 	var nodes_ref = {};
-	var g = this.newGraphItem();
+	this.emptyGraph();
+	var g = this.graph;
 	
 	if (jg.constructor == String) {
 		if (JSON != undefined)
@@ -67,8 +68,8 @@ JSDot.prototype.loadJSON = function (jg) {
 	g.name = saneString(jg.name);
 	g.directed = jg.directed ? true : false;
 	g.attributes = saneAttributes(jg.attributes);
-	g.nodes = [];
-	g.edges = [];
+	g.nodes = {};
+	g.edges = {};
 	
 	if (jg.nodes.constructor == Array) {
 	for (var i=0; i < jg.nodes.length; i++) {
@@ -76,9 +77,6 @@ JSDot.prototype.loadJSON = function (jg) {
 		// allow the node to be just a string and use it as name
 		var n = this.newNode(saneString(typeof jn == "string" ? jn : jn.name));
 		n.attributes = saneAttributes(jn.attributes);
-		g.nodes[i] = n;
-		// FIXME: check if n.name is already defined
-		nodes_ref[n.name] = n;
 	}}
 	
 	if (jg.edges.constructor == Array) {
@@ -87,11 +85,9 @@ JSDot.prototype.loadJSON = function (jg) {
 		// FIXME: check if nodes are defined
 		var e = this.newEdge(nodes_ref[je.src], nodes_ref[je.dst]);
 		e.attributes = saneAttributes(je.attributes);
-		g.edges[i] = e;
 	}}
 	
 	this.graph = g;
-	this.graph._nodes_map = nodes_ref;
 }
 
 /** Returns a JSON representation of the graph
@@ -105,18 +101,18 @@ JSDot.prototype.toJSON = function() {
 	res.nodes = [];
 	res.edges = [];
 	
-	for (var i = 0; i < g.nodes.length; i++) {
+	for (var i in g.nodes) {
 		var n = g.nodes[i];
-		res.nodes[i] = n;
+		res.nodes.push(n);
 	}
 	
-	for (var i = 0; i < g.edges.length; i++) {
+	for (var i in g.edges) {
 		var edge = g.edges[i];
 		var e = {};
 		e.src = edge.src.name;
 		e.dst = edge.dst.name;
 		e.attributes = edge.attributes;
-		res.edges[i] = e;
+		res.edges.push(e);
 	}
 	res.attributes = g.attributes;
 	

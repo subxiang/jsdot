@@ -87,7 +87,7 @@ THE SOFTWARE.
 	 * @param {Object} y
 	 */
 	JSDot.prototype.Node.prototype.setPos = function(x, y) {
-		this.setAttrribute("pos", ""+x+","+y);
+		this.setAttribute("pos", ""+x+","+y);
 	}
 	
 	/** Return the line color.
@@ -202,8 +202,7 @@ THE SOFTWARE.
 JSDot.prototype.newNode = function(name) {
 	//TODO: check if name already exists
 	var n = new this.Node(name);
-	this.graph.nodes.push(n);
-	this.graph._nodes_map[name] = n;
+	this.graph.nodes[name] = n;
 	return n;
 };
 
@@ -212,8 +211,17 @@ JSDot.prototype.newNode = function(name) {
  * @param {String} name name of the node
  */
 JSDot.prototype.getNodeByName = function(name) {
-	return this.graph._nodes_map[name];
+	return this.graph.nodes[name];
 };
+
+/** Removes a node from the graph.
+ * 
+ * @param {Object,String} node node to remove or its name (as a string)
+ */
+JSDot.prototype.removeNode = function(node) {
+	if (node instanceof this.Node) node = node.name;
+	delete(this.graph.nodes[node]);
+}
 
 /** Creates an edge connecting node src to dst in the graph.
  * 
@@ -225,7 +233,32 @@ JSDot.prototype.newEdge = function(src, dst) {
 	if (typeof src == "string") src = this.getNodeByName(src);
 	if (typeof dst == "string") dst = this.getNodeByName(dst);
 	
+	//TODO: check if node already exists
 	var e = new this.Edge(src, dst);
-	this.graph.edges.push(e);
+	this.graph.edges[e.src.name+'-'+e.dst.name];
 	return e;
 }
+
+
+/** Returns a new object representing an empty graph.
+ * To reset the model to an empty graph use emptyGraph().
+ * @see emptyGraph
+ * 
+ * @return {Object} an empty graph (internal representation)
+ */
+JSDot.prototype.getEmptyGraph = function() {
+	return {
+			name: "",
+			directed: false,
+			nodes: {},
+			edges:{},
+			attributes: {}
+	};
+};
+
+/** Resets the graph to an empty one.
+ * 
+ */
+JSDot.prototype.emptyGraph = function() {
+	this.graph = this.getEmptyGraph();
+};
