@@ -203,16 +203,28 @@ JSDot.prototype.newNode = function(name) {
 	//TODO: check if name already exists
 	var n = new this.Node(name);
 	this.graph.nodes.push(n);
+	this.graph._nodes_map[name] = n;
 	return n;
+};
+
+/** Returns a node of the graph by name.
+ * 
+ * @param {String} name name of the node
+ */
+JSDot.prototype.getNodeByName = function(name) {
+	return this.graph._nodes_map[name];
 };
 
 /** Creates an edge connecting node src to dst in the graph.
  * 
- * @param {Object} src Source Node
- * @param {Object} dst Destination Node
+ * @param {Object} src Source Node or name of the node
+ * @param {Object} dst Destination Node or name of the node
  * @return {Edge} the new edge
  */
 JSDot.prototype.newEdge = function(src, dst) {
+	if (typeof src == "string") src = this.getNodeByName(src);
+	if (typeof dst == "string") dst = this.getNodeByName(dst);
+	
 	var e = new this.Edge(src, dst);
 	this.graph.edges.push(e);
 	return e;

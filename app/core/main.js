@@ -33,8 +33,16 @@ JSDot.prototype = {
 
     mainWin: null,
 	selected_form: null,
-	graph: {name: "", directed: false, nodes: [], edges:[], attributes: {}},
 	svg: null,
+	
+	graph: {name: "",
+			directed: false,
+			nodes: [],
+			edges:[],
+			attributes: {},
+			
+			_nodes_map: {}
+	},
 	
 	
     init: function(id){
