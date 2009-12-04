@@ -22,33 +22,30 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+*/	
 
-*/
+function Class(){ return function(arguments){ this.init(arguments); } }
 
+var Popup = function(arg0, arg1){
+		return this.init(arg0, arg1);
+	};
 
-/**
- * This file is intended to be included in html for development,
- * it will throw in all the pieces of JSDOT.
- * for production you should use the single-file release.
- */
-var f= function() {
-	var files = [
-		"../lib/json_sans_eval.js",
-		"helpers.js",
-		"main.js",
-		"graph.js",
-		"popup.js",
-		"svg.js",
-		"painter.js",
-		"json.js",
-	];
+Popup.prototype = {
 	
-	var ip = JSDOT_PATH || "../";
-	var h = document.getElementsByTagName("head").item(0);
-	for (var i = 0; i < files.length; i++) {
-		var e = document.createElement("script");
-		e.setAttribute("type", "text/javascript");
-		e.setAttribute("src", ip+files[i]);
-		h.appendChild(e);
+	doc: null,
+	newDiv: null,
+	
+	init:function(parent, type) {
+		this.doc = parent.ownerDocument;
+		this.newDiv = this.doc.createElement('div');
+		if (type == "popup") {
+			this.newDiv.setAttribute('style', 'position:absolute; left:10%; top:10%; height:80%; width:80%; background:green; padding:0.4em; display:None');
+		}
+		parent.appendChild(this.newDiv);
+	},
+	
+	show:function() {
+		alert(this.newDiv);
+		(this.newDiv).style.display = 'block';
 	}
-}();
+}

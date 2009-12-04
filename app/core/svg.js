@@ -34,6 +34,7 @@ JSVG.prototype = {
 	designArea:null,
 	coords:null,
 	selected: null,
+	popup:null,
 	
 	defaultCircle : 'this.Element(\'circle\', { "r": "2.5em", "cx": evt.clientX, "cy": evt.clientY, "fill": "#ddd", "stroke": "#000" })',
 	defaultRect: 'this.Element(\'rect\', { "height": "5em", "width": "5em", "x": evt.clientX, "y": evt.clientY, "fill": "#ff0000" })',
@@ -46,6 +47,8 @@ JSVG.prototype = {
 		this.svgdoc = this.container.ownerDocument;
 		this.svgroot = this.svgdoc.createElementNS(svgns, "svg");
 		this.container.appendChild(this.svgroot);
+		
+		this.popup = new Popup(this.container, 'popup');
 		
 		setAttrs(this.svgroot,{
 			"width": window.innerWidth - 5,
@@ -204,8 +207,23 @@ JSVG.prototype = {
 		}, this.cnt).addEventListener('click',function(evt){ self.selected = self.defaultLine; },false);	
 		// -->
 
-
-		new this.Element('text',{"font-size":"14", "dx":"5","dy":5, "x":"14em", "y":".5em"},this.cnt);
+		// <-- Popup button
+		new this.Element('rect',{
+			"height": "2em", "width": "8em",
+			"x": ".5em", "y": "14em",
+			'stroke': 'red', "fill": "white",
+			"style":"cursor:pointer", "id":"t"	
+		}, this.cnt).addEventListener('click', function() { self.popup.show(); }, false);		
+		// -->
+		// not so nice
+	    var text = document.createElementNS(svgns, "text");
+		text.setAttribute('x', '.6em');
+		text.setAttribute('y', '15.5em');
+		text.setAttribute('stroke', 'black');
+		text.textContent = 'Insert JSON string';
+	    document.getElementById("t").appendChild(text);
+		
+		//new this.Element('text',{"font-size":"14", "stroke-width":"2px", "dx":"5","dy":5, "x":"14em", "y":".5em"},this.cnt);
 
 		
 		// --> Toggle menu bar
@@ -217,6 +235,7 @@ JSVG.prototype = {
 			
 		},this.cnt).addEventListener('click',function(){ setAttrs(self.cnt,{'x':'-15%'}); },false);
 		// <--
+		
 	},
 
 	/**
