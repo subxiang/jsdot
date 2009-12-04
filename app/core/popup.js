@@ -24,8 +24,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */	
 
-function Class(){ return function(arguments){ this.init(arguments); } }
-
 var Popup = function(arg0, arg1){
 		return this.init(arg0, arg1);
 	};
@@ -39,13 +37,12 @@ Popup.prototype = {
 		this.doc = parent.ownerDocument;
 		this.newDiv = this.doc.createElement('div');
 		if (type == "popup") {
-			this.newDiv.setAttribute('style', 'position:absolute; left:10%; top:10%; height:80%; width:80%; background:green; padding:0.4em; display:None');
+			this.newDiv.setAttribute('style', 'position:absolute; left:10%; top:10%; height:80%; width:80%; background:white; border-color:black; border-width:0.5em; padding:0.4em; display:None');
 		}
 		parent.appendChild(this.newDiv);
 	},
 	
 	show:function() {
-		alert(this.newDiv);
 		(this.newDiv).style.display = 'block';
 	}
 }
