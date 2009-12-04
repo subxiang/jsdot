@@ -91,6 +91,7 @@ JSDot.prototype.loadJSON = function (jg) {
 	}}
 	
 	this.graph = g;
+	this.graph._nodes_map = nodes_ref;
 }
 
 /** Returns a JSON representation of the graph
