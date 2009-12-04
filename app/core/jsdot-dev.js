@@ -34,6 +34,7 @@ THE SOFTWARE.
 var f= function() {
 	var files = [
 		"../lib/json_sans_eval.js",
+		"helpers.js",
 		"main.js",
 		"graph.js",
 		"svg.js",
