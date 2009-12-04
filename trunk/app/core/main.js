@@ -34,18 +34,14 @@ JSDot.prototype = {
     mainWin: null,
 	selected_form: null,
 	svg: null,
-	
-	graph: {name: "",
-			directed: false,
-			nodes: [],
-			edges:[],
-			attributes: {},
-			
-			_nodes_map: {}
-	},
+	graph: null,
 	
 	
     init: function(id){
+		// start with an empty graph
+		this.emptyGraph();
+		
+		// set up the drawing area
 		if (typeof id == "string") {
 			this.svg = new JSVG(id);
 		}
