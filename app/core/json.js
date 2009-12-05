@@ -26,24 +26,10 @@ THE SOFTWARE.
 */
 
 
-/** Returns a new instance of a GraphItem.
- * GraphItems represent graphs, edges and nodes.
- * Usage: var g = newGraph();
- */
-JSDot.prototype.newGraphItem = function () {
-	var res = {};
-	res.name = "";
-	res.attributes = {};
-	
-	return res;
-}
-
-
 /** Load a graph from the JSON representation.
  * @param jg JSON representation of a graph
  */
 JSDot.prototype.loadJSON = function (jg) {
-	var nodes_ref = {};
 	this.emptyGraph();
 	var g = this.graph;
 	
@@ -83,11 +69,9 @@ JSDot.prototype.loadJSON = function (jg) {
 	for (var i=0; i < jg.edges.length; i++) {
 		var je = jg.edges[i];
 		// FIXME: check if nodes are defined
-		var e = this.newEdge(nodes_ref[je.src], nodes_ref[je.dst]);
+		var e = this.newEdge(je.src, je.dst);
 		e.attributes = saneAttributes(je.attributes);
 	}}
-	
-	this.graph = g;
 }
 
 /** Returns a JSON representation of the graph

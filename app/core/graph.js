@@ -235,7 +235,7 @@ JSDot.prototype.newEdge = function(src, dst) {
 	
 	//TODO: check if node already exists
 	var e = new this.Edge(src, dst);
-	this.graph.edges[e.src.name+'-'+e.dst.name];
+	this.graph.edges[e.src.name+'-'+e.dst.name] = e;
 	return e;
 }
 
