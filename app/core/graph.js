@@ -195,12 +195,22 @@ THE SOFTWARE.
  */
 
 /** Creates a new node in the graph
+ * If name is missing it will be automatically generated.
  * 
- * @param {String} name the name of the node
+ * @param {String} name optional, the name of the node
  * @return {Node} the new node
  */
 JSDot.prototype.newNode = function(name) {
-	//TODO: check if name already exists
+	if (!name) {
+		// no name was given, generate one
+		while (this.getNodeByName(name = 'n' + (new Date()).getTime())) {};
+	} else {
+		// a name was given, check that it isn't already in use
+		if (this.getNodeByName(name)) {
+			return null;
+		}
+	}
+	
 	var n = new this.Node(name);
 	this.graph.nodes[name] = n;
 	return n;
@@ -209,6 +219,7 @@ JSDot.prototype.newNode = function(name) {
 /** Returns a node of the graph by name.
  * 
  * @param {String} name name of the node
+ * @return {Node} the node if found, undefined otherwise
  */
 JSDot.prototype.getNodeByName = function(name) {
 	return this.graph.nodes[name];
@@ -235,7 +246,7 @@ JSDot.prototype.newEdge = function(src, dst) {
 	
 	//TODO: check if node already exists
 	var e = new this.Edge(src, dst);
-	this.graph.edges[e.src.name+'-'+e.dst.name] = e;
+	this.graph.edges[e.src.name.length+':'+e.dst.name.length+'-'+e.src.name+'-'+e.dst.name] = e;
 	return e;
 }
 

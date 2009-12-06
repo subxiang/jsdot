@@ -67,6 +67,18 @@ THE SOFTWARE.
 		teardown: function() {
 
 		},
+		
+		testNodeCreation: function() {
+			with(this) {
+				var n = jsdot.newNode("n");
+				assert(jsdot.getNodeByName('n') == n); // node created
+				n = jsdot.newNode("n");
+				assert(n == null); // duplicate name
+				n = jsdot.newNode(); // auto-generate name
+				assert(n != null); // node created
+				assert(n.getName().length > 1); // node has a name
+			}
+		},
 
 		testSingleNode: function(){
 			with (this) {

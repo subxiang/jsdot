@@ -131,7 +131,7 @@ var cases = function(){
 				"node1": {"name": "node1", "attributes": {"label": "a", "color": "blue", "pos": "200,100"}},
 				"node2": {"name": "node2", "attributes": {"label": "b", "color": "red", "pos": "500,100"}}
 		};
-		g.edges = { "node1-node2": {
+		g.edges = { "5:5-node1-node2": {
 			src: node1,
 			dst: node2,
 			attributes: {
@@ -164,7 +164,7 @@ var cases = function(){
 				"node1": {"name": "node1", "attributes": {"label": "a", "color": "blue", "pos": "200,100"}},
 				"node2": {"name": "node2", "attributes": {"label": "b", "color": "red", "pos": "500,100"}}
 		};
-		g.edges = { "node1-node2": {
+		g.edges = { "5:5-node1-node2": {
 			src: node1,
 			dst: node2,
 			attributes: {
@@ -206,7 +206,7 @@ var cases = function(){
 				"node3": {"name": "node3", "attributes": {"label": "c", "color": "yellow", "pos": "200,500"}},
 				"node4": {"name": "node4", "attributes": {"label": "d", "color": "green","pos": "500,500"}}
 		};
-		g.edges = { "node1-node2": {
+		g.edges = { "5:5-node1-node2": {
 			src: node1,
 			dst: node2,
 			attributes: {
@@ -214,7 +214,7 @@ var cases = function(){
 				style: "solid"
 			}
 		},
-		"node2-node3": {
+		"5:5-node2-node3": {
 			src: node2,
 			dst: node3,
 			attributes: {
@@ -222,7 +222,7 @@ var cases = function(){
 				style: "solid"
 			}
 		},
-		"node3-node4": {
+		"5:5-node3-node4": {
 			src: node3,
 			dst: node4,
 			attributes: {
@@ -230,7 +230,7 @@ var cases = function(){
 				style: "solid"
 			}
 		},
-		"node4-node1": {
+		"5:5-node4-node1": {
 			src: node4,
 			dst: node1,
 			attributes: {
@@ -270,7 +270,7 @@ var cases = function(){
 				"node3": {"name": "node3", "attributes": {"label": "c", "color": "yellow", "pos": "200,500"}},
 				"node4": {"name": "node4", "attributes": {"label": "d", "color": "green","pos": "500,500"}}
 		};
-		g.edges = { "node1-node2": {
+		g.edges = { "5:5-node1-node2": {
 			src: node1,
 			dst: node2,
 			attributes: {
@@ -278,7 +278,7 @@ var cases = function(){
 				style: "solid"
 			}
 		},
-		"node2-node3": {
+		"5:5-node2-node3": {
 			src: node2,
 			dst: node3,
 			attributes: {
@@ -286,7 +286,7 @@ var cases = function(){
 				style: "solid"
 			}
 		},
-		"node3-node4": {
+		"5:5-node3-node4": {
 			src: node3,
 			dst: node4,
 			attributes: {
@@ -326,7 +326,7 @@ var cases = function(){
 				"node3": {"name": "node3", "attributes": {"label": "c", "color": "yellow", "pos": "200,500"}},
 				"node4": {"name": "node4", "attributes": {"label": "d", "color": "green","pos": "500,500"}}
 		};
-		g.edges = { "node1-node2": {
+		g.edges = { "5:5-node1-node2": {
 			src: node1,
 			dst: node2,
 			attributes: {
@@ -334,7 +334,7 @@ var cases = function(){
 				style: "solid"
 			}
 		},
-		"node3-node4": {
+		"5:5-node3-node4": {
 			src: node3,
 			dst: node4,
 			attributes: {
