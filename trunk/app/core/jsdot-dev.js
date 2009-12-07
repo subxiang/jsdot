@@ -37,8 +37,8 @@ var f= function() {
 		"helpers.js",
 		"main.js",
 		"graph.js",
-		"popup.js",
 		"svg.js",
+		"popup.js",
 		"painter.js",
 		"json.js",
 	];
