@@ -79,13 +79,31 @@ THE SOFTWARE.
 				assert(n.getName().length > 1); // node has a name
 			}
 		},
+		
+		testLoadJSON: function() {
+			with(this) {
+				var r = jsdot.loadJSON("this is not valid JSON");
+				assert(r == 2);
+				assert(jsdot.error);
+				assert(jsdot.error.name === 'SyntaxError');
+				assert(typeof jsdot.error.message == 'string');
+				
+				r = jsdot.loadJSON(cases.duplicateNode);
+				assert(r == 1);
+				assert(jsdot.error.name == 'RangeError');
+				assert(ops.compareGraphs(jsdot.graph, cases.duplicateNode_ref));
+				assert(typeof jsdot.error.message == 'string');
+			}
+		},
 
 		testSingleNode: function(){
 			with (this) {
-				jsdot.loadJSON(cases.graph1)
+				var r = jsdot.loadJSON(cases.graph1)
+				assert(r == 0);
 				assert(ops.compareGraphs(jsdot.graph, cases.graph1_ref));
 				
-				jsdot.loadJSON(cases.graph1b)
+				r = jsdot.loadJSON(cases.graph1b)
+				assert(r == 0);
 				assert(ops.compareGraphs(jsdot.graph, cases.graph1_ref));
 			}
 		},
