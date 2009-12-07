@@ -24,9 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */	
 
-var Popup = function(arg0, arg1){
-		return this.init(arg0, arg1);
-	};
+var Popup = new Class();
 
 Popup.prototype = {
 	
@@ -34,7 +32,8 @@ Popup.prototype = {
 	doc: null,
 	newDiv: null,
 	
-	init:function(parent, type) {
+	init:function(jsdot, parent, type) {
+		this.jsdot = jsdot;
 		this.doc = parent.ownerDocument;
 		this.newDiv = this.doc.createElement('div');
 		if (type == "popup") {
@@ -50,6 +49,8 @@ Popup.prototype = {
 		var text_area = document.createElement("textarea");
 		text_area.setAttribute("id", "text");
 		text_area.setAttribute("name", "text");
+		var json = document.createTextNode(this.jsdot.toJSON());
+		text_area.appendChild(json);
 		this.newDiv.appendChild(text_area);
 		
 		var p = document.createElement("p");
@@ -80,14 +81,13 @@ Popup.prototype = {
 		}
 	},
 	
-	// here I create a new JSDot()...have I to really do it????
 	load_string:function(evt) {
 		var content = document.getElementById('text').value;
-		res = {}
-		var jsdot = new JSDot();
+		res = {};
 		if(content != "") {
-			jsdot.loadJSON(content);
-			res = jsdot.graph;
+			//TODO: check return value
+			this.jsdot.loadJSON(content);
+			res = this.jsdot.graph;
 		//	jsdot.draw();
 		}
 		alert(res)

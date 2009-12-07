@@ -34,14 +34,16 @@ JSVG.prototype = {
     defaultLine: 'this.Element(\'line\', { "x1": evt.clientX, "y1": evt.clientX,  "x2": evt.clientX + 5, "y2": evt.clientY + 5, "style": "fill:none;stroke:black;stroke-width:1;"})',
     
     /** Constructor */
-    init: function(id){
+    init: function(jsdot, id){
     
+		this.jsdot = jsdot;
+		
         this.container = $(id);
         this.svgdoc = this.container.ownerDocument;
         this.svgroot = this.svgdoc.createElementNS(svgns, "svg");
         this.container.appendChild(this.svgroot);
         
-        this.popup = new Popup(this.container, 'popup');
+        this.popup = new Popup(this.jsdot, this.container, 'popup');
         
         setAttrs(this.svgroot, {
             "width": window.innerWidth - 5,
