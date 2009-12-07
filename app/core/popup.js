@@ -47,17 +47,20 @@ Popup.prototype = {
 		var self = this;
 		
 		var text_area = document.createElement("textarea");
+		text_area.setAttribute("id", "text");
 		text_area.setAttribute("name", "text");
 		this.newDiv.appendChild(text_area);
 		
 		var p = document.createElement("p");
 		
 		var save_button = document.createElement("input");
+		save_button.setAttribute("id", "save button");
 		save_button.setAttribute("value", "Load");
 		save_button.setAttribute("type", "submit");
-	//	save_button.addEventListener("click", function(evt){ self.load_string(evt); }, false);
+		save_button.addEventListener("click", function(evt){ self.load_string(evt); }, false);
 		
 		var exit_button = document.createElement("input");
+		exit_button.setAttribute("id", "exit button");
 		exit_button.setAttribute("value", "Exit");
 		exit_button.setAttribute("type", "submit");
 		exit_button.addEventListener("click", function(evt){ self.hide(evt); }, false);
@@ -70,9 +73,21 @@ Popup.prototype = {
 	
 	hide:function(evt) { 
 		(this.newDiv).style.display = 'None';
+		var children = this.newDiv.childNodes;
+		while(children.length >= 1) {
+			this.newDiv.removeChild(this.newDiv.firstChild);
+		}
 	},
 	
 	load_string:function(evt) {
+		var content = document.getElementById('text').value;
+		if(content != "") {
+			alert(content);
+		}
+		
+		var exit_button = document.getElementById('exit button');
+		exit_button.click();
+		
 		
 	}
 }
