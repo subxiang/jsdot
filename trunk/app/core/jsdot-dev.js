@@ -38,9 +38,9 @@ var f= function() {
 		"main.js",
 		"graph.js",
 		"svg.js",
-		"popup.js",
 		"painter.js",
 		"json.js",
+		"popup.js",
 	];
 	
 	var ip = JSDOT_PATH || "../";
