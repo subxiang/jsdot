@@ -345,6 +345,28 @@ var cases = function(){
 		res.graph6_ref = g;
 	}
 	
+	res.duplicateNode = '{ \
+			"name": "duplicate", \
+			"directed": false, \
+			"nodes": ["node1", "node2", "node1", "node3"], \
+			"edges": [], \
+			"attributes": { \
+				"label": "graph with a duplicate node" \
+			} \
+		}';
+			
+	res.duplicateNode_ref = {
+			'name': 'duplicate',
+			'directed': false,
+			'nodes': {
+				'node1': {'name': 'node1', 'attributes': {}},
+				'node2': {'name': 'node2', 'attributes': {}},
+				'node3': {'name': 'node3', 'attributes': {}}
+			},
+			'edges': {},
+			"attributes": {"label": "graph with a duplicate node"}
+	};
+	
 	return res;
 } (); // create reference graphs
 

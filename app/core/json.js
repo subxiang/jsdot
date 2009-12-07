@@ -27,18 +27,37 @@ THE SOFTWARE.
 
 
 /** Load a graph from the JSON representation.
+ * The return value indicates whether an error occurred.
+ * Returns 0 on success: everything went fine and the graph has been changed.
+ * Returns 1 on fixed error: something was wrong in the JSON representation but
+ * it has been skipped and the graph has been changed.
+ * Returns 2 on fatal error: e.g. when the input is not valid JSON, the graph
+ * does NOT change.
+ * On error, JSDor.error has a message describing it. On multiple errors only the
+ * last one is preserved.
+ * 
  * @param jg JSON representation of a graph
+ * @return {Number} 0 on success, 1 error found but skipped, 2 on fatal error
  */
 JSDot.prototype.loadJSON = function (jg) {
-	this.emptyGraph();
-	var g = this.graph;
+	var retval = 0;
 	
-	if (jg.constructor == String) {
-		if (JSON != undefined)
-			// FIXME: catch exception on malformed json
-			jg = JSON.parse(jg);
-		else
-			jg = jsonParse(jg);
+	// parse the JSON string 'jg'
+	try {
+		if (jg.constructor == String) {
+			if (JSON != undefined)
+				// FIXME: catch exception on malformed json
+				jg = JSON.parse(jg);
+			else
+				jg = jsonParse(jg);
+		}
+	} catch (e) {
+		if (e instanceof SyntaxError) {
+			e.message = 'The input is not a valid JSON string';
+			this.error = e;
+			return 2;
+		} else
+			throw (e);
 	}
 	
 	// helper functions
@@ -51,6 +70,10 @@ JSDot.prototype.loadJSON = function (jg) {
 	}
 	//
 	
+	// start with an empty graph
+	this.emptyGraph();
+	var g = this.graph;
+	
 	g.name = saneString(jg.name);
 	g.directed = jg.directed ? true : false;
 	g.attributes = saneAttributes(jg.attributes);
@@ -61,17 +84,34 @@ JSDot.prototype.loadJSON = function (jg) {
 	for (var i=0; i < jg.nodes.length; i++) {
 		var jn = jg.nodes[i];
 		// allow the node to be just a string and use it as name
-		var n = this.newNode(saneString(typeof jn == "string" ? jn : jn.name));
-		n.attributes = saneAttributes(jn.attributes);
-	}}
+		var name = saneString(typeof jn == "string" ? jn : jn.name)
+		var n = this.newNode(name);
+		if (!n) {
+			this.error = {'name': 'RangeError', 'message': 'duplicate node name "'+name+'"'};
+			retval = 1;
+		} else
+			n.attributes = saneAttributes(jn.attributes);
+	}} else {
+		this.error = {'name': 'TypeError', 'message': '"nodes" must be an array'};
+		retval = 1;
+	}
 	
 	if (jg.edges.constructor == Array) {
 	for (var i=0; i < jg.edges.length; i++) {
 		var je = jg.edges[i];
 		// FIXME: check if nodes are defined
 		var e = this.newEdge(je.src, je.dst);
-		e.attributes = saneAttributes(je.attributes);
-	}}
+		if (!e) {
+			this.error = {'name': 'RangeError', 'message': 'found edge with inexistent node'};
+			retval = 1;
+		} else
+			e.attributes = saneAttributes(je.attributes);
+	}} else {
+		this.error = {'name': 'TypeError', 'message': '"nodes" must be an array'};
+		retval = 1;
+	}
+	
+	return retval;
 }
 
 /** Returns a JSON representation of the graph

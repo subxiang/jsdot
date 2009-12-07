@@ -36,6 +36,14 @@ JSDot.prototype = {
 	svg: null,
 	graph: null,
 	
+	/** Last error encountered.
+	 * It has the same basic structure as an exception:
+	 * {'name': 'SomeError', 'message': 'error description}
+	 * It's meaning depends on the return value of the called function,
+	 * see the documentation of each function whether it uses error messages.
+	 */
+	error: null,
+	
 	
     init: function(id){
 		// start with an empty graph
