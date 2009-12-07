@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 */
 
-function Class(){ return function(arguments){ this.init(arguments); } }
+function Class(){ return function(){ this.init.apply(this, arguments); } }
 
 var JSDot = new Class();
 
@@ -51,7 +51,7 @@ JSDot.prototype = {
 		
 		// set up the drawing area
 		if (typeof id == "string") {
-			this.svg = new JSVG(id);
+			this.svg = new JSVG(this, id);
 		}
     },
    
