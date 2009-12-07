@@ -30,6 +30,7 @@ var Popup = function(arg0, arg1){
 
 Popup.prototype = {
 	
+	prova: '{"name": "graph1", "directed": false, "nodes": ["node1"], "edges": [], "attributes": { "label": "graph with a single node"}}',
 	doc: null,
 	newDiv: null,
 	
@@ -55,7 +56,7 @@ Popup.prototype = {
 		
 		var save_button = document.createElement("input");
 		save_button.setAttribute("id", "save button");
-		save_button.setAttribute("value", "Load");
+		save_button.setAttribute("value", "Load/Save");
 		save_button.setAttribute("type", "submit");
 		save_button.addEventListener("click", function(evt){ self.load_string(evt); }, false);
 		
@@ -79,15 +80,18 @@ Popup.prototype = {
 		}
 	},
 	
+	// here I create a new JSDot()...have I to really do it????
 	load_string:function(evt) {
 		var content = document.getElementById('text').value;
+		res = {}
+		var jsdot = new JSDot();
 		if(content != "") {
-			alert(content);
+			jsdot.loadJSON(content);
+			res = jsdot.graph;
+		//	jsdot.draw();
 		}
-		
+		alert(res)
 		var exit_button = document.getElementById('exit button');
-		exit_button.click();
-		
-		
+		exit_button.click();	
 	}
 }
