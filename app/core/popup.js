@@ -28,49 +28,102 @@ var Popup = new Class();
 
 Popup.prototype = {
 	
-	prova: '{"name": "graph1", "directed": false, "nodes": ["node1"], "edges": [], "attributes": { "label": "graph with a single node"}}',
+	prova: {"name":"graph2","directed":false,"nodes":[{"name":"node1","attributes":{"label":"a","color":"blue","pos":"200,100"}},{"name":"node2","attributes":{"label":"b","color":"red","pos":"500,100"}}],"edges":[{"src":"node1","dst":"node2","attributes":{"label":"edge1","style":"dotted"}}],"attributes":{"label":"undirected graph with two nodes and one edge"}},
 	doc: null,
 	newDiv: null,
+	jsdot: null,
 	
 	init:function(jsdot, parent, type) {
 		this.jsdot = jsdot;
 		this.doc = parent.ownerDocument;
 		this.newDiv = this.doc.createElement('div');
-		if (type == "popup") {
-			this.newDiv.setAttribute('style', 'position:absolute; left:10%; top:10%; height:80%; width:80%; background:white; border-color:black; border-width:0.5em; padding:0.4em; display:None');
-		}
+		this.newDiv.setAttribute('style', 'position:absolute; left:10%; top:10%; height:80%; width:80%; background:white; border-color:black; border-width:0.5em; padding:0.4em; display:None');
 		parent.appendChild(this.newDiv);
 	},
 	
-	show:function() {
-		(this.newDiv).style.display = 'block';
-		var self = this;
+	show_JSON:function() {
+        (this.newDiv).style.display = 'block';
+        var self = this;
+        
+        var text_area = document.createElement("textarea");
+        text_area.setAttribute("id", "text");
+        text_area.setAttribute("name", "text");
+		text_area.setAttribute("style", "height:80%; width:100%;");
+
+        var json = document.createTextNode(this.jsdot.toJSON());
+        text_area.appendChild(json);
+        this.newDiv.appendChild(text_area);
+        
+        var p = document.createElement("p");
+        
+        var save_button = document.createElement("input");
+        save_button.setAttribute("id", "save button");
+        save_button.setAttribute("value", "Load/Save");
+        save_button.setAttribute("type", "submit");
+        save_button.addEventListener("click", function(evt){
+            self.load_string(evt);
+        }, false);
+        
+        var exit_button = document.createElement("input");
+        exit_button.setAttribute("id", "exit button");
+        exit_button.setAttribute("value", "Exit");
+        exit_button.setAttribute("type", "submit");
+        exit_button.addEventListener("click", function(evt){
+            self.hide(evt);
+        }, false);
+        
+        p.appendChild(save_button);
+        p.appendChild(exit_button);
+        
+        this.newDiv.appendChild(p);
+	},
+	
+	show_attributes_node:function(node) {
 		
-		var text_area = document.createElement("textarea");
-		text_area.setAttribute("id", "text");
-		text_area.setAttribute("name", "text");
-		var json = document.createTextNode(this.jsdot.toJSON());
-		text_area.appendChild(json);
-		this.newDiv.appendChild(text_area);
+		var label = document.createElement("input");
+		label.setAttribute("id", "label");
+		label.setAttribute("type", "text");
+		label.setAttribute("value", node.getLabel());
+		this.newDiv.appendChild(label);
 		
-		var p = document.createElement("p");
+		// color 
+		var fill_color = document.createElement("select");
+		fill_color.setAttribute("name", "color");	
+		fill_color.setAttribute("id", "fill_color");	
+		var blue = document.createElement("option");
+		blue.setAttribute("value", "blue");
+		fill_color.appendChild(blue);
+		var yellow = document.createElement("option");
+		yellow.setAttribute("value", "yellow");
+		fill_color.appendChild(yellow);
+		var red = document.createElement("option");
+		red.setAttribute("value", "red");
+		fill_color.appendChild(red);
+		var green = document.createElement("option");
+		green.setAttribute("value", "green");
+		fill_color.appendChild(green);
 		
 		var save_button = document.createElement("input");
-		save_button.setAttribute("id", "save button");
-		save_button.setAttribute("value", "Load/Save");
-		save_button.setAttribute("type", "submit");
-		save_button.addEventListener("click", function(evt){ self.load_string(evt); }, false);
-		
-		var exit_button = document.createElement("input");
-		exit_button.setAttribute("id", "exit button");
-		exit_button.setAttribute("value", "Exit");
-		exit_button.setAttribute("type", "submit");
-		exit_button.addEventListener("click", function(evt){ self.hide(evt); }, false);
-		
-		p.appendChild(save_button);
-		p.appendChild(exit_button);
-		
-		this.newDiv.appendChild(p);
+        save_button.setAttribute("id", "change");
+        save_button.setAttribute("value", "Change");
+        save_button.setAttribute("type", "submit");
+        save_button.addEventListener("click", function(evt){
+            self.change_node(evt, node);
+        }, false);
+        
+        var exit_button = document.createElement("input");
+        exit_button.setAttribute("id", "exit button");
+        exit_button.setAttribute("value", "Exit");
+        exit_button.setAttribute("type", "submit");
+        exit_button.addEventListener("click", function(evt){
+            self.hide(evt);
+        }, false);
+        
+        p.appendChild(save_button);
+        p.appendChild(exit_button);
+        
+        this.newDiv.appendChild(p);
+
 	},
 	
 	hide:function(evt) { 
@@ -83,15 +136,27 @@ Popup.prototype = {
 	
 	load_string:function(evt) {
 		var content = document.getElementById('text').value;
-		res = {};
 		if(content != "") {
-			//TODO: check return value
 			this.jsdot.loadJSON(content);
-			res = this.jsdot.graph;
-		//	jsdot.draw();
+			// TODO control return value
+			this.jsdot.draw();
 		}
-		alert(res)
 		var exit_button = document.getElementById('exit button');
 		exit_button.click();	
+	},
+	
+	change_node:function(evt, node) {
+		var fill_color = document.getElementById('fill_color').value;
+		var label = document.getElementById('label').value;
+		
+		if(label != "") {
+			node.setLabel(label);
+		}
+		node.setFillColor(fill_color);
+		
+		this.jsdot.draw();
+		
+		var exit_button = document.getElementById('exit button');
+		exit_button.click();
 	}
 }

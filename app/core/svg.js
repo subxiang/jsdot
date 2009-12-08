@@ -375,7 +375,7 @@ JSVG.prototype = {
             "style": "cursor:pointer",
             "id": "t"
         }, this.cnt).addEventListener('click', function(){
-            self.popup.show();
+            self.popup.show_JSON();
         }, false);
         // -->
         
