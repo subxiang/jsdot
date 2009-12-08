@@ -112,6 +112,7 @@ JSDot.prototype.loadJSON = function (jg) {
 	}
 	
 	return retval;
+	
 }
 
 /** Returns a JSON representation of the graph
