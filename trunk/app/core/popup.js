@@ -46,9 +46,12 @@ Popup.prototype = {
         var self = this;
         
         var text_area = document.createElement("textarea");
-        text_area.setAttribute("id", "text");
-        text_area.setAttribute("name", "text");
-		text_area.setAttribute("style", "height:80%; width:100%;");
+		var text_area_attr = {
+			id: "text",
+			name: "text",
+			style: "height:80%; width:100%;"
+		};
+		setAttrs(text_area, text_area_attr);
 
         var json = document.createTextNode(this.jsdot.toJSON());
         text_area.appendChild(json);
@@ -57,17 +60,23 @@ Popup.prototype = {
         var p = document.createElement("p");
         
         var save_button = document.createElement("input");
-        save_button.setAttribute("id", "save button");
-        save_button.setAttribute("value", "Load/Save");
-        save_button.setAttribute("type", "submit");
+		var save_button_attr = {
+			id: "save button",
+			value: "load and save",
+			type: "submit",
+		}
+        setAttrs(save_button, save_button_attr);
         save_button.addEventListener("click", function(evt){
             self.load_string(evt);
         }, false);
         
         var exit_button = document.createElement("input");
-        exit_button.setAttribute("id", "exit button");
-        exit_button.setAttribute("value", "Exit");
-        exit_button.setAttribute("type", "submit");
+		var exit_button_attr = {
+			id:  "exit button",
+			value:  "Exit",
+			type: "submit"
+		}
+   		setAttrs(exit_button, exit_button_attr);
         exit_button.addEventListener("click", function(evt){
             self.hide(evt);
         }, false);
@@ -78,12 +87,15 @@ Popup.prototype = {
         this.newDiv.appendChild(p);
 	},
 	
-	show_attributes_node:function(node) {
+	show_attributes:function(node) {
 		
 		var label = document.createElement("input");
-		label.setAttribute("id", "label");
-		label.setAttribute("type", "text");
-		label.setAttribute("value", node.getLabel());
+		var label_attr = {
+			id:  "label",
+			type: "text",
+			value: node.getLabel()
+		}
+   		setAttrs(label, label_attr);
 		this.newDiv.appendChild(label);
 		
 		// color 
@@ -103,18 +115,26 @@ Popup.prototype = {
 		green.setAttribute("value", "green");
 		fill_color.appendChild(green);
 		
-		var save_button = document.createElement("input");
-        save_button.setAttribute("id", "change");
-        save_button.setAttribute("value", "Change");
-        save_button.setAttribute("type", "submit");
+		var p = document.createElement("p");
+        
+        var save_button = document.createElement("input");
+		var save_button_attr = {
+			id: "change",
+			value: "change",
+			type: "submit",
+		}
+        setAttrs(save_button, save_button_attr);
         save_button.addEventListener("click", function(evt){
             self.change_node(evt, node);
         }, false);
         
         var exit_button = document.createElement("input");
-        exit_button.setAttribute("id", "exit button");
-        exit_button.setAttribute("value", "Exit");
-        exit_button.setAttribute("type", "submit");
+		var exit_button_attr = {
+			id:  "exit button",
+			value:  "Exit",
+			type: "submit"
+		}
+   		setAttrs(exit_button, exit_button_attr);
         exit_button.addEventListener("click", function(evt){
             self.hide(evt);
         }, false);
@@ -125,7 +145,7 @@ Popup.prototype = {
         this.newDiv.appendChild(p);
 
 	},
-	
+		
 	hide:function(evt) { 
 		(this.newDiv).style.display = 'None';
 		var children = this.newDiv.childNodes;
@@ -135,19 +155,19 @@ Popup.prototype = {
 	},
 	
 	load_string:function(evt) {
-		var content = document.getElementById('text').value;
+		var content = $('text').value;
 		if(content != "") {
 			this.jsdot.loadJSON(content);
 			// TODO control return value
 			this.jsdot.draw();
 		}
-		var exit_button = document.getElementById('exit button');
+		var exit_button = $('exit button');
 		exit_button.click();	
 	},
 	
 	change_node:function(evt, node) {
-		var fill_color = document.getElementById('fill_color').value;
-		var label = document.getElementById('label').value;
+		var fill_color = $('fill_color').value;
+		var label = $('label').value;
 		
 		if(label != "") {
 			node.setLabel(label);
@@ -156,7 +176,7 @@ Popup.prototype = {
 		
 		this.jsdot.draw();
 		
-		var exit_button = document.getElementById('exit button');
+		var exit_button = $('exit button');
 		exit_button.click();
 	}
 }

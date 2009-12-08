@@ -178,7 +178,39 @@ THE SOFTWARE.
 	 */
 	JSDot.prototype.Edge.prototype.setDst = function(dst) {
 		this.dst = dst;
-	};
+	};	
+	
+	/** Returns the label to display for the edge.
+	 * @return {String} label
+	 */
+	JSDot.prototype.Edge.prototype.getLabel = function() {
+		var l = this.getAttribute("label");
+		return l ? l : "";
+	}
+	
+	/** Set a label for the edge.
+	 * If set to null or undefined the name will be used instead.
+	 * 
+	 * @param {String} label
+	 */
+	JSDot.prototype.Edge.prototype.setLabel = function(label) {
+		this.setAttribute("label", label);
+	}
+	
+	/** Return the edge color.
+	 * @return {String} line color
+	 */
+	JSDot.prototype.Edge.prototype.getColor = function() {
+		return this.getAttribute("color") || "black";
+	}
+	
+	/** Set the line color.
+	 * 
+	 * @param {String} color
+	 */
+	JSDot.prototype.Edge.prototype.setColor = function(color) {
+		this.setAttribute("color", color);
+	}
 	
 	JSDot.prototype.Edge.prototype.getAttribute = function(key) {
 		return this.attributes[key];
