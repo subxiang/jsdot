@@ -23,7 +23,6 @@ var JSVG = new Class();
 
 JSVG.prototype = {
 
-    root: null,
     designArea: null,
     coords: null,
     selected: null,
@@ -40,27 +39,38 @@ JSVG.prototype = {
 		
         this.container = $(id);
         this.svgdoc = this.container.ownerDocument;
-        this.svgroot = this.svgdoc.createElementNS(svgns, "svg");
+        this.svgroot = $e("svg");
+		JSVG.svgroot = this.svgroot;
         this.container.appendChild(this.svgroot);
-        
+        this.container.style.position = "relative";
         this.popup = new Popup(this.jsdot, this.container, 'popup');
         
-        setAttrs(this.svgroot, {
-            "width": window.innerWidth - 5,
-            "height": window.innerHeight - 5,
+        this.svgroot.setAttrs({
+            "width": window.innerWidth - 220,
             "id": "svgroot",
+			"style": "position:absolute;top:0;right:0;background:#ddd;padding:0;margin:0;",
             "xmlns": svgns,
             "xmlns:xlink": xlinkns
         });
         
-        this.root = this.svgroot;
-        JSVG.root = this.root;
-        
-        this.coords = this.root.createSVGPoint();
-        this.grabPoint = this.root.createSVGPoint();
+        this.coords = this.svgroot.createSVGPoint();
+        this.grabPoint = this.svgroot.createSVGPoint();
         
         this.buildMenu();
-        this.buildDesignArea();
+		var self = this;
+
+        
+        // Drag and drop listeners
+        this.svgroot.addEventListener('mousemove', function(evt){
+            self.drag(evt);
+        }, false);
+        this.svgroot.addEventListener('mouseup', function(evt){
+            self.drop(evt);
+        }, false);
+        // Add elements listener
+        this.svgroot.addEventListener('click', function(evt){
+            self.drawElement(evt);
+        }, false);
         
     },
     
@@ -73,7 +83,7 @@ JSVG.prototype = {
         var self = this, element;
         
         if (this.selected != null) {
-        
+
             element = eval('new ' + this.selected);
             element.addEventListener('mousedown', function(evt){
             
@@ -81,7 +91,7 @@ JSVG.prototype = {
 					var text = prompt('Insert the label');
 					if (text) {
 						var e = $e('text');
-						setAttrs(e,{"x":this.getX() - this.getWidth(),"y":this.getY()});
+						e.setAttrs({"x":this.getX() - this.getWidth(),"y":this.getY()});
 						e.textContent = text;
 						this.appendChild(e);
 					}
@@ -93,34 +103,6 @@ JSVG.prototype = {
         } 
     },
     
-    /** Builds the design area and adds event listeners. */
-    buildDesignArea: function(){
-    
-        var self = this;
-        
-        this.designArea = new this.Element('rect', {
-            "height": "100%",
-            "width": "85%",
-            "x": "15%",
-            "y": 0,
-            "fill": "#eee",
-            "id": "designArea"
-        });
-        
-        // Drag and drop listeners
-        this.designArea.addEventListener('mousemove', function(evt){
-            self.drag(evt);
-        }, false);
-        this.designArea.addEventListener('mouseup', function(evt){
-            self.drop(evt);
-        }, false);
-        
-        // Add elements listener
-        this.designArea.addEventListener('click', function(evt){
-            self.drawElement(evt);
-        }, false);
-        
-    },
     
     /**
      * Set the element to be dragged.
@@ -171,7 +153,7 @@ JSVG.prototype = {
         if (this.dragElement != null) {
         
             // Set the selected style
-            setAttrs(this.selected, {
+            this.selected.setAttrs( {
                 "fill-opacity": 1
             });
             this.dragElement.setAttributeNS(null, 'pointer-events', 'all');
@@ -186,38 +168,9 @@ JSVG.prototype = {
      */
     getCoords: function(evt){
     
-        var scale = this.root.currentScale, translation = this.root.currentTranslate;
+        var scale = this.svgroot.currentScale, translation = this.svgroot.currentTranslate;
         this.coords.x = (evt.clientX - translation.x) / scale;
         this.coords.y = (evt.clientY - translation.y) / scale;
-    },
-    
-    /** Builds the left menu, buttons and all listeners */
-    buildMenu: function(evt){
-    
-        var self = this;
-        
-        this.designArea = new this.Element('rect', {
-            "height": "100%",
-            "width": "85%",
-            "x": "15%",
-            "y": 0,
-            "fill": "#eee",
-            "id": "designArea"
-        });
-        
-        // Drag and drop listeners
-        this.designArea.addEventListener('mousemove', function(evt){
-            self.drag(evt);
-        }, false);
-        this.designArea.addEventListener('mouseup', function(evt){
-            self.drop(evt);
-        }, false);
-        
-        // Add elements listener
-        this.designArea.addEventListener('click', function(evt){
-            self.drawElement(evt);
-        }, false);
-        
     },
     
     /**
@@ -231,7 +184,7 @@ JSVG.prototype = {
         if (this.designArea != targetElement) {
         
             this.selected = targetElement;
-            setAttrs(targetElement, {
+            targetElement.setAttrs( {
                 "fill-opacity": 0.5
             });
             
@@ -271,7 +224,7 @@ JSVG.prototype = {
         if (this.dragElement != null) {
         
             // Set the selected style
-            setAttrs(this.selected, {
+            this.selected.setAttrs( {
                 "fill-opacity": 1
             });
             this.dragElement.setAttributeNS(null, 'pointer-events', 'all');
@@ -286,7 +239,7 @@ JSVG.prototype = {
      */
     getCoords: function(evt){
     
-        var scale = this.root.currentScale, translation = this.root.currentTranslate;
+        var scale = this.svgroot.currentScale, translation = this.svgroot.currentTranslate;
         this.coords.x = (evt.clientX - translation.x) / scale;
         this.coords.y = (evt.clientY - translation.y) / scale;
     },
@@ -294,134 +247,63 @@ JSVG.prototype = {
     /** Builds the left menu, buttons and all listeners */
     buildMenu: function(){
     
-        var self = this;
+        var self = this, toggle;
         this.toggle = false;
-        this.cnt;
-        this.cnt = new this.Element('g', {
-            'id': 'leftMenu',
-            'width': '20%',
-            'height': '100%'
-        });
-        this.bg = new this.Element('rect', {
-            "height": "100%",
-            "width": "15%",
-            "x": 0,
-            "y": 0,
-            "fill": "#333"
-        }, this.cnt);
-        
+		
+		// <-- left menu container
+        this.cnt = $e('div',true);
+		this.cnt.setAttrs({'id':'leftMenu' });
+		// -->
+
+		// <-- toggle container
+        toggle = $e('div',true);
+		toggle.setAttrs({'id':'toggle' });
+		toggle.addEventListener('click', function(evt){ self.toggleMenu(); }, false);
+		// -->
+		
         // <-- Rectangle button
-        new this.Element('rect', {
-        
-            "height": "5em",
-            "width": "5em",
-            "x": ".5em",
-            "y": ".5em",
-            'stroke': 'red',
-            "fill": "#ddd",
-            "style": "cursor:pointer"
-        
-        }, this.cnt).addEventListener('click', function(evt){
-            setAttrs(this, {
-                "stroke": "yellow"
-            });
-            self.selected = self.defaultRect;
-        }, false);
-        // -->
-        
-        // <-- Circle button
-        new this.Element('circle', {
-        
-            "r": "2.5em",
-            "cx": "9.5em",
-            "cy": "3em",
-            "fill": "#ddd",
-            "fill-opacity": 0.85,
-            "stroke": "red",
-            "stroke-opacity": 0.85,
-            "style": "cursor:pointer"
-        
-        }, this.cnt).addEventListener('click', function(evt){
-            setAttrs(this, {
-                "stroke": "yellow"
-            });
-            self.selected = self.defaultCircle;
-        }, false);
-        // -->
-        
+		var rectBtn = $e("svg"), rect = $e('circle'); rectBtn.setAttribute("class","btn");
+		rect.addEventListener('click', function(evt){ self.selected = self.defaultCircle; }, false);
+		rect.setAttrs({"r": "24","cx":"25","cy":"25"});
+		rectBtn.appendChild(rect);
+        // -->	
+	
         // <-- Arrow button
-        new this.Element('line', {
-        
-            "x1": ".5em",
-            "y1": "8em",
-            "x2": "5em",
-            "y2": "12em",
-            "style": "fill:none;stroke:red;fill:#ddd;stroke-width:.2em;cursor:pointer;"
-        
-        
-        }, this.cnt).addEventListener('click', function(evt){
-            setAttrs(this,{'x':'-15%'})
-        }, false);
-        // -->
-        
-        // <-- Popup button
-        var popup = new this.Element('rect', {
-            "height": "2em",
-            "width": "8em",
-            "x": ".5em",
-            "y": "14em",
-            'stroke': 'red',
-            "fill": "white",
-            "style": "cursor:pointer",
-            "id": "t"
-        }, this.cnt).addEventListener('click', function(){
-            self.popup.show_JSON();
-        }, false);
-        // -->
-        
-        // not so nice
-        var text = document.createElementNS(svgns, "text");
-        setAttrs(text, {
-            'x': '.6em',
-            'y': '15.5em',
-            'stroke': 'black'
-        });
-        text.textContent = 'Insert JSON string';
-        $("t").appendChild(text);
-        
-        
-        // <-- Label button
-        var insertLabel = document.createElementNS(svgns, "text");
-        setAttrs(insertLabel, {
-            'x': '8em',
-            'y': '10.5em',
-            'stroke': 'black'
-        });
-        insertLabel.textContent = 'Insert HTML';
-        this.cnt.appendChild(insertLabel);
-        insertLabel.addEventListener('click', function(){
-            self.selected = 'text'
-        }, false);
-        
-        // --> Toggle menu bar
-        new this.Element('rect', {
-        
-            "height": "100%",
-            "width": ".3%",
-            "x": "14.7%",
-            "y": 0,
-            "fill": "#222",
-            "id": "toggle",
-            "style": "cursor:pointer"
-        
-        }, this.cnt).addEventListener('click', function(){
-            setAttrs(self.cnt, {
-                'x': '-15%'
-            });
-        }, false);
-        // <--
+		var arrowBtn = $e("svg"), arrow = $e('line'); arrowBtn.setAttribute("class","btn");
+		arrow.addEventListener('click', function(evt){ self.selected = self.defaultCircle; }, false);
+		arrow.setAttrs({"x1": "0", "y1": "0", "x2": "5em", "y2": "5em","stroke":"yellow"});
+		arrowBtn.appendChild(arrow);		
+        // -->	
+
+        // <-- Insert string button
+		var stringBtn = $e("div",true); stringBtn.setAttribute("class","btn");
+		stringBtn.addEventListener('click', function(){ self.popup.show_JSON(); }, false);
+		stringBtn.innerHTML = "Insert JSON";	
+        // -->	
+	
+        // <-- Copyright footer
+		var footer = $e("div",true); footer.setAttribute("id","footer");
+		footer.innerHTML = 'JSDot 2009 - USI Lugano<br /><a href="#">Lucia Blondel</a> | <a href="#">Nicos Giuliani</a> | <a href="#">Carlo Vanini</a>';	
+        // -->		
+		
+		this.cnt.appends([toggle,rectBtn,arrowBtn,footer,stringBtn])
+		this.container.appendChild(this.cnt);
+
     },
     
+	toggleMenu:function(){
+		
+		if(this.toogle) {
+			setAttrs(this.svgroot,{"width":window.innerWidth - 200});
+			setAttrs(this.cnt,{'style': "margin-left:0"});
+			this.toogle = false;
+			return;
+		}
+		setAttrs(this.svgroot,{"width":window.innerWidth - 3});
+		setAttrs(this.cnt,{'style':'margin-left:-215px'});
+		this.toogle = true;
+	},
+	
     /**
      * Creates and append an element
      * @param {String} element
@@ -454,9 +336,9 @@ JSVG.prototype = {
         delete attrs.id;
         setAttrs(el, attrs);
         
-        arguments[2] ? arguments[2].appendChild(cnt) : JSVG.root.appendChild(cnt);
         cnt.appendChild(el);
-        
+        arguments[2] ? arguments[2].appendChild(cnt) : JSVG.svgroot.appendChild(cnt);
+
         return cnt;
     },
 

@@ -30,7 +30,20 @@ var xlinkns = "http://www.w3.org/1999/xlink";
 var xmlns = "http://www.w3.org/2000/svg";
 var xlink = "http://www.w3.org/1999/xlink";
 
-function $e(i){ return document.createElementNS(svgns, i); }
+function $e(i){ 
+	if(arguments[1]) return document.createElement(i);
+	return document.createElementNS(svgns, i); 
+}
+Element.prototype.appends = function(array) {
+	for(i in array){
+		this.appendChild(array[i]);
+	}
+}
+Element.prototype.setAttrs = function(attrs) {
+	for (i in attrs) {
+		this.setAttribute(i, attrs[i]);
+	}
+}
 function $(i) { return document.getElementById(i); };
 function Class(){ return function(arguments){ this.init(arguments); } }
 function setAttrs(obj, values) { for (i in values) { obj.setAttribute(i, values[i]); } }
