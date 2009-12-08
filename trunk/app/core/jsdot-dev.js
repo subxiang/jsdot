@@ -40,15 +40,24 @@ var f= function() {
 		"svg.js",
 		"painter.js",
 		"json.js",
-		"popup.js",
+		"popup.js"
 	];
 	
 	var ip = JSDOT_PATH || "../";
 	var h = document.getElementsByTagName("head").item(0);
+
+	// Main css file
+	var style = document.createElement("link");
+	style.setAttribute("type", "text/css");
+	style.setAttribute("rel", "stylesheet");
+	style.setAttribute("href", ip + '../style/main.css');
+	h.appendChild(style);
+
 	for (var i = 0; i < files.length; i++) {
 		var e = document.createElement("script");
 		e.setAttribute("type", "text/javascript");
 		e.setAttribute("src", ip+files[i]);
 		h.appendChild(e);
 	}
+
 }();
