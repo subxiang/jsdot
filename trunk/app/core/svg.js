@@ -71,8 +71,72 @@ JSVG.prototype = {
         this.svgroot.addEventListener('click', function(evt){
             self.drawElement(evt);
         }, false);
-        
+        // Right click listener
+        this.svgroot.addEventListener('mousedown', function(evt){
+			if (evt.which == 2 || evt.which == 3) {
+				self.showRightMenu(evt);
+			}
+		}, false);
+		
+		document.oncontextmenu = new Function("return false");
+		
     },
+	
+	showRightMenu: function(evt) {
+		
+		if (!this.rightMenuCnt) {
+			
+			this.rightMenuCnt = $e('div', true);
+			this.rightMenuCnt.setAttrs({
+				'style': 'top:' + evt.clientY + 'px;left:' + evt.clientX + 'px;',
+				'class' : 'rightMenu'
+			});
+			
+			var self = this, el;
+			
+			/** Object that defines the label inside the menu
+			 *  @struct { label : function } */
+			var func = {
+				'delete': function(){
+					self.deleteElement();
+				},
+				'show attributes': function(){
+					alert('showattributes');
+					self.popup.show_attributes(self.selected);
+				}
+			};
+			
+			for (label in func) {
+			
+				el = $e('a', true);
+				el.addEventListener('click', func[label], false);
+				el.innerHTML = label;
+				this.rightMenuCnt.appendChild(el);
+			}
+			
+			this.container.appendChild(this.rightMenuCnt);
+			
+		} else {
+			this.rightMenuCnt.style.display = 'block';
+			this.rightMenuCnt.style.top = evt.clientY + 'px';
+			this.rightMenuCnt.style.left = evt.clientX + 'px';			
+		}
+		
+
+		var time;		
+		this.rightMenuCnt.addEventListener('mouseout', function(evt){
+			var self = this;
+			time = setTimeout(function(){ self.style.display = 'none'; }, 500);
+		}, false);
+		
+		this.rightMenuCnt.addEventListener('mouseover', function(evt){
+			clearTimeout(time);
+		}, false);		
+	},
+	
+	deleteElement:function(){
+		alert('delete');
+	},
     
     /**
      * Draw an element depending on the selected form
@@ -86,16 +150,7 @@ JSVG.prototype = {
 
             element = eval('new ' + this.selected);
             element.addEventListener('mousedown', function(evt){
-            
-                if (self.selected == 'text') {
-					var text = prompt('Insert the label');
-					if (text) {
-						var e = $e('text');
-						e.setAttrs({"x":this.getX() - this.getWidth(),"y":this.getY()});
-						e.textContent = text;
-						this.appendChild(e);
-					}
-				} else {
+				if (evt.which != 2 && evt.which != 3) {
 					self.grab(evt);
 				}
             }, false);
