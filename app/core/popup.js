@@ -104,7 +104,13 @@ Popup.prototype = {
 		// color 
 		var fill_color = document.createElement("select");
 		fill_color.setAttribute("name", "color");	
-		fill_color.setAttribute("id", "fill_color");	
+		fill_color.setAttribute("id", "fill_color");
+		var current_value = node.getFillColor();
+		var current = document.createElement("option");
+		current.setAttribute("value", current_value);
+		current.setAttribute("selected", "true");
+		current.appendChild(document.createTextNode(current_value));
+		fill_color.appendChild(current);
 		var blue = document.createElement("option");
 		blue.setAttribute("value", "blue");
 		blue.appendChild(document.createTextNode('blue'));
