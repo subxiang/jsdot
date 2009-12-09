@@ -27,20 +27,8 @@ THE SOFTWARE.
 
 	JSDot.prototype.draw = function() {
 		var g = this.graph;
-		for(i in g.nodes) {
-			var n = g.nodes[i];
-			var pos = n.getAttribute("pos");
-			var x = 10, y = 10;
-			if (typeof pos == "string") {
-				pos = pos.split(',');
-				x = pos[0];
-				y = pos[1];
-			}
-			var e = this.svg.Element('circle', {'r': '2.5em', 'cx': x, 'cy': y});
-			e.addEventListener('mousedown', function(svg){ return function(evt) {svg.grab(evt);}; }(this.svg), false);
-		}
 		
-		for(i in g.edges) {
+		for(var i in g.edges) {
 			var e = g.edges[i];
 			var p1 = e.src.getAttribute("pos");
 			var p2 = e.dst.getAttribute("pos");
@@ -52,7 +40,27 @@ THE SOFTWARE.
 			var y2 = p2[1];
 			
 			var l = this.svg.Element('line', {'x1': x1, 'y1': y1, 'x2': x2, 'y2': y2, "style": "fill:none;stroke:black;stroke-width:1;"});
-		}
-//		JSVG.
-//		alert(JSON.stringify(g));
+		};
+		
+		for(var i in g.nodes) {
+			this.svg.drawNode(g.nodes[i]);
+		};
+};
+
+JSVG.prototype.drawNode = function(n) {
+	var pos = n.getPos();
+	var e = this.Element('circle', {
+		'r': '2.5em', 'cx': pos[0], 'cy': pos[1],
+		'stroke': n.getColor(),
+		'fill': n.getFillColor()
+		});
+	e.addEventListener('mousedown', function(svg){ return function(evt) {svg.grab(evt);}; }(this), false);
+	var t = $e('text');
+	setAttrs(t, {
+		'x': pos[0], 'y': pos[1],
+		'stroke': n.getColor(),
+		'text-anchor': "middle"
+	});
+	t.textContent = n.getLabel();
+	this.svgroot.appendChild(t);
 };
