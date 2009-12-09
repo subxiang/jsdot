@@ -50,11 +50,16 @@ THE SOFTWARE.
 JSVG.prototype.drawNode = function(n) {
 	var pos = n.getPos();
 	var e = this.Element('circle', {
+		'id': 'n_'+n.getName(),
 		'r': '2.5em', 'cx': pos[0], 'cy': pos[1],
 		'stroke': n.getColor(),
 		'fill': n.getFillColor()
 		});
-	e.addEventListener('mousedown', function(svg){ return function(evt) {svg.grab(evt);}; }(this), false);
+	e.addEventListener('mousedown',
+		function(svg){
+			return function(evt) {
+				if (evt.which != 2 && evt.which != 3) svg.grab(evt);
+			}; }(this), false);
 	var t = $e('text');
 	setAttrs(t, {
 		'x': pos[0], 'y': pos[1],
