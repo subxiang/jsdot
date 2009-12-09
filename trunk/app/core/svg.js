@@ -58,9 +58,9 @@ JSVG.prototype = {
         this.grabPoint = this.svgroot.createSVGPoint();
         
         this.buildMenu();
+		
 		var self = this;
-
-        
+		
         // Drag and drop listeners
         this.svgroot.addEventListener('mousemove', function(evt){
 			if (self.selected == 'edge' && self.edge != null) {
@@ -88,6 +88,11 @@ JSVG.prototype = {
 		document.oncontextmenu = new Function("return false");
     },
 	
+	/**
+	 * Show and hide the right click menu.
+	 * (if first time, it creates the menu in the DOM)
+	 * @param {Object} evt
+	 */
 	showRightMenu: function(evt) {
 		
 		if (!this.rightMenuCnt) {
@@ -329,6 +334,7 @@ JSVG.prototype = {
 
     },
     
+	/** Toggle the left menu */
 	toggleMenu:function(){
 		
 		if(this.toogle) {
@@ -380,6 +386,10 @@ JSVG.prototype = {
         return cnt;
     },
 	
+	/**
+	 * Draw an edge from a node to an other
+	 * @param {Object} evt
+	 */
 	drawEdge: function(evt) {
 		
 		if (evt.target instanceof SVGCircleElement) {
