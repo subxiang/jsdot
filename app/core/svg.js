@@ -27,9 +27,10 @@ JSVG.prototype = {
     coords: null,
     selected: null,
     popup: null,
+	edge: null,
 	leftMenuSize:220,
     
-    defaultCircle: 'this.Element(\'circle\', { "r": "2.5em", "cx": evt.clientX-220, "cy": evt.clientY, "fill": "#ddd", "stroke": "#000" })',
+    defaultCircle: 'this.Element(\'circle\', { "r": "2.5em", "cx": evt.clientX-220, "cy": evt.clientY, "fill": "#000", "stroke": "#000", "z-index":"10" })',
 	defaultLine: 'this.Element(\'line\', { "x1": evt.clientX, "y1": evt.clientX,  "x2": evt.clientX + 5, "y2": evt.clientY + 5, "style": "fill:none;stroke:black;stroke-width:1;"})',
     
     /** Constructor */
@@ -62,14 +63,21 @@ JSVG.prototype = {
         
         // Drag and drop listeners
         this.svgroot.addEventListener('mousemove', function(evt){
-            self.drag(evt);
+			if (self.selected == 'edge' && self.edge != null) {
+				self.edge.setAttrs({
+					'x2': evt.clientX - self.leftMenuSize - 2,
+					'y2': evt.clientY - 2
+				});
+			} else {
+	            self.drag(evt);
+			}
         }, false);
         this.svgroot.addEventListener('mouseup', function(evt){
             self.drop(evt);
         }, false);
         // Add elements listener
         this.svgroot.addEventListener('click', function(evt){
-            self.drawElement(evt);
+            self.dispatchEvent(evt);
         }, false);
         // Right click listener
         this.svgroot.addEventListener('mousedown', function(evt){
@@ -77,9 +85,7 @@ JSVG.prototype = {
 				self.showRightMenu(evt);
 			}
 		}, false);
-		
 		document.oncontextmenu = new Function("return false");
-		
     },
 	
 	showRightMenu: function(evt) {
@@ -141,21 +147,26 @@ JSVG.prototype = {
 	},
     
     /**
-     * Draw an element depending on the selected form
+     * Dispatch different events
      * @param {Object} evt
      */
-    drawElement: function(evt){
+    dispatchEvent: function(evt){
     
         var self = this, element;
         
         if (this.selected != null) {
 
-            element = eval('new ' + this.selected);
-            element.addEventListener('mousedown', function(evt){
-				if (evt.which != 2 && evt.which != 3) {
-					self.grab(evt);
-				}
-            }, false);
+			if (self.selected != 'edge') {
+				
+				element = eval('new ' + this.selected);
+				element.addEventListener('mousedown', function(evt){
+					if (self.selected == 'edge') {
+						self.drawEdge(evt);
+					} else if (evt.which != 2 && evt.which != 3) {
+						self.grab(evt);
+					}
+				}, false);
+			}
         } 
     },
     
@@ -289,15 +300,15 @@ JSVG.prototype = {
 		// -->
 		
         // <-- Rectangle button
-		var rectBtn = $e("svg"), rect = $e('circle'); rectBtn.setAttribute("class","btn");
-		rect.addEventListener('click', function(evt){ self.selected = self.defaultCircle; }, false);
-		rect.setAttrs({"r": "24","cx":"25","cy":"25"});
-		rectBtn.appendChild(rect);
+		var circleBtn = $e("svg"), circle = $e('circle'); circleBtn.setAttribute("class","btn");
+		circle.addEventListener('click', function(evt){ self.selected = self.defaultCircle; }, false);
+		circle.setAttrs({"r": "24","cx":"25","cy":"25"});
+		circleBtn.appendChild(circle);
         // -->	
 	
-        // <-- Arrow button
+        // <-- Edge button
 		var arrowBtn = $e("svg"), arrow = $e('line'); arrowBtn.setAttribute("class","btn");
-		arrow.addEventListener('click', function(evt){ self.selected = self.defaultCircle; }, false);
+		arrowBtn.addEventListener('click', function(evt){ self.selected = 'edge'; }, false);
 		arrow.setAttrs({"x1": "0", "y1": "0", "x2": "5em", "y2": "5em","stroke":"yellow"});
 		arrowBtn.appendChild(arrow);		
         // -->	
@@ -313,7 +324,7 @@ JSVG.prototype = {
 		footer.innerHTML = 'JSDot 2009 - USI Lugano<br /><a href="#">Lucia Blondel</a> | <a href="#">Nicos Giuliani</a> | <a href="#">Carlo Vanini</a>';	
         // -->		
 		
-		this.cnt.appends([toggle,rectBtn,arrowBtn,footer,stringBtn])
+		this.cnt.appends([toggle,circleBtn,arrowBtn,footer,stringBtn])
 		this.container.appendChild(this.cnt);
 
     },
@@ -367,6 +378,27 @@ JSVG.prototype = {
         arguments[2] ? arguments[2].appendChild(cnt) : JSVG.svgroot.appendChild(cnt);
 
         return cnt;
-    }
+    },
+	
+	drawEdge: function(evt) {
+		
+		if (evt.target instanceof SVGCircleElement) {
+			
+			// We got already a point, so fix the second
+			if(this.pointOne && evt.target instanceof SVGCircleElement) {
 
+				var target = evt.target;
+				this.edge.setAttrs({'x2':target.getAttribute("cx"),'y2':target.getAttribute("cy")});
+				this.edge = null; this.pointOne = false;
+				
+			} else { // set the start point to the target position
+				
+				var x = evt.target.getAttribute("cx"), y = evt.target.getAttribute("cy");
+				this.edge = $e('line'); this.edge.setAttrs({'stroke': 'black','x1': x,'y1': y,'x2': x,'y2': y});
+				this.svgroot.appendChild(this.edge);			
+				this.pointOne = true;
+			}
+		}
+	}
 }
+
