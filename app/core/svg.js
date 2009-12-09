@@ -340,14 +340,6 @@ JSVG.prototype = {
         arguments[2] ? arguments[2].appendChild(cnt) : JSVG.svgroot.appendChild(cnt);
 
         return cnt;
-    },
-
-	
-    drawEdge: function(Edge){
-    
-    },
-    
-    drawNode: function(Node){
-    
     }
+
 }
