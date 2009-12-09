@@ -34,7 +34,7 @@ JSVG.prototype = {
     
     /** Constructor */
     init: function(jsdot, id){
-    
+
 		this.jsdot = jsdot;
 		
         this.container = $(id);
@@ -98,7 +98,6 @@ JSVG.prototype = {
 				} else {
 					self.grab(evt);
 				}
-                
             }, false);
         } 
     },
@@ -122,6 +121,7 @@ JSVG.prototype = {
             // Calculates the element's coords
             var transMatrix = targetElement.getCTM();
             this.getCoords(evt);
+
             this.grabPoint.x = this.coords.x - Number(transMatrix.e);
             this.grabPoint.y = this.coords.y - Number(transMatrix.f);
             
