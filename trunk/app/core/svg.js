@@ -102,36 +102,6 @@ JSVG.prototype = {
         } 
     },
     
-    
-    /**
-     * Set the element to be dragged.
-     * @param {Object} evt
-     */
-    grab: function(evt){
-    
-        var targetElement = evt.target;
-        
-        if (this.designArea != targetElement) {
-        
-            this.selected = targetElement;
-            setAttrs(targetElement, {
-                "fill-opacity": 0.5
-            });
-            
-            // Calculates the element's coords
-            var transMatrix = targetElement.getCTM();
-            this.getCoords(evt);
-
-            this.grabPoint.x = this.coords.x - Number(transMatrix.e);
-            this.grabPoint.y = this.coords.y - Number(transMatrix.f);
-            
-            // Set out target
-            this.dragElement = targetElement;
-            this.dragElement.setAttributeNS(null, 'pointer-events', 'none');
-            
-        }
-    },
-    
     /**
      * Drag the element throught the design area
      * @param {Object} evt
@@ -179,7 +149,7 @@ JSVG.prototype = {
      */
     grab: function(evt){
     
-        var targetElement = evt.target;
+        var targetElement = evt.currentTarget;
         
         if (this.designArea != targetElement) {
         

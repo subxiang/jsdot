@@ -62,5 +62,5 @@ JSVG.prototype.drawNode = function(n) {
 		'text-anchor': "middle"
 	});
 	t.textContent = n.getLabel();
-	this.svgroot.appendChild(t);
+	e.appendChild(t);
 };
