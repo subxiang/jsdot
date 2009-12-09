@@ -89,6 +89,9 @@ Popup.prototype = {
 	
 	show_attributes:function(node) {
 		
+		if (typeof node == "string") node = this.jsdot.getNodeByName(node);
+		var self = this;
+		
 		var label = document.createElement("input");
 		var label_attr = {
 			id:  "label",
@@ -104,16 +107,22 @@ Popup.prototype = {
 		fill_color.setAttribute("id", "fill_color");	
 		var blue = document.createElement("option");
 		blue.setAttribute("value", "blue");
+		blue.appendChild(document.createTextNode('blue'));
 		fill_color.appendChild(blue);
 		var yellow = document.createElement("option");
 		yellow.setAttribute("value", "yellow");
+		yellow.appendChild(document.createTextNode('yellow'));
 		fill_color.appendChild(yellow);
 		var red = document.createElement("option");
 		red.setAttribute("value", "red");
+		red.appendChild(document.createTextNode('red'));
 		fill_color.appendChild(red);
 		var green = document.createElement("option");
 		green.setAttribute("value", "green");
+		green.appendChild(document.createTextNode('green'));
 		fill_color.appendChild(green);
+		
+		this.newDiv.appendChild(fill_color);
 		
 		var p = document.createElement("p");
         
@@ -143,6 +152,7 @@ Popup.prototype = {
         p.appendChild(exit_button);
         
         this.newDiv.appendChild(p);
+        this.newDiv.style.display = 'block';
 
 	},
 		

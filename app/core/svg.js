@@ -94,15 +94,17 @@ JSVG.prototype = {
 			
 			var self = this, el;
 			
+			// get affected node
+			var node_name = evt.target.parentNode.id.slice(2);
+			
 			/** Object that defines the label inside the menu
 			 *  @struct { label : function } */
 			var func = {
 				'delete': function(){
-					self.deleteElement();
+					self.jsdot.removeNode(node_name);
 				},
 				'show attributes': function(){
-					alert('showattributes');
-					self.popup.show_attributes(self.selected);
+					self.popup.show_attributes(node_name);
 				}
 			};
 			
