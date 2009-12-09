@@ -37,7 +37,7 @@ Popup.prototype = {
 		this.jsdot = jsdot;
 		this.doc = parent.ownerDocument;
 		this.newDiv = this.doc.createElement('div');
-		this.newDiv.setAttribute('style', 'position:absolute; left:10%; top:10%; height:80%; width:80%; background:white; border-color:black; border-width:0.5em; padding:0.4em; display:None');
+		this.newDiv.setAttribute('style', 'position:absolute; left:10%; top:10%; height:80%; width:80%; background:white; border-color:black; border-width:0.5em; padding:0.4em; display:None; z-index:1000');
 		parent.appendChild(this.newDiv);
 	},
 	

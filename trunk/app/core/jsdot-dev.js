@@ -40,7 +40,8 @@ var f= function() {
 		"svg.js",
 		"painter.js",
 		"json.js",
-		"popup.js"
+		"popup.js",
+		"check.js"
 	];
 	
 	var ip = JSDOT_PATH || "../";
