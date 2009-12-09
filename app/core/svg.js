@@ -27,10 +27,10 @@ JSVG.prototype = {
     coords: null,
     selected: null,
     popup: null,
+	leftMenuSize:220,
     
-    defaultCircle: 'this.Element(\'circle\', { "r": "2.5em", "cx": evt.clientX, "cy": evt.clientY, "fill": "#ddd", "stroke": "#000" })',
-    defaultRect: 'this.Element(\'rect\', { "height": "5em", "width": "5em", "x": evt.clientX, "y": evt.clientY, "fill": "#ff0000" })',
-    defaultLine: 'this.Element(\'line\', { "x1": evt.clientX, "y1": evt.clientX,  "x2": evt.clientX + 5, "y2": evt.clientY + 5, "style": "fill:none;stroke:black;stroke-width:1;"})',
+    defaultCircle: 'this.Element(\'circle\', { "r": "2.5em", "cx": evt.clientX-220, "cy": evt.clientY, "fill": "#ddd", "stroke": "#000" })',
+	defaultLine: 'this.Element(\'line\', { "x1": evt.clientX, "y1": evt.clientX,  "x2": evt.clientX + 5, "y2": evt.clientY + 5, "style": "fill:none;stroke:black;stroke-width:1;"})',
     
     /** Constructor */
     init: function(jsdot, id){
@@ -46,7 +46,7 @@ JSVG.prototype = {
         this.popup = new Popup(this.jsdot, this.container, 'popup');
         
         this.svgroot.setAttrs({
-            "width": window.innerWidth - 220,
+            "width": window.innerWidth - this.leftMenuSize,
             "id": "svgroot",
 			"style": "position:absolute;top:0;right:0;background:#ddd;padding:0;margin:0;",
             "xmlns": svgns,
@@ -161,8 +161,8 @@ JSVG.prototype = {
             // Calculates the element's coords
             var transMatrix = targetElement.getCTM();
             this.getCoords(evt);
-            this.grabPoint.x = this.coords.x - Number(transMatrix.e);
-            this.grabPoint.y = this.coords.y - Number(transMatrix.f);
+            this.grabPoint.x = this.coords.x - Number(transMatrix.e) + this.leftMenuSize;
+			this.grabPoint.y = this.coords.y - Number(transMatrix.f);
             
             // Set out target
             this.dragElement = targetElement;
