@@ -112,7 +112,7 @@ JSVG.prototype = {
 			 *  @struct { label : function } */
 			var func = {
 				'delete': function(){
-					self.jsdot.removeNode(node_name);
+					self.deleteElement(node_name);
 				},
 				'show attributes': function(){
 					self.popup.show_attributes(node_name);
@@ -147,8 +147,9 @@ JSVG.prototype = {
 		}, false);		
 	},
 	
-	deleteElement:function(){
-		alert('delete');
+	deleteElement:function(name){
+		this.jsdot.removeNode(name);
+		this.jsdot.draw();
 	},
     
     /**
