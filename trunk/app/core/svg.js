@@ -105,17 +105,15 @@ JSVG.prototype = {
 			
 			var self = this, el;
 			
-			// get affected node
-			var node_name = evt.target.parentNode.id.slice(2);
 			
 			/** Object that defines the label inside the menu
 			 *  @struct { label : function } */
 			var func = {
 				'delete': function(){
-					self.deleteElement(node_name);
+					self.deleteElement(self.node_name);
 				},
 				'show attributes': function(){
-					self.popup.show_attributes(node_name);
+					self.popup.show_attributes(self.node_name);
 				}
 			};
 			
@@ -135,6 +133,9 @@ JSVG.prototype = {
 			this.rightMenuCnt.style.left = evt.clientX + 'px';			
 		}
 		
+		// get affected node
+		this.node_name = evt.target.parentNode.id.slice(2);
+
 
 		var time;		
 		this.rightMenuCnt.addEventListener('mouseout', function(evt){
