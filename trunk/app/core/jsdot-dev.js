@@ -37,6 +37,7 @@ var f= function() {
 		"helpers.js",
 		"main.js",
 		"graph.js",
+		"template.js",
 		"svg.js",
 		"painter.js",
 		"json.js",

@@ -336,13 +336,43 @@ JSVG.prototype = {
 		stringBtn.addEventListener('click', function(){ self.popup.show_JSON(); }, false);
 		stringBtn.innerHTML = "Insert or see JSON";	
         // -->	
+		
+		// <-- Drop down examples
+		var examples = document.createElement("div"); 
+		examples.setAttribute("style", "float-left:5px");
+		
+		var sel =  document.createElement("select");
+		sel.setAttribute("name", "examples");	
+		sel.setAttribute("id", "examples");
+		
+		for(var i = 0; i < JSDot.template.length; i++) {
+			var o =  document.createElement("option");
+			o.setAttribute("value", JSDot.template[i][0]);
+			o.appendChild(document.createTextNode(JSDot.template[i][0]));
+			o.addEventListener('click', function(i){ return function(){
+				self.jsdot.loadJSON(JSDot.template[i][1]);
+				self.jsdot.draw();
+			} }(i), false);
+			sel.appendChild(o);
+		}
+		examples.appendChild(sel);
+			
+		/*
+		
+		var option1 = document.createElement("option");
+		option1.setAttribute("value", "ooo");
+		option1.appendChild(document.createTextNode('ooo'));
+		
+		sel.appendChild(option1);
+		*/
+		// -->
 	
         // <-- Copyright footer
 		var footer = $e("div",true); footer.setAttribute("id","footer");
 		footer.innerHTML = 'JSDot 2009 - USI Lugano<br /><a href="#">Lucia Blondel</a> | <a href="#">Nicos Giuliani</a> | <a href="#">Carlo Vanini</a>';	
         // -->		
 		
-		this.cnt.appends([toggle,circleBtn,arrowBtn,footer,stringBtn])
+		this.cnt.appends([toggle,circleBtn,arrowBtn,footer,stringBtn,examples]);
 		this.container.appendChild(this.cnt);
 
     },
@@ -408,9 +438,6 @@ JSVG.prototype = {
 				
 				var x = evt.target.getAttribute("cx"), y = evt.target.getAttribute("cy");
 				var target = evt.target;
-				/* =====
-				this.src = document.elementFromPoint(x, y);
-				 ==== */
 				this.edge = $e('line'); this.edge.setAttrs({'stroke': 'black','x1': x,'y1': y,'x2': x,'y2': y});
 				this.svgroot.insertBefore(this.edge, this.svgroot.firstChild);			
 				this.pointOne = true;
