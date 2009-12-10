@@ -163,14 +163,20 @@ JSVG.prototype = {
 
 			if (self.selected != 'edge') {
 				
-				element = eval('new ' + this.selected);
-				element.addEventListener('mousedown', function(evt){
-					if (self.selected == 'edge') {
-						self.drawEdge(evt);
-					} else if (evt.which != 2 && evt.which != 3) {
-						self.grab(evt);
-					}
-				}, false);
+				if (this.selected == this.defaultCircle) {
+					var node = this.jsdot.newNode();
+					node.setPos(evt.clientX-this.leftMenuSize, evt.clientY);
+					this.drawNode(node);
+				} else {
+					element = eval('new ' + this.selected);
+					element.addEventListener('mousedown', function(evt){
+						if (self.selected == 'edge') {
+							self.drawEdge(evt);
+						} else if (evt.which != 2 && evt.which != 3) {
+							self.grab(evt);
+						}
+					}, false);
+				}
 			}
         } 
     },
