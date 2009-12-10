@@ -60,7 +60,11 @@ JSVG.prototype.drawNode = function(n) {
 	e.addEventListener('mousedown',
 		function(svg){
 			return function(evt) {
-				if (evt.which != 2 && evt.which != 3) svg.grab(evt);
+				if (svg.selected == 'edge') {
+					svg.drawEdge(evt);
+				} else if (evt.which != 2 && evt.which != 3) {
+					svg.grab(evt);
+				}
 			}; }(this), false);
 	var t = $e('text');
 	setAttrs(t, {

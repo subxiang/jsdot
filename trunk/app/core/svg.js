@@ -416,7 +416,7 @@ JSVG.prototype = {
 				
 				var x = evt.target.getAttribute("cx"), y = evt.target.getAttribute("cy");
 				this.edge = $e('line'); this.edge.setAttrs({'stroke': 'black','x1': x,'y1': y,'x2': x,'y2': y});
-				this.svgroot.appendChild(this.edge);			
+				this.svgroot.insertBefore(this.edge, this.svgroot.firstChild);			
 				this.pointOne = true;
 			}
 		}
