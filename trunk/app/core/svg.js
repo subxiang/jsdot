@@ -285,6 +285,8 @@ JSVG.prototype = {
             this.dragElement.setAttributeNS(null, 'pointer-events', 'all');
             this.dragElement = null;
             this.selected = null;
+			
+			this.jsdot.draw();
         }
     },
     
@@ -402,6 +404,10 @@ JSVG.prototype = {
 	 * Draw an edge from a node to an other
 	 * @param {Object} evt
 	 */
+	
+	src: null,
+	dst: null,
+	
 	drawEdge: function(evt) {
 		
 		if (evt.target instanceof SVGCircleElement) {
@@ -410,12 +416,23 @@ JSVG.prototype = {
 			if(this.pointOne && evt.target instanceof SVGCircleElement) {
 
 				var target = evt.target;
+				var x = evt.target.getAttribute("cx"), y = evt.target.getAttribute("cy");
 				this.edge.setAttrs({'x2':target.getAttribute("cx"),'y2':target.getAttribute("cy")});
 				this.edge = null; this.pointOne = false;
+				/* ==== ADD ID TO THE NODES AND EDGES!
+				this.dst = document.elementFromPoint(x, y);		
+				alert(this.src);
+				alert(this.dst);		
+				this.jsdot.newEdge(this.src, this.dst);
+				 ==== */
 				
 			} else { // set the start point to the target position
 				
 				var x = evt.target.getAttribute("cx"), y = evt.target.getAttribute("cy");
+				var target = evt.target;
+				/* =====
+				this.src = document.elementFromPoint(x, y);
+				 ==== */
 				this.edge = $e('line'); this.edge.setAttrs({'stroke': 'black','x1': x,'y1': y,'x2': x,'y2': y});
 				this.svgroot.insertBefore(this.edge, this.svgroot.firstChild);			
 				this.pointOne = true;
