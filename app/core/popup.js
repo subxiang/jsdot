@@ -99,7 +99,10 @@ Popup.prototype = {
 			value: node.getLabel()
 		}
    		setAttrs(label, label_attr);
+		this.newDiv.innerHTML += "Label ";
 		this.newDiv.appendChild(label);
+		this.newDiv.innerHTML += "<br />";
+		this.newDiv.innerHTML += "Fill color ";
 		
 		// color 
 		var fill_color = document.createElement("select");
