@@ -170,14 +170,7 @@ JSVG.prototype = {
 					node.setPos(evt.clientX-this.leftMenuSize, evt.clientY);
 					this.drawNode(node);
 				} else {
-					element = eval('new ' + this.selected);
-					element.addEventListener('mousedown', function(evt){
-						if (self.selected == 'edge') {
-							self.drawEdge(evt);
-						} else if (evt.which != 2 && evt.which != 3) {
-							self.grab(evt);
-						}
-					}, false);
+					throw({'name': 'RangeError', 'message': 'unexpected selection'})
 				}
 			}
         } 
@@ -422,22 +415,23 @@ JSVG.prototype = {
 	src: null,
 	dst: null,
 	
-	drawEdge: function(evt) {
+	addEdge: function(evt) {
 		
 		if (evt.target instanceof SVGCircleElement) {
 			
 			// We got already a point, so fix the second
 			if(this.pointOne && evt.target instanceof SVGCircleElement) {
 
-				var target = evt.target;
-				var x = evt.target.getAttribute("cx"), y = evt.target.getAttribute("cy");
-				this.edge.setAttrs({'x2':target.getAttribute("cx"),'y2':target.getAttribute("cy")});
+				var dst = evt.currentTarget.id.slice(2);
+				var e = this.jsdot.newEdge(this.src, dst);
+				this.edge.parentNode.removeChild(this.edge);
 				this.edge = null; this.pointOne = false;
+				this.drawEdge(e);
 				
 			} else { // set the start point to the target position
 				
 				var x = evt.target.getAttribute("cx"), y = evt.target.getAttribute("cy");
-				var target = evt.target;
+				this.src = evt.currentTarget.id.slice(2);
 				this.edge = $e('line'); this.edge.setAttrs({'stroke': 'black','x1': x,'y1': y,'x2': x,'y2': y});
 				this.svgroot.insertBefore(this.edge, this.svgroot.firstChild);			
 				this.pointOne = true;
