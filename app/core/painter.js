@@ -25,28 +25,18 @@ THE SOFTWARE.
 
 */
 
-	JSDot.prototype.draw = function() {
-		var g = this.graph;
-		
-		this.svg.clear();
-		
-		for(var i in g.edges) {
-			var e = g.edges[i];
-			var p1 = e.src.getAttribute("pos");
-			var p2 = e.dst.getAttribute("pos");
-			p1 = p1.split(',');
-			p2 = p2.split(',');
-			var x1 = p1[0];
-			var y1 = p1[1];
-			var x2 = p2[0];
-			var y2 = p2[1];
-			
-			var l = this.svg.Element('line', {'x1': x1, 'y1': y1, 'x2': x2, 'y2': y2, "style": "fill:none;stroke:black;stroke-width:1;"});
-		};
-		
-		for(var i in g.nodes) {
-			this.svg.drawNode(g.nodes[i]);
-		};
+JSDot.prototype.draw = function() {
+	var g = this.graph;
+	
+	this.svg.clear();
+	
+	for(var i in g.edges) {
+		this.svg.drawEdge(g.edges[i]);
+	};
+	
+	for(var i in g.nodes) {
+		this.svg.drawNode(g.nodes[i]);
+	};
 };
 
 JSVG.prototype.drawNode = function(n) {
@@ -76,10 +66,37 @@ JSVG.prototype.drawNode = function(n) {
 	e.appendChild(t);
 };
 
+JSVG.prototype.drawEdge = function(edge) {
+	var p1 = edge.src.getPos();
+	var p2 = edge.dst.getPos();
+	
+	var attrs = {'x1': p1[0], 'y1': p1[1], 'x2': p2[0], 'y2': p2[1], "style": "fill:none;stroke:black;stroke-width:1;"};
+	if (this.jsdot.graph.directed) attrs['marker-end'] = 'url(#Arrow)';
+	var l = this.Element('line', attrs);
+};
+
+JSVG.prototype.drawFragments = function() {
+	var marker = $e('marker');
+	setAttrs(marker, {'id': 'Arrow',
+		'orient': 'auto',
+		'refX': '2.5em',
+		'refY': '0.0',
+		'style': 'overflow:visible'});
+	var path = $e('path');
+	setAttrs(path, {'d': 'M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z',
+		'style': 'font-size:12.0;fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round'});
+	path.setAttribute('transform', 'scale(1.1) rotate(180) translate(1,0)');
+	marker.appendChild(path);
+	this.svgroot.appendChild(marker);
+};
+
 /** Remove all child of the SVG tag
  * 
  */
 JSVG.prototype.clear = function() {
 	while (this.svgroot.lastChild)
 		this.svgroot.removeChild(this.svgroot.lastChild);
+
+	// add picture fragments
+	this.drawFragments();
 };
