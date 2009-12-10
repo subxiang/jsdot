@@ -332,7 +332,7 @@ JSVG.prototype = {
         // <-- Insert string button
 		var stringBtn = $e("div",true); stringBtn.setAttribute("class","btn");
 		stringBtn.addEventListener('click', function(){ self.popup.show_JSON(); }, false);
-		stringBtn.innerHTML = "Insert JSON";	
+		stringBtn.innerHTML = "Insert or see JSON";	
         // -->	
 	
         // <-- Copyright footer
