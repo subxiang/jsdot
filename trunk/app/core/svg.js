@@ -270,6 +270,11 @@ JSVG.prototype = {
             this.selected.setAttrs( {
                 "fill-opacity": 1
             });
+            
+            // update node
+            this.getCoords(evt);
+            this.jsdot.getNodeByName(this.dragElement.id.slice(2)).setPos(evt.clientX - this.leftMenuSize, evt.clientY);
+            
             this.dragElement.setAttributeNS(null, 'pointer-events', 'all');
             this.dragElement = null;
             this.selected = null;
