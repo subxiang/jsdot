@@ -135,7 +135,7 @@ THE SOFTWARE.
 	JSDot.prototype.Node.prototype.setShape = function(shape) {
 		this.setAttribute("shape", shape);
 	}
-
+	
 
 /** Edges API
  * 
@@ -268,8 +268,10 @@ JSDot.prototype.removeNode = function(node) {
 		if(this.graph.edges[edge].getSrc().name == node) {
 			delete(this.graph.edges[edge]);
 		}
-		if(this.graph.edges[edge].getDst().name == node) {
-			delete(this.graph.edges[edge]);
+		if (this.graph.edges[edge]) {
+			if (this.graph.edges[edge].getDst().name == node) {
+				delete (this.graph.edges[edge]);
+			}
 		}
 	}
 }
