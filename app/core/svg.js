@@ -29,6 +29,7 @@ JSVG.prototype = {
     popup: null,
 	edge: null,
 	leftMenuSize:220,
+	defaultMenuSize:this.lefMenuSize,
     
     defaultCircle: 'this.Element(\'circle\', { "r": "2.5em", "cx": evt.clientX-220, "cy": evt.clientY, "fill": "#000", "stroke": "#000", "z-index":"10" })',
 	defaultLine: 'this.Element(\'line\', { "x1": evt.clientX, "y1": evt.clientX,  "x2": evt.clientX + 5, "y2": evt.clientY + 5, "style": "fill:none;stroke:black;stroke-width:1;"})',
@@ -135,9 +136,8 @@ JSVG.prototype = {
 		
 		// get affected node
 		this.node_name = evt.target.parentNode.id.slice(2);
-
-
 		var time;		
+		
 		this.rightMenuCnt.addEventListener('mouseout', function(evt){
 			var self = this;
 			time = setTimeout(function(){ self.style.display = 'none'; }, 500);
@@ -204,9 +204,7 @@ JSVG.prototype = {
         if (this.dragElement != null) {
         
             // Set the selected style
-            this.selected.setAttrs( {
-                "fill-opacity": 1
-            });
+            this.selected.setAttrs({"fill-opacity": 1});
             this.dragElement.setAttributeNS(null, 'pointer-events', 'all');
             this.dragElement = null;
             this.selected = null;
@@ -353,14 +351,16 @@ JSVG.prototype = {
 	toggleMenu:function(){
 		
 		if(this.toogle) {
-			setAttrs(this.svgroot,{"width":window.innerWidth - 200});
-			setAttrs(this.cnt,{'style': "margin-left:0"});
+			this.svgroot.setAttrs({"width":window.innerWidth - 220});
+			this.cnt.setAttrs({'style': "margin-left:0"});
 			this.toogle = false;
+			this.leftMenuSize = 220;
 			return;
 		}
 		setAttrs(this.svgroot,{"width":window.innerWidth - 3});
 		setAttrs(this.cnt,{'style':'margin-left:-215px'});
-		this.toogle = true;
+		this.toogle = true; 
+		this.leftMenuSize = 0;
 	},
 	
     /**
@@ -370,24 +370,7 @@ JSVG.prototype = {
      * @param {Object} target (Optional)
      */
     Element: function(element, attrs){
-
-		Element.prototype.getX = function(){
-			for (i in attrs){
-				if(i.indexOf('x') != -1) return attrs[i];
-			}
-		}
-
-		Element.prototype.getY = function(){
-			for (i in attrs){
-				if(i.indexOf('y') != -1) return attrs[i];
-			}
-		}
-		Element.prototype.getWidth = function(){
-			for (i in attrs){
-				if(i.indexOf('width') != -1) return parseInt(attrs[i]);
-				if(i.indexOf('r') != -1) return parseInt(attrs[i]);
-			}
-		}    
+  
         var el = $e(element);
         var cnt = $e('g');
         
@@ -420,12 +403,6 @@ JSVG.prototype = {
 				var x = evt.target.getAttribute("cx"), y = evt.target.getAttribute("cy");
 				this.edge.setAttrs({'x2':target.getAttribute("cx"),'y2':target.getAttribute("cy")});
 				this.edge = null; this.pointOne = false;
-				/* ==== ADD ID TO THE NODES AND EDGES!
-				this.dst = document.elementFromPoint(x, y);		
-				alert(this.src);
-				alert(this.dst);		
-				this.jsdot.newEdge(this.src, this.dst);
-				 ==== */
 				
 			} else { // set the start point to the target position
 				
