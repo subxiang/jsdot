@@ -28,6 +28,8 @@ THE SOFTWARE.
 	JSDot.prototype.draw = function() {
 		var g = this.graph;
 		
+		this.svg.clear();
+		
 		for(var i in g.edges) {
 			var e = g.edges[i];
 			var p1 = e.src.getAttribute("pos");
@@ -68,4 +70,12 @@ JSVG.prototype.drawNode = function(n) {
 	});
 	t.textContent = n.getLabel();
 	e.appendChild(t);
+};
+
+/** Remove all child of the SVG tag
+ * 
+ */
+JSVG.prototype.clear = function() {
+	while (this.svgroot.lastChild)
+		this.svgroot.removeChild(this.svgroot.lastChild);
 };
