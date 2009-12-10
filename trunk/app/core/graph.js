@@ -264,6 +264,14 @@ JSDot.prototype.getNodeByName = function(name) {
 JSDot.prototype.removeNode = function(node) {
 	if (node instanceof this.Node) node = node.name;
 	delete(this.graph.nodes[node]);
+	for (edge in this.graph.edges) {
+		if(this.graph.edges[edge].getSrc().name == node) {
+			delete(this.graph.edges[edge]);
+		}
+		if(this.graph.edges[edge].getDst().name == node) {
+			delete(this.graph.edges[edge]);
+		}
+	}
 }
 
 /** Creates an edge connecting node src to dst in the graph.
