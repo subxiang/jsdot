@@ -24,6 +24,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */	
 
+/**
+ * Array that contains some examples of the possible graphs that 
+ * can be drawn with JSDot
+ */
 JSDot.template = [
 				["Tree", '{\
 							"name": "tree",\
