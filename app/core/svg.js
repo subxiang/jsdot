@@ -34,7 +34,11 @@ JSVG.prototype = {
     defaultCircle: 'this.Element(\'circle\', { "r": "2.5em", "cx": evt.clientX-220, "cy": evt.clientY, "fill": "#000", "stroke": "#000", "z-index":"10" })',
 	defaultLine: 'this.Element(\'line\', { "x1": evt.clientX, "y1": evt.clientX,  "x2": evt.clientX + 5, "y2": evt.clientY + 5, "style": "fill:none;stroke:black;stroke-width:1;"})',
     
-    /** Constructor */
+    /** 
+     * JSVG constructor
+     * @param {Object} jsdot
+     * @param {Object} id (destination div id)
+     */
     init: function(jsdot, id){
 
 		this.jsdot = jsdot;
@@ -90,7 +94,7 @@ JSVG.prototype = {
     },
 	
 	/**
-	 * Show and hide the right click menu.
+	 * Show and hide the right click menu
 	 * (if first time, it creates the menu in the DOM)
 	 * @param {Object} evt
 	 */
@@ -216,7 +220,7 @@ JSVG.prototype = {
     },
     
     /**
-     * Set the element to be dragged.
+     * Set the element to be dragged
      * @param {Object} evt
      */
     grab: function(evt){
@@ -349,15 +353,6 @@ JSVG.prototype = {
 			sel.appendChild(o);
 		}
 		examples.appendChild(sel);
-			
-		/*
-		
-		var option1 = document.createElement("option");
-		option1.setAttribute("value", "ooo");
-		option1.appendChild(document.createTextNode('ooo'));
-		
-		sel.appendChild(option1);
-		*/
 		// -->
 	
         // <-- Copyright footer
@@ -370,7 +365,9 @@ JSVG.prototype = {
 
     },
     
-	/** Toggle the left menu */
+	/** 
+	 * Toggle the left menu
+	 */
 	toggleMenu:function(){
 		
 		if(this.toogle) {
@@ -411,10 +408,6 @@ JSVG.prototype = {
 	 * Draw an edge from a node to an other
 	 * @param {Object} evt
 	 */
-	
-	src: null,
-	dst: null,
-	
 	addEdge: function(evt) {
 		
 		if (evt.target instanceof SVGCircleElement) {
