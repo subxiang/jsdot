@@ -19,6 +19,12 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  */
+
+/** The JSVG API
+ * This defines the functions that are used for drawing
+ * the graph
+ */
+
 var JSVG = new Class();
 
 JSVG.prototype = {

@@ -25,6 +25,10 @@ THE SOFTWARE.
 
 */
 
+/**
+ * Draw the graph
+ */
+
 JSDot.prototype.draw = function() {
 	var g = this.graph;
 	
@@ -39,6 +43,10 @@ JSDot.prototype.draw = function() {
 	};
 };
 
+/**
+ * Given a Node draws it
+ * @param {Object} Node
+ */
 JSVG.prototype.drawNode = function(n) {
 	var pos = n.getPos();
 	var e = this.Element('circle', {
@@ -66,6 +74,10 @@ JSVG.prototype.drawNode = function(n) {
 	e.appendChild(t);
 };
 
+/**
+ * Given an edge it draws it
+ * @param {Object} Edge
+ */
 JSVG.prototype.drawEdge = function(edge) {
 	var p1 = edge.src.getPos();
 	var p2 = edge.dst.getPos();
@@ -82,6 +94,9 @@ JSVG.prototype.drawEdge = function(edge) {
 	this.svgroot.insertBefore(g, this.svgroot.firstChild);
 };
 
+/**
+ * Draw the head of the arrow
+ */
 JSVG.prototype.drawFragments = function() {
 	var marker = $e('marker');
 	marker.setAttrs({'id': 'Arrow',
@@ -97,8 +112,8 @@ JSVG.prototype.drawFragments = function() {
 	this.svgroot.appendChild(marker);
 };
 
-/** Remove all child of the SVG tag
- * 
+/**
+ * Remove all child of the SVG tag
  */
 JSVG.prototype.clear = function() {
 	while (this.svgroot.lastChild)
