@@ -380,8 +380,8 @@ JSVG.prototype = {
 			this.leftMenuSize = 220;
 			return;
 		}
-		setAttrs(this.svgroot,{"width":window.innerWidth - 3});
-		setAttrs(this.cnt,{'style':'margin-left:-215px'});
+		this.svgroot.setAttrs({"width":window.innerWidth - 3});
+		this.cnt.setAttrs({'style':'margin-left:-215px'});
 		this.toogle = true; 
 		this.leftMenuSize = 0;
 	},
@@ -397,9 +397,9 @@ JSVG.prototype = {
         var el = $e(element);
         var cnt = $e('g');
         
-        setAttrs(cnt, attrs);
+        cnt.setAttrs(attrs);
         delete attrs.id;
-        setAttrs(el, attrs);
+        el.setAttrs(attrs);
         
         cnt.appendChild(el);
         arguments[2] ? arguments[2].appendChild(cnt) : JSVG.svgroot.appendChild(cnt);
