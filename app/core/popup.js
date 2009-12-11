@@ -24,6 +24,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */	
 
+/** The popup API
+ * This defines the functions that are used to provide boxes 
+ * with which the user can interact
+ */
+	
+
 var Popup = new Class();
 
 Popup.prototype = {
@@ -33,6 +39,12 @@ Popup.prototype = {
 	newDiv: null,
 	jsdot: null,
 	
+	/**
+	 * Popup constructor
+	 * @param {Object} jsdot
+	 * @param {Object} parent
+	 * @param {Object} type
+	 */
 	init:function(jsdot, parent, type) {
 		this.jsdot = jsdot;
 		this.doc = parent.ownerDocument;
@@ -44,6 +56,10 @@ Popup.prototype = {
 		parent.appendChild(this.newDiv);
 	},
 	
+	/**
+	 * Make visible the popup for inserting/changing and controlling
+	 * the JSON string that represents the graph
+	 */
 	show_JSON:function() {
 		this.backDiv.style.display = 'block';
         (this.newDiv).style.display = 'block';
@@ -91,6 +107,10 @@ Popup.prototype = {
         this.newDiv.appendChild(p);
 	},
 	
+	/**
+	 * Make visible the popup for changing attributes of the node
+	 * @param {Object} Node
+	 */
 	show_attributes:function(node) {
 		
 		if (typeof node == "string") node = this.jsdot.getNodeByName(node);
@@ -180,7 +200,11 @@ Popup.prototype = {
 		this.backDiv.style.display = 'block';
 
 	},
-		
+	
+	/**
+	 * Hide the popup
+	 * @param {Object} evt
+	 */	
 	hide:function(evt) { 
 		(this.backDiv).style.display = 'None';
 		(this.newDiv).style.display = 'None';
@@ -190,6 +214,10 @@ Popup.prototype = {
 		}
 	},
 	
+	/**
+	 * Load the JSON string and hide the popup
+	 * @param {Object} evt
+	 */
 	load_string:function(evt) {
 		var content = $('text').value;
 		if(content != "") {
@@ -201,6 +229,11 @@ Popup.prototype = {
 		exit_button.click();	
 	},
 	
+	/**
+	 * Change attributes of the Node
+	 * @param {Object} evt
+	 * @param {Object} Node
+	 */
 	change_node:function(evt, node) {
 		var fill_color = $('fill_color').value;
 		var label = $('label').value;
