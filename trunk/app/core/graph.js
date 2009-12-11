@@ -39,24 +39,36 @@ THE SOFTWARE.
 		return this;
 	};
 	
-	JSDot.prototype.Node.prototype.getName = function() {
-		return this.name;
-	};
-
-	JSDot.prototype.Node.prototype.setAttribute = function(key, value) {
+	/*
+	 *  ---------- PRIVATE METHODS---------------------
+	 *  
+	 *  used by all the others getter and setter that are below
+	 */
+	
+	JSDot.prototype.Node.prototype._setAttribute = function(key, value) {
 		this.attributes[key] = value;
 	};
 	
-	JSDot.prototype.Node.prototype.getAttribute = function(key) {
+	JSDot.prototype.Node.prototype._getAttribute = function(key) {
 		return this.attributes[key];
 	}
+	/*
+	 * -----------------------------------------
+	 */
 	
+	
+	/** Returns the name of the node
+	 * @return {String} name
+	 */
+	JSDot.prototype.Node.prototype.getName = function() {
+		return this.name;
+	};
 	
 	/** Returns the label to display for the node.
 	 * @return {String} label
 	 */
 	JSDot.prototype.Node.prototype.getLabel = function() {
-		var l = this.getAttribute("label");
+		var l = this._getAttribute("label");
 		return l ? l : this.name;
 	}
 	
@@ -66,14 +78,14 @@ THE SOFTWARE.
 	 * @param {String} label
 	 */
 	JSDot.prototype.Node.prototype.setLabel = function(label) {
-		this.setAttribute("label", label);
+		this._setAttribute("label", label);
 	}
 	
 	/** Returns the coordinates of the center where the node should be drawn.
 	 * @return {Array} coordinates [x, y]
 	 */
 	JSDot.prototype.Node.prototype.getPos = function() {
-		var p = this.getAttribute("pos");
+		var p = this._getAttribute("pos");
 		if (typeof p != "string") return [10, 10];
 		p = p.split(',');
 		if (p.length != 2) return [10, 10];
@@ -81,59 +93,55 @@ THE SOFTWARE.
 		//FIXME: defaults here do not really make sense, and the returned values may still not be numbers
 	}
 	
-	/** Set the coordinates of the center of the node.
-	 * 
+	/** Set the coordinates of the center of the node
 	 * @param {Object} x
 	 * @param {Object} y
 	 */
 	JSDot.prototype.Node.prototype.setPos = function(x, y) {
-		this.setAttribute("pos", ""+x+","+y);
+		this._setAttribute("pos", ""+x+","+y);
 	}
 	
-	/** Return the line color.
+	/** Return the line color
 	 * @return {String} line color
 	 */
 	JSDot.prototype.Node.prototype.getColor = function() {
-		return this.getAttribute("color") || "black";
+		return this._getAttribute("color") || "black";
 	}
 	
-	/** Set the line color.
-	 * 
+	/** Set the line color
 	 * @param {String} color
 	 */
 	JSDot.prototype.Node.prototype.setColor = function(color) {
-		this.setAttribute("color", color);
+		this._setAttribute("color", color);
 	}
 	
-	/** Returns the fill color.
+	/** Returns the fill color
 	 * @return {String} fill color
 	 */
 	JSDot.prototype.Node.prototype.getFillColor = function() {
-		return this.getAttribute("fillcolor") || "lightgrey";
+		return this._getAttribute("fillcolor") || "lightgrey";
 	}
 	
-	/** Set the fill color.
-	 * 
+	/** Set the fill color
 	 * @param {String} fill color
 	 */
 	JSDot.prototype.Node.prototype.setFillColor = function(color) {
-		this.setAttribute("fillcolor", color);
+		this._setAttribute("fillcolor", color);
 	}
 	
-	/** Return the shape to be drawn.
-	 * The default is "circle".
+	/** Return the shape to be drawn
+	 * The default is "circle"
 	 * @return {String} shape
 	 */
 	JSDot.prototype.Node.prototype.getShape = function() {
-		return this.getAttribute("shape") || "circle";
+		return this._getAttribute("shape") || "circle";
 	}
 	
-	/** Set the shape.
-	 * 
+	/** Set the shape
 	 * @param {String} shape
 	 */
 	JSDot.prototype.Node.prototype.setShape = function(shape) {
-		this.setAttribute("shape", shape);
+		this._setAttribute("shape", shape);
 	}
 	
 
@@ -151,167 +159,166 @@ THE SOFTWARE.
 		return this;
 	};
 	
-	/** Returns the node where the edge starts.
+	/*
+	 *  ---------- PRIVATE METHODS---------------------
+	 *  
+	 *  used by all the others getter and setter that are below
+	 */
+	
+	JSDot.prototype.Edge.prototype._getAttribute = function(key) {
+		return this.attributes[key];
+	}
+	
+	JSDot.prototype.Edge.prototype._setAttribute = function(key, value) {
+		this.attributes[key] = value;
+	};
+	/*
+	 * -----------------------------------------
+	 */
+	
+	/** Returns the node where the edge source
 	 * @return Node
 	 */
 	JSDot.prototype.Edge.prototype.getSrc = function(){
 		return this.src;
 	};
 	
-	/** Change edge source.
-	 * @param {Node} src source node
+	/** Change edge source
+	 * @param {Node} src source Node
 	 */
 	JSDot.prototype.Edge.prototype.setSrc = function(src){
 		this.src = src;
 	};
 	
-	/** Returns the node where the edge ends.
+	/** Returns the node where the edge ends
 	 * @return Node
 	 */
 	JSDot.prototype.Edge.prototype.getDst = function(){
 		return this.dst;
 	};
 	
-	/** Change destination of the edge.
-	 * 
-	 * @param {Node} dst destination node
+	/** Change destination of the edge
+	 * @param {Node} dst destination Node
 	 */
 	JSDot.prototype.Edge.prototype.setDst = function(dst) {
 		this.dst = dst;
 	};	
 	
-	/** Returns the label to display for the edge.
+	/** Returns the label to display for the edge
 	 * @return {String} label
 	 */
 	JSDot.prototype.Edge.prototype.getLabel = function() {
-		var l = this.getAttribute("label");
+		var l = this._getAttribute("label");
 		return l ? l : "";
 	}
 	
-	/** Set a label for the edge.
-	 * If set to null or undefined the name will be used instead.
-	 * 
+	/** Set a label for the edge
+	 * if set to null or undefined the name of the edge will be used instead
 	 * @param {String} label
 	 */
 	JSDot.prototype.Edge.prototype.setLabel = function(label) {
-		this.setAttribute("label", label);
+		this._setAttribute("label", label);
 	}
 	
-	/** Return the edge color.
+	/** Return the edge color
 	 * @return {String} line color
 	 */
 	JSDot.prototype.Edge.prototype.getColor = function() {
-		return this.getAttribute("color") || "black";
+		return this._getAttribute("color") || "black";
 	}
 	
-	/** Set the line color.
-	 * 
+	/** Set the line color
 	 * @param {String} color
 	 */
 	JSDot.prototype.Edge.prototype.setColor = function(color) {
-		this.setAttribute("color", color);
+		this._setAttribute("color", color);
 	}
 	
-	JSDot.prototype.Edge.prototype.getAttribute = function(key) {
-		return this.attributes[key];
-	}
+
+
+	/** Added functionality to JSDot
+	 * 
+	 */
 	
-	JSDot.prototype.Edge.prototype.setAttribute = function(key, value) {
-		this.attributes[key] = value;
+	/** Creates a new node in the graph
+	 * if name is missing it will be automatically generated.
+	 * @param {String} name optional, the name of the node
+	 * @return {Node} the new node
+	 */
+	JSDot.prototype.newNode = function(name) {
+		if (!name) {
+			// no name was given, generate one
+			while (this.getNodeByName(name = 'n' + (new Date()).getTime())) {};
+		} else {
+			// a name was given, check that it isn't already in use
+			if (this.getNodeByName(name)) {
+				return null;
+			}
+		}
+		
+		var n = new this.Node(name);
+		this.graph.nodes[name] = n;
+		return n;
 	};
 
+	/** Returns a node of the graph by name
+	 * @param {String} name name of the node
+	 * @return {Node} the node if found, undefined otherwise
+	 */
+	JSDot.prototype.getNodeByName = function(name) {
+		return this.graph.nodes[name];
+	};
 
-
-/** Added functionality to JSDot
- * 
- */
-
-/** Creates a new node in the graph
- * If name is missing it will be automatically generated.
- * 
- * @param {String} name optional, the name of the node
- * @return {Node} the new node
- */
-JSDot.prototype.newNode = function(name) {
-	if (!name) {
-		// no name was given, generate one
-		while (this.getNodeByName(name = 'n' + (new Date()).getTime())) {};
-	} else {
-		// a name was given, check that it isn't already in use
-		if (this.getNodeByName(name)) {
-			return null;
-		}
-	}
-	
-	var n = new this.Node(name);
-	this.graph.nodes[name] = n;
-	return n;
-};
-
-/** Returns a node of the graph by name.
- * 
- * @param {String} name name of the node
- * @return {Node} the node if found, undefined otherwise
- */
-JSDot.prototype.getNodeByName = function(name) {
-	return this.graph.nodes[name];
-};
-
-/** Removes a node from the graph.
- * 
- * @param {Object,String} node node to remove or its name (as a string)
- */
-JSDot.prototype.removeNode = function(node) {
-	if (node instanceof this.Node) node = node.name;
-	delete(this.graph.nodes[node]);
-	for (edge in this.graph.edges) {
-		if(this.graph.edges[edge].getSrc().name == node) {
-			delete(this.graph.edges[edge]);
-		}
-		if (this.graph.edges[edge]) {
-			if (this.graph.edges[edge].getDst().name == node) {
-				delete (this.graph.edges[edge]);
+	/** Removes a node from the graph
+	 * @param {Object,String} node node to remove or its name (as a string)
+	 */
+	JSDot.prototype.removeNode = function(node) {
+		if (node instanceof this.Node) node = node.name;
+		delete(this.graph.nodes[node]);
+		for (edge in this.graph.edges) {
+			if(this.graph.edges[edge].getSrc().name == node) {
+				delete(this.graph.edges[edge]);
+			}
+			if (this.graph.edges[edge]) {
+				if (this.graph.edges[edge].getDst().name == node) {
+					delete (this.graph.edges[edge]);
+				}
 			}
 		}
 	}
-}
 
-/** Creates an edge connecting node src to dst in the graph.
- * 
- * @param {Object} src Source Node or name of the node
- * @param {Object} dst Destination Node or name of the node
- * @return {Edge} the new edge
- */
-JSDot.prototype.newEdge = function(src, dst) {
-	if (typeof src == "string") src = this.getNodeByName(src);
-	if (typeof dst == "string") dst = this.getNodeByName(dst);
-	
-	//TODO: check if node already exists
-	var e = new this.Edge(src, dst);
-	this.graph.edges[e.src.name.length+':'+e.dst.name.length+'-'+e.src.name+'-'+e.dst.name] = e;
-	return e;
-}
+	/** Creates an edge connecting node src to dst in the graph
+	 * @param {Object} src Source Node or name of the node
+	 * @param {Object} dst Destination Node or name of the node
+	 * @return {Edge} the new edge
+	 */
+	JSDot.prototype.newEdge = function(src, dst) {
+		if (typeof src == "string") src = this.getNodeByName(src);
+		if (typeof dst == "string") dst = this.getNodeByName(dst);
+		
+		//TODO: check if node already exists
+		var e = new this.Edge(src, dst);
+		this.graph.edges[e.src.name.length+':'+e.dst.name.length+'-'+e.src.name+'-'+e.dst.name] = e;
+		return e;
+	}
 
-
-/** Returns a new object representing an empty graph.
- * To reset the model to an empty graph use emptyGraph().
- * @see emptyGraph
- * 
- * @return {Object} an empty graph (internal representation)
- */
-JSDot.prototype.getEmptyGraph = function() {
-	return {
-			name: "",
-			directed: false,
-			nodes: {},
-			edges:{},
-			attributes: {}
+	/** Returns a new object representing an empty graph.
+	 * To reset the model to an empty graph use emptyGraph().
+	 * @see emptyGraph
+	 * @return {Object} an empty graph (internal representation)
+	 */
+	JSDot.prototype.getEmptyGraph = function() {
+		return {
+				name: "",
+				directed: false,
+				nodes: {},
+				edges:{},
+				attributes: {}
+		};
 	};
-};
 
-/** Resets the graph to an empty one.
- * 
- */
-JSDot.prototype.emptyGraph = function() {
-	this.graph = this.getEmptyGraph();
-};
+	/** Resets the graph to an empty one.
+	 */
+	JSDot.prototype.emptyGraph = function() {
+		this.graph = this.getEmptyGraph();
+	};
