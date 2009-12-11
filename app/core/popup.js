@@ -28,20 +28,24 @@ var Popup = new Class();
 
 Popup.prototype = {
 	
-	prova: {"name":"graph2","directed":false,"nodes":[{"name":"node1","attributes":{"label":"a","color":"blue","pos":"200,100"}},{"name":"node2","attributes":{"label":"b","color":"red","pos":"500,100"}}],"edges":[{"src":"node1","dst":"node2","attributes":{"label":"edge1","style":"dotted"}}],"attributes":{"label":"undirected graph with two nodes and one edge"}},
 	doc: null,
+	backDiv:null,
 	newDiv: null,
 	jsdot: null,
 	
 	init:function(jsdot, parent, type) {
 		this.jsdot = jsdot;
 		this.doc = parent.ownerDocument;
+		this.backDiv = this.doc.createElement('div');
+		this.backDiv.setAttribute('style', 'position:absolute; height:100%; width:100%; opacity: 0.6; background-color:yellow; display: None; z-index:1000');
 		this.newDiv = this.doc.createElement('div');
-		this.newDiv.setAttribute('style', 'position:absolute; left:10%; top:10%; height:80%; width:80%; background:white; border-color:black; border-width:0.5em; padding:0.4em; display:None; z-index:1000');
+		this.newDiv.setAttribute('style', 'position:absolute; left:10%; top:10%; height:80%; width:80%; background:white; border-color:black; opacity: 1.0; border-width:0.5em; padding:0.4em; display:None; z-index:1000');
+		parent.appendChild(this.backDiv);
 		parent.appendChild(this.newDiv);
 	},
 	
 	show_JSON:function() {
+		this.backDiv.style.display = 'block';
         (this.newDiv).style.display = 'block';
         var self = this;
         
@@ -173,10 +177,12 @@ Popup.prototype = {
         
         this.newDiv.appendChild(p);
         this.newDiv.style.display = 'block';
+		this.backDiv.style.display = 'block';
 
 	},
 		
 	hide:function(evt) { 
+		(this.backDiv).style.display = 'None';
 		(this.newDiv).style.display = 'None';
 		var children = this.newDiv.childNodes;
 		while(children.length >= 1) {
