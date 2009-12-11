@@ -51,7 +51,7 @@ Popup.prototype = {
 			name: "text",
 			style: "height:80%; width:100%;"
 		};
-		setAttrs(text_area, text_area_attr);
+		text_area.setAttrs(text_area_attr);
 
         var json = document.createTextNode(this.jsdot.toJSON());
         text_area.appendChild(json);
@@ -65,7 +65,7 @@ Popup.prototype = {
 			value: "load and save",
 			type: "submit",
 		}
-        setAttrs(save_button, save_button_attr);
+        save_button.setAttrs(save_button_attr);
         save_button.addEventListener("click", function(evt){
             self.load_string(evt);
         }, false);
@@ -76,7 +76,7 @@ Popup.prototype = {
 			value:  "Exit",
 			type: "submit"
 		}
-   		setAttrs(exit_button, exit_button_attr);
+   		exit_button.setAttrs(exit_button_attr);
         exit_button.addEventListener("click", function(evt){
             self.hide(evt);
         }, false);
@@ -98,7 +98,7 @@ Popup.prototype = {
 			type: "text",
 			value: node.getLabel()
 		}
-   		setAttrs(label, label_attr);
+   		label.setAttrs(label_attr);
 		this.newDiv.innerHTML += "Label ";
 		this.newDiv.appendChild(label);
 		this.newDiv.innerHTML += "<br />";
@@ -106,26 +106,37 @@ Popup.prototype = {
 		
 		// color 
 		var fill_color = document.createElement("select");
-		fill_color.setAttribute("name", "color");	
-		fill_color.setAttribute("id", "fill_color");
+		var fill_color_attr = {
+			name: "color",
+			id : "fill_color"
+		};
+		fill_color.setAttrs(fill_color_attr);
+		
 		var current_value = node.getFillColor();
 		var current = document.createElement("option");
-		current.setAttribute("value", current_value);
-		current.setAttribute("selected", "true");
+		var current_attr = {
+			value: current_value,
+			selected: true
+		};
+		current.setAttrs(current_attr);
 		current.appendChild(document.createTextNode(current_value));
 		fill_color.appendChild(current);
+		
 		var blue = document.createElement("option");
 		blue.setAttribute("value", "blue");
 		blue.appendChild(document.createTextNode('blue'));
 		fill_color.appendChild(blue);
+		
 		var yellow = document.createElement("option");
 		yellow.setAttribute("value", "yellow");
 		yellow.appendChild(document.createTextNode('yellow'));
 		fill_color.appendChild(yellow);
+		
 		var red = document.createElement("option");
 		red.setAttribute("value", "red");
 		red.appendChild(document.createTextNode('red'));
 		fill_color.appendChild(red);
+		
 		var green = document.createElement("option");
 		green.setAttribute("value", "green");
 		green.appendChild(document.createTextNode('green'));
@@ -141,7 +152,7 @@ Popup.prototype = {
 			value: "change",
 			type: "submit",
 		}
-        setAttrs(save_button, save_button_attr);
+        save_button.setAttrs(save_button_attr);
         save_button.addEventListener("click", function(evt){
             self.change_node(evt, node);
         }, false);
@@ -152,7 +163,7 @@ Popup.prototype = {
 			value:  "Exit",
 			type: "submit"
 		}
-   		setAttrs(exit_button, exit_button_attr);
+   		exit_button.setAttrs(exit_button_attr);
         exit_button.addEventListener("click", function(evt){
             self.hide(evt);
         }, false);

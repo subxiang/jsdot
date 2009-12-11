@@ -51,13 +51,5 @@ Element.prototype.getPos = function(){
 function $e(i){ if(arguments[1]) return document.createElement(i); return document.createElementNS(svgns, i);};
 function $(i) { return document.getElementById(i); };
 function Class(){ return function(arguments){ this.init(arguments); } }
-function setAttrs(obj, values) { for (i in values) { obj.setAttribute(i, values[i]); } }
 function randColor(){ return "rgb(" + parseInt(Math.random() * 255) + "," + parseInt(Math.random() * 255) + "," + parseInt(Math.random() * 255) + ")"; }
-function counter(object) {
-		var size = 0;
-		var key;
-		for(key in object) {
-			size++;
-		}
-		return size;
-	}
+function counter(object) {var size = 0; var key; for(key in object) { size++; } return size;}

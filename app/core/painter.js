@@ -57,7 +57,7 @@ JSVG.prototype.drawNode = function(n) {
 				}
 			}; }(this), false);
 	var t = $e('text');
-	setAttrs(t, {
+	t.setAttrs({
 		'x': pos[0], 'y': pos[1],
 		'stroke': n.getColor(),
 		'text-anchor': "middle"
@@ -84,13 +84,13 @@ JSVG.prototype.drawEdge = function(edge) {
 
 JSVG.prototype.drawFragments = function() {
 	var marker = $e('marker');
-	setAttrs(marker, {'id': 'Arrow',
+	marker.setAttrs({'id': 'Arrow',
 		'orient': 'auto',
 		'refX': '2.5em',
 		'refY': '0.0',
 		'style': 'overflow:visible'});
 	var path = $e('path');
-	setAttrs(path, {'d': 'M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z',
+	path.setAttrs({'d': 'M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z',
 		'style': 'font-size:12.0;fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round'});
 	path.setAttribute('transform', 'scale(1.1) rotate(180) translate(1,0)');
 	marker.appendChild(path);
