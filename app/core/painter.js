@@ -82,15 +82,31 @@ JSVG.prototype.drawEdge = function(edge) {
 	var p1 = edge.src.getPos();
 	var p2 = edge.dst.getPos();
 	
-	var attrs = {'x1': p1[0], 'y1': p1[1], 'x2': p2[0], 'y2': p2[1], "style": "fill:none;stroke:black;stroke-width:1;"};
+	var attrs = {'d': 'M'+p1+'L'+p2, "style": "fill:none;stroke:black;stroke-width:1;"};
 	if (this.jsdot.graph.directed) attrs['marker-end'] = 'url(#Arrow)';
-	var l = $e('line');
+	var l = $e('path');
 	l.setAttribute('id', 'e_'+edge.getName()+'+line');
 	l.setAttrs(attrs);
-	
+
 	var g = $e('g');
 	g.setAttribute('id', 'e_'+edge.getName());
 	g.appendChild(l);
+	
+	var label = edge.getLabel();
+	if (label) {
+		var s = $e('tspan');
+		s.setAttribute('dy', '-5');
+		s.textContent = label;
+		var p = $e('textPath');
+		p.setAttributeNS(xlinkns, 'xlink:href', '#e_'+edge.getName()+'+line');
+		p.setAttrs({'startOffset': '50%', 'text-anchor': 'middle'});
+		p.appendChild(s);
+		var t = $e('text');
+		//t.setAttribute('font-size', 20);
+		t.setAttribute('fill', 'black');
+		t.appendChild(p);
+		g.appendChild(t);
+	}
 	
 	this.svgroot.insertBefore(g, this.svgroot.firstChild);
 };
@@ -99,6 +115,8 @@ JSVG.prototype.drawEdge = function(edge) {
  * Draw the head of the arrow
  */
 JSVG.prototype.drawFragments = function() {
+	var defs = $e('defs');
+	
 	var marker = $e('marker');
 	marker.setAttrs({'id': 'Arrow',
 		'orient': 'auto',
@@ -110,7 +128,9 @@ JSVG.prototype.drawFragments = function() {
 		'style': 'font-size:12.0;fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round'});
 	path.setAttribute('transform', 'scale(1.1) rotate(180) translate(1,0)');
 	marker.appendChild(path);
-	this.svgroot.appendChild(marker);
+	defs.appendChild(marker);
+	
+	this.svgroot.appendChild(defs);
 };
 
 /**
