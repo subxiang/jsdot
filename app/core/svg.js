@@ -250,6 +250,23 @@ JSVG.prototype = {
             this.dragElement = targetElement;
             this.dragElement.setAttributeNS(null, 'pointer-events', 'none');
             
+            if (targetElement.id.slice(0,2) == 'n_') {
+            	// then it should be a node
+            	// now get the edges that should be dragged together with the node
+            	this.dragEdges = [];
+            	var node_name = targetElement.id.slice(2);
+            	var l;
+            	this.dragEdges[0] = this.jsdot.getNodeByName(node_name).getEdgesIn();
+            	for (i in this.dragEdges[0]) {
+            		l = $('e_'+this.dragEdges[0][i].getName()+'+line');
+            		this.dragEdges[0][i] = [l, parseFloat(l.getAttribute('x2')), parseFloat(l.getAttribute('y2'))];
+            	}
+            	this.dragEdges[1] = this.jsdot.getNodeByName(node_name).getEdgesOut();
+            	for (i in this.dragEdges[1]) {
+            		 l = $('e_'+this.dragEdges[1][i].getName()+'+line');
+            		this.dragEdges[1][i] = [l, parseFloat(l.getAttribute('x1')), parseFloat(l.getAttribute('y1'))];
+            	}
+            }
         }
     },
     
@@ -264,6 +281,16 @@ JSVG.prototype = {
             var newX = this.coords.x - this.grabPoint.x;
             var newY = this.coords.y - this.grabPoint.y;
             this.dragElement.setAttributeNS(null, 'transform', 'translate(' + newX + ',' + newY + ')');
+            if (this.dragEdges[0]) {
+            	for (i in this.dragEdges[0]) {
+            		this.dragEdges[0][i][0].setAttribute('x2', this.dragEdges[0][i][1] + newX);
+            		this.dragEdges[0][i][0].setAttribute('y2', this.dragEdges[0][i][2] + newY);
+            	}
+            	for (i in this.dragEdges[1]) {
+            		this.dragEdges[1][i][0].setAttribute('x1', this.dragEdges[1][i][1] + newX);
+            		this.dragEdges[1][i][0].setAttribute('y1', this.dragEdges[1][i][2] + newY);
+            	}
+            }
         }
     },
     
@@ -286,6 +313,7 @@ JSVG.prototype = {
             
             this.dragElement.setAttributeNS(null, 'pointer-events', 'all');
             this.dragElement = null;
+            this.dragEdges = [];
             this.selected = null;
 			
 			this.jsdot.draw();
