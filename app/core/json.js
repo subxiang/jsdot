@@ -127,7 +127,10 @@ JSDot.prototype.toJSON = function() {
 	res.edges = [];
 	
 	for (var i in g.nodes) {
-		var n = g.nodes[i];
+		var node = g.nodes[i];
+		var n = {};
+		n.name = node.name;
+		n.attributes = node.attributes;
 		res.nodes.push(n);
 	}
 	

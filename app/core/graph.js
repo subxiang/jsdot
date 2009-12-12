@@ -34,7 +34,7 @@ THE SOFTWARE.
 	 * DO NOT USE this, use jsdot.newNode(name)
 	 */
 	JSDot.prototype.Node = function(graph, name) {
-		this.graph = graph;
+		this._graph = graph;
 		this.name = name;
 		this.attributes = {};
 		return this;
@@ -65,8 +65,8 @@ THE SOFTWARE.
 	 */
 	JSDot.prototype.Node.prototype.getEdgesIn = function() {
 		var res = [];
-		for (i in this.graph.edges) {
-			if (this.graph.edges[i].dst == this) res.push(this.graph.edges[i]);
+		for (i in this._graph.edges) {
+			if (this._graph.edges[i].dst == this) res.push(this._graph.edges[i]);
 		}
 		return res;
 	};
@@ -79,8 +79,8 @@ THE SOFTWARE.
 	 */
 	JSDot.prototype.Node.prototype.getEdgesOut = function() {
 		var res = [];
-		for (i in this.graph.edges) {
-			if (this.graph.edges[i].src == this) res.push(this.graph.edges[i]);
+		for (i in this._graph.edges) {
+			if (this._graph.edges[i].src == this) res.push(this._graph.edges[i]);
 		}
 		return res;
 	};
@@ -213,7 +213,9 @@ THE SOFTWARE.
 	 * @return {String} the name of the edge
 	 */
 	JSDot.prototype.Edge.prototype.getName = function() {
-		return this.src.name.length+':'+this.dst.name.length+'-'+this.src.name+'-'+this.dst.name;
+		var sn = this.src.getName();
+		var dn = this.dst.getName();
+		return sn.length+':'+dn.length+'-'+sn+'-'+dn;
 	};
 	
 	/** Returns the node where the edge starts
