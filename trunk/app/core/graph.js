@@ -33,7 +33,8 @@ THE SOFTWARE.
 	/** Node constructor
 	 * DO NOT USE this, use jsdot.newNode(name)
 	 */
-	JSDot.prototype.Node = function(name) {
+	JSDot.prototype.Node = function(graph, name) {
+		this.graph = graph;
 		this.name = name;
 		this.attributes = {};
 		return this;
@@ -56,6 +57,33 @@ THE SOFTWARE.
 	 * -----------------------------------------
 	 */
 	
+	/** Returns the array of edges leading to the this node.
+	 * Edges always have a direction, no difference is made between
+	 * directed and undirected graphs.
+	 * 
+	 * @return {Array} edges leading to this node
+	 */
+	JSDot.prototype.Node.prototype.getEdgesIn = function() {
+		var res = [];
+		for (i in this.graph.edges) {
+			if (this.graph.edges[i].dst == this) res.push(this.graph.edges[i]);
+		}
+		return res;
+	};
+	
+	/** Returns the array of edges strting from this node.
+	 * Edges always have a direction, no difference is made between
+	 * directed and undirected graphs.
+	 * 
+	 * @return {Array} edges starting from this node
+	 */
+	JSDot.prototype.Node.prototype.getEdgesOut = function() {
+		var res = [];
+		for (i in this.graph.edges) {
+			if (this.graph.edges[i].src == this) res.push(this.graph.edges[i]);
+		}
+		return res;
+	};
 	
 	/** Returns the name of the node
 	 * @return {String} name
@@ -176,7 +204,19 @@ THE SOFTWARE.
 	 * -----------------------------------------
 	 */
 	
-	/** Returns the node where the edge source
+	/** Returns the name of the edge.
+	 * The name allows to identify the edge, it is automatically generated
+	 * and cannot be changed manually.
+	 * Note: if the source or the destination of the edge is modified the name
+	 * changes.
+	 * 
+	 * @return {String} the name of the edge
+	 */
+	JSDot.prototype.Edge.prototype.getName = function() {
+		return this.src.name.length+':'+this.dst.name.length+'-'+this.src.name+'-'+this.dst.name;
+	};
+	
+	/** Returns the node where the edge starts
 	 * @return Node
 	 */
 	JSDot.prototype.Edge.prototype.getSrc = function(){
@@ -256,7 +296,7 @@ THE SOFTWARE.
 			}
 		}
 		
-		var n = new this.Node(name);
+		var n = new this.Node(this.graph, name);
 		this.graph.nodes[name] = n;
 		return n;
 	};
@@ -298,7 +338,7 @@ THE SOFTWARE.
 		
 		//TODO: check if node already exists
 		var e = new this.Edge(src, dst);
-		this.graph.edges[e.src.name.length+':'+e.dst.name.length+'-'+e.src.name+'-'+e.dst.name] = e;
+		this.graph.edges[e.getName()] = e;
 		return e;
 	}
 
