@@ -82,13 +82,14 @@ JSVG.prototype.drawEdge = function(edge) {
 	var p1 = edge.src.getPos();
 	var p2 = edge.dst.getPos();
 	
-	//g.setAttribute('id', 'e_'+edge.getName()); //FIXME: tbd
 	var attrs = {'x1': p1[0], 'y1': p1[1], 'x2': p2[0], 'y2': p2[1], "style": "fill:none;stroke:black;stroke-width:1;"};
 	if (this.jsdot.graph.directed) attrs['marker-end'] = 'url(#Arrow)';
 	var l = $e('line');
+	l.setAttribute('id', 'e_'+edge.getName()+'+line');
 	l.setAttrs(attrs);
 	
 	var g = $e('g');
+	g.setAttribute('id', 'e_'+edge.getName());
 	g.appendChild(l);
 	
 	this.svgroot.insertBefore(g, this.svgroot.firstChild);
