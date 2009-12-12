@@ -255,16 +255,20 @@ JSVG.prototype = {
             	// now get the edges that should be dragged together with the node
             	this.dragEdges = [];
             	var node_name = targetElement.id.slice(2);
-            	var l;
+            	var l, p1, p2;
             	this.dragEdges[0] = this.jsdot.getNodeByName(node_name).getEdgesIn();
-            	for (i in this.dragEdges[0]) {
+            	for (var i in this.dragEdges[0]) {
             		l = $('e_'+this.dragEdges[0][i].getName()+'+line');
-            		this.dragEdges[0][i] = [l, parseFloat(l.getAttribute('x2')), parseFloat(l.getAttribute('y2'))];
+            		p1 = this.dragEdges[0][i].getSrc().getPos();
+            		p2 = this.dragEdges[0][i].getDst().getPos();
+            		this.dragEdges[0][i] = [l, 'M'+p1+'L', parseFloat(p2[0]), parseFloat(p2[1])];
             	}
             	this.dragEdges[1] = this.jsdot.getNodeByName(node_name).getEdgesOut();
-            	for (i in this.dragEdges[1]) {
-            		 l = $('e_'+this.dragEdges[1][i].getName()+'+line');
-            		this.dragEdges[1][i] = [l, parseFloat(l.getAttribute('x1')), parseFloat(l.getAttribute('y1'))];
+            	for (var i in this.dragEdges[1]) {
+            		l = $('e_'+this.dragEdges[1][i].getName()+'+line');
+            		p1 = this.dragEdges[1][i].getSrc().getPos();
+             		p2 = this.dragEdges[1][i].getDst().getPos();
+            		this.dragEdges[1][i] = [l, parseFloat(p1[0]), parseFloat(p1[1]), 'L'+p2];
             	}
             }
         }
@@ -282,13 +286,15 @@ JSVG.prototype = {
             var newY = this.coords.y - this.grabPoint.y;
             this.dragElement.setAttributeNS(null, 'transform', 'translate(' + newX + ',' + newY + ')');
             if (this.dragEdges[0]) {
-            	for (i in this.dragEdges[0]) {
-            		this.dragEdges[0][i][0].setAttribute('x2', this.dragEdges[0][i][1] + newX);
-            		this.dragEdges[0][i][0].setAttribute('y2', this.dragEdges[0][i][2] + newY);
+            	for (var i in this.dragEdges[0]) {
+            		this.dragEdges[0][i][0].setAttribute('d', this.dragEdges[0][i][1] +
+            				(this.dragEdges[0][i][2] + newX) + ',' +
+            				(this.dragEdges[0][i][3] + newY));
             	}
-            	for (i in this.dragEdges[1]) {
-            		this.dragEdges[1][i][0].setAttribute('x1', this.dragEdges[1][i][1] + newX);
-            		this.dragEdges[1][i][0].setAttribute('y1', this.dragEdges[1][i][2] + newY);
+            	for (var i in this.dragEdges[1]) {
+            		this.dragEdges[1][i][0].setAttribute('d', 'M' + (this.dragEdges[1][i][1] + newX) + ',' +
+            				(this.dragEdges[1][i][2] + newY) +
+            				this.dragEdges[1][i][3]);
             	}
             }
         }
