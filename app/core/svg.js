@@ -309,7 +309,11 @@ JSVG.prototype = {
             
             // update node
             this.getCoords(evt);
-            this.jsdot.getNodeByName(this.dragElement.id.slice(2)).setPos(evt.clientX - this.leftMenuSize, evt.clientY);
+            var dX = this.coords.x - this.grabPoint.x;
+            var dY = this.coords.y - this.grabPoint.y;
+            var node = this.jsdot.getNodeByName(this.dragElement.id.slice(2));
+            var p = node.getPos();
+            node.setPos(parseFloat(p[0])+dX, parseFloat(p[1])+dY);
             
             this.dragElement.setAttributeNS(null, 'pointer-events', 'all');
             this.dragElement = null;
