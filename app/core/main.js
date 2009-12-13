@@ -49,8 +49,11 @@ JSDot.prototype = {
 		// start with an empty graph
 		this.emptyGraph();
 		
+		// if just a string is given use it as target id for drawing
+		if (typeof params == "string") params = {'targetId': params};
+		
 		// set up the drawing area
-		if (typeof params.targetId == "string") {
+		if (params && typeof params.targetId == "string") {
 			this.svg = new JSVG({
 				jsdot: this,
 				targetId: params.targetId,
