@@ -71,7 +71,7 @@ Popup.prototype = {
 	show_JSON:function() {
 
 		this.show();
-        
+        if(this.attrs) this.attrs.parentNode.removeChild(this.attrs);
 		if (!this.text_area) {
 
 	        var self = this;
@@ -116,88 +116,87 @@ Popup.prototype = {
 		if (typeof node == "string") node = this.jsdot.getNodeByName(node);
 		var self = this;
 		
-		var label = document.createElement("input");
-		var label_attr = {
-			id:  "label",
-			type: "text",
-			value: node.getLabel()
+		if(this.text_area) this.text_area.parentNode.removeChild(this.text_area);
+		if (!this.attrs) {
+			this.attrs = $e('div',true);
+			this.label = $e("input", true);
+			this.label.setAttrs({
+				id: "label",
+				name: 'label',
+				type: "text",
+				value: node.getLabel()
+			});
+			var lab = $e('label',true); lab.setAttribute('for','label');lab.innerHTML ="Background ";
+			
+			// color 
+			var fill_color = $e("select", true);
+			fill_color.setAttrs({
+				name: "color",
+				id: "fill_color"
+			});
+			
+			var current_value = node.getFillColor();
+			this.current = $e("option", true);
+			
+			this.current.setAttrs({
+				value: current_value,
+				selected: true
+			});
+			this.current.appendChild(document.createTextNode(current_value));
+			fill_color.appendChild(this.current);
+			
+			var blue = document.createElement("option");
+			blue.setAttribute("value", "blue");
+			blue.appendChild(document.createTextNode('blue'));
+			fill_color.appendChild(blue);
+			
+			var yellow = document.createElement("option");
+			yellow.setAttribute("value", "yellow");
+			yellow.appendChild(document.createTextNode('yellow'));
+			fill_color.appendChild(yellow);
+			
+			var red = document.createElement("option");
+			red.setAttribute("value", "red");
+			red.appendChild(document.createTextNode('red'));
+			fill_color.appendChild(red);
+			
+			var green = document.createElement("option");
+			green.setAttribute("value", "green");
+			green.appendChild(document.createTextNode('green'));
+			fill_color.appendChild(green);
+			
+			var p = document.createElement("p");
+			
+			var save_button = document.createElement("input");
+			var save_button_attr = {
+				id: "change",
+				value: "change",
+				type: "submit",
+			}
+			save_button.setAttrs(save_button_attr);
+			save_button.addEventListener("click", function(evt){
+				self.change_node(evt, node);
+			}, false);
+			
+			var exit_button = document.createElement("input");
+			var exit_button_attr = {
+				id: "exit button",
+				value: "Exit",
+				type: "submit"
+			}
+			exit_button.setAttrs(exit_button_attr);
+			exit_button.addEventListener("click", function(evt){
+				self.hide(evt);
+			}, false);
+			
+			p.appends([save_button,exit_button]);
+			this.attrs.appends([lab,this.label,fill_color,p]);
+			this.newDiv.appendChild(this.attrs);
+			this.show();
+		} else {
+			this.current.value = node.getFillColor();
+			this.show();
 		}
-   		label.setAttrs(label_attr);
-		this.newDiv.innerHTML += "Label ";
-		this.newDiv.appendChild(label);
-		this.newDiv.innerHTML += "<br />";
-		this.newDiv.innerHTML += "Fill color ";
-		
-		// color 
-		var fill_color = document.createElement("select");
-		var fill_color_attr = {
-			name: "color",
-			id : "fill_color"
-		};
-		fill_color.setAttrs(fill_color_attr);
-		
-		var current_value = node.getFillColor();
-		var current = document.createElement("option");
-		var current_attr = {
-			value: current_value,
-			selected: true
-		};
-		current.setAttrs(current_attr);
-		current.appendChild(document.createTextNode(current_value));
-		fill_color.appendChild(current);
-		
-		var blue = document.createElement("option");
-		blue.setAttribute("value", "blue");
-		blue.appendChild(document.createTextNode('blue'));
-		fill_color.appendChild(blue);
-		
-		var yellow = document.createElement("option");
-		yellow.setAttribute("value", "yellow");
-		yellow.appendChild(document.createTextNode('yellow'));
-		fill_color.appendChild(yellow);
-		
-		var red = document.createElement("option");
-		red.setAttribute("value", "red");
-		red.appendChild(document.createTextNode('red'));
-		fill_color.appendChild(red);
-		
-		var green = document.createElement("option");
-		green.setAttribute("value", "green");
-		green.appendChild(document.createTextNode('green'));
-		fill_color.appendChild(green);
-		
-		this.newDiv.appendChild(fill_color);
-		
-		var p = document.createElement("p");
-        
-        var save_button = document.createElement("input");
-		var save_button_attr = {
-			id: "change",
-			value: "change",
-			type: "submit",
-		}
-        save_button.setAttrs(save_button_attr);
-        save_button.addEventListener("click", function(evt){
-            self.change_node(evt, node);
-        }, false);
-        
-        var exit_button = document.createElement("input");
-		var exit_button_attr = {
-			id:  "exit button",
-			value:  "Exit",
-			type: "submit"
-		}
-   		exit_button.setAttrs(exit_button_attr);
-        exit_button.addEventListener("click", function(evt){
-            self.hide(evt);
-        }, false);
-        
-        p.appendChild(save_button);
-        p.appendChild(exit_button);
-        
-        this.newDiv.appendChild(p);
-        this.newDiv.style.display = 'block';
-		this.backDiv.style.display = 'block';
 
 	},
 	
