@@ -46,14 +46,22 @@ Popup.prototype = {
 	 * @param {Object} type
 	 */
 	init:function(jsdot, parent, type) {
+		
+		var self = this;
 		this.jsdot = jsdot;
 		this.doc = parent.ownerDocument;
 		this.backDiv = this.doc.createElement('div');
-		this.backDiv.setAttribute('style', 'position:absolute; height:100%; width:100%; opacity: 0.6; background-color:yellow; display: None; z-index:1000');
+		this.backDiv.setAttribute('style', 'position:absolute; height:100%; width:100%; opacity: 0.9; background-color:#000; display:none; z-index:1000');
 		this.newDiv = this.doc.createElement('div');
-		this.newDiv.setAttribute('style', 'position:absolute; left:10%; top:10%; height:80%; width:80%; background:white; border-color:black; opacity: 1.0; border-width:0.5em; padding:0.4em; display:None; z-index:1000');
-		parent.appendChild(this.backDiv);
-		parent.appendChild(this.newDiv);
+		this.newDiv.setAttribute('style', 'position:absolute; left:10%; top:10%; padding:5px; height:80%; width:80%; background:#ddd; border-color:black; opacity: 1.0; border-width:0.5em; padding:0.4em; display:None; z-index:1000');
+		
+		var tl = $e('div',true),tr = $e('div',true),bl = $e('div',true),br = $e('div',true),closeBtn = $e('div',true);
+		tl.className = "tl";tr.className = "tr";bl.className = "bl";br.className = "br"; closeBtn.className = "closeBtn";
+		closeBtn.addEventListener("click", function(evt){
+            self.hide(evt);
+        }, false);
+		this.newDiv.appends([tl,tr,bl,br,closeBtn]);
+		parent.appends([this.backDiv,this.newDiv]);
 	},
 	
 	/**
@@ -61,50 +69,42 @@ Popup.prototype = {
 	 * the JSON string that represents the graph
 	 */
 	show_JSON:function() {
-		this.backDiv.style.display = 'block';
-        (this.newDiv).style.display = 'block';
-        var self = this;
-        
-        var text_area = document.createElement("textarea");
-		var text_area_attr = {
-			id: "text",
-			name: "text",
-			style: "height:80%; width:100%;"
-		};
-		text_area.setAttrs(text_area_attr);
 
-        var json = document.createTextNode(this.jsdot.toJSON());
-        text_area.appendChild(json);
-        this.newDiv.appendChild(text_area);
+		this.show();
         
-        var p = document.createElement("p");
-        
-        var save_button = document.createElement("input");
-		var save_button_attr = {
-			id: "save button",
-			value: "load and save",
-			type: "submit",
+		if (!this.text_area) {
+
+	        var self = this;
+			this.text_area = $e("textarea", true);
+			var exit_button = $e("input",true);			
+			var p = $e("p",true);
+			var save_button = $e("input",true);
+
+			this.text_area.setAttrs({
+				id: "text",
+				name: "text",
+				style: "height:80%; width:99.5%;margin:20px auto 0 auto; border:1px solid #666;padding:2px;"
+			});
+			save_button.setAttrs({
+				id: "save button",
+				value: "load and save",
+				type: "submit",
+			});			
+			exit_button.setAttrs({
+				id: "exit button",
+				value: "Exit",
+				type: "submit"
+			});
+			exit_button.addEventListener("click", function(evt){
+				self.hide(evt);
+			}, false);
+			save_button.addEventListener("click", function(evt){
+				self.load_string(evt);
+			}, false);
+			p.appends([save_button,exit_button]);
+			this.newDiv.appends([this.text_area,p]);
 		}
-        save_button.setAttrs(save_button_attr);
-        save_button.addEventListener("click", function(evt){
-            self.load_string(evt);
-        }, false);
-        
-        var exit_button = document.createElement("input");
-		var exit_button_attr = {
-			id:  "exit button",
-			value:  "Exit",
-			type: "submit"
-		}
-   		exit_button.setAttrs(exit_button_attr);
-        exit_button.addEventListener("click", function(evt){
-            self.hide(evt);
-        }, false);
-        
-        p.appendChild(save_button);
-        p.appendChild(exit_button);
-        
-        this.newDiv.appendChild(p);
+		this.text_area.innerHTML = this.jsdot.toJSON();
 	},
 	
 	/**
@@ -206,12 +206,17 @@ Popup.prototype = {
 	 * @param {Object} evt
 	 */	
 	hide:function(evt) { 
-		(this.backDiv).style.display = 'None';
-		(this.newDiv).style.display = 'None';
-		var children = this.newDiv.childNodes;
-		while(children.length >= 1) {
-			this.newDiv.removeChild(this.newDiv.firstChild);
-		}
+		(this.backDiv).style.display = 'none';
+		(this.newDiv).style.display = 'none';
+	},
+
+	/**
+	 * Show the popup
+	 * @param {Object} evt
+	 */	
+	show:function(evt) { 
+		this.backDiv.style.display = '';
+		this.newDiv.style.display = '';
 	},
 	
 	/**
