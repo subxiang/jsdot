@@ -45,11 +45,11 @@ JSVG.prototype = {
      * @param {Object} jsdot
      * @param {Object} id (destination div id)
      */
-    init: function(jsdot, id){
+    init: function(params){
 
-		this.jsdot = jsdot;
+		this.jsdot = params.jsdot;
 		
-        this.container = $(id);
+        this.container = $(params.targetId);
         this.svgdoc = this.container.ownerDocument;
         this.svgroot = $e("svg");
 		JSVG.svgroot = this.svgroot;
@@ -57,7 +57,13 @@ JSVG.prototype = {
         this.container.style.position = "relative";
         this.popup = new Popup(this.jsdot, this.container, 'popup');
         
-        this.svgroot.setAttrs({
+		if(params.leftMenu) {
+	        this.buildMenu();
+		} else {
+			this.leftMenuSize = 0;	
+		}
+        
+		this.svgroot.setAttrs({
             "width": window.innerWidth - this.leftMenuSize,
             "id": "svgroot",
 			"style": "position:absolute;top:0;right:0;background:#ddd;padding:0;margin:0;",
@@ -66,10 +72,7 @@ JSVG.prototype = {
         });
         
         this.coords = this.svgroot.createSVGPoint();
-        this.grabPoint = this.svgroot.createSVGPoint();
-        
-        this.buildMenu();
-		
+        this.grabPoint = this.svgroot.createSVGPoint();		
 		var self = this;
 		
         // Drag and drop listeners

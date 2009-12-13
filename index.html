@@ -1,18 +1,20 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 <html>
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-		<title>JSDot demo</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+		<title>JSDot demo</title>	
 		<script type="text/javascript">
-			// <![CDATA[
 			var JSDOT_PATH = "app/core/";
-			window.onload = function(){
-				new JSDot('body');
-			}
-			// ]]>
 		</script>
 		<script type="text/javascript" src="app/core/jsdot-dev.js"></script>
 	</head>
-	<body id="body">
+	<body>
+	<div id="dest" style="height:100%"></div>
+		<script type="text/javascript">
+			new JSDot({
+				targetId: "dest",
+				leftMenu:true
+			});
+		</script>
 	</body>
 </html>

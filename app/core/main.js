@@ -45,13 +45,17 @@ JSDot.prototype = {
 	error: null,
 	
 	
-    init: function(id){
+    init: function(params){
 		// start with an empty graph
 		this.emptyGraph();
 		
 		// set up the drawing area
-		if (typeof id == "string") {
-			this.svg = new JSVG(this, id);
+		if (typeof params.targetId == "string") {
+			this.svg = new JSVG({
+				jsdot: this,
+				targetId: params.targetId,
+				leftMenu: params.leftMenu
+			});
 		}
     },
    
