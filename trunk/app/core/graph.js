@@ -157,6 +157,20 @@ THE SOFTWARE.
 		this._setAttribute("fillcolor", color);
 	}
 	
+	/** Returns the font color, used for text
+	 * @return {String} fill color
+	 */
+	JSDot.prototype.Node.prototype.getFontColor = function() {
+		return this._getAttribute("fontcolor") || "black";
+	}
+	
+	/** Set the font color, used for text
+	 * @param {String} fill color
+	 */
+	JSDot.prototype.Node.prototype.setFontColor = function(color) {
+		this._setAttribute("fontcolor", color);
+	}
+	
 	/** Return the shape to be drawn
 	 * The default is "circle"
 	 * @return {String} shape
@@ -274,6 +288,20 @@ THE SOFTWARE.
 	 */
 	JSDot.prototype.Edge.prototype.setColor = function(color) {
 		this._setAttribute("color", color);
+	}
+	
+	/** Returns the font color, used for text
+	 * @return {String} fill color
+	 */
+	JSDot.prototype.Edge.prototype.getFontColor = function() {
+		return this._getAttribute("fontcolor") || "black";
+	}
+	
+	/** Set the font color, used for text
+	 * @param {String} fill color
+	 */
+	JSDot.prototype.Edge.prototype.setFontColor = function(color) {
+		this._setAttribute("fontcolor", color);
 	}
 	
 
