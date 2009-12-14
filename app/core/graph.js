@@ -117,7 +117,7 @@ THE SOFTWARE.
 		if (typeof p != "string") return [10, 10];
 		p = p.split(',');
 		if (p.length != 2) return [10, 10];
-		return p;
+		return [parseFloat(p[0]), parseFloat(p[1])];
 		//FIXME: defaults here do not really make sense, and the returned values may still not be numbers
 	}
 	

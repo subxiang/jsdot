@@ -261,17 +261,21 @@ JSVG.prototype = {
             	var l, p1, p2;
             	this.dragEdges[0] = this.jsdot.getNodeByName(node_name).getEdgesIn();
             	for (var i in this.dragEdges[0]) {
+            		l = $('e_'+this.dragEdges[0][i].getName()+'+text');
+            		if (l) l.style.display = 'none';
             		l = $('e_'+this.dragEdges[0][i].getName()+'+line');
             		p1 = this.dragEdges[0][i].getSrc().getPos();
             		p2 = this.dragEdges[0][i].getDst().getPos();
-            		this.dragEdges[0][i] = [l, 'M'+p1+'L', parseFloat(p2[0]), parseFloat(p2[1])];
+            		this.dragEdges[0][i] = [l, 'M'+p1+'L', p2[0], p2[1]];
             	}
             	this.dragEdges[1] = this.jsdot.getNodeByName(node_name).getEdgesOut();
             	for (var i in this.dragEdges[1]) {
+            		l = $('e_'+this.dragEdges[1][i].getName()+'+text');
+            		if (l) l.style.display = 'none';
             		l = $('e_'+this.dragEdges[1][i].getName()+'+line');
             		p1 = this.dragEdges[1][i].getSrc().getPos();
              		p2 = this.dragEdges[1][i].getDst().getPos();
-            		this.dragEdges[1][i] = [l, parseFloat(p1[0]), parseFloat(p1[1]), 'L'+p2];
+            		this.dragEdges[1][i] = [l, p1[0], p1[1], 'L'+p2];
             	}
             }
         }
@@ -322,7 +326,7 @@ JSVG.prototype = {
             var dY = this.coords.y - this.grabPoint.y;
             var node = this.jsdot.getNodeByName(this.dragElement.id.slice(2));
             var p = node.getPos();
-            node.setPos(parseFloat(p[0])+dX, parseFloat(p[1])+dY);
+            node.setPos(p[0]+dX, p[1]+dY);
             
             this.dragElement.setAttributeNS(null, 'pointer-events', 'all');
             this.dragElement = null;

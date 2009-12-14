@@ -68,7 +68,8 @@ JSVG.prototype.drawNode = function(n) {
 	t.setAttrs({
 		'x': pos[0], 'y': pos[1],
 		'stroke': n.getColor(),
-		'text-anchor': "middle"
+		'text-anchor': "middle",
+		'dominant-baseline': 'middle'
 	});
 	t.textContent = n.getLabel();
 	e.appendChild(t);
@@ -82,14 +83,27 @@ JSVG.prototype.drawEdge = function(edge) {
 	var p1 = edge.src.getPos();
 	var p2 = edge.dst.getPos();
 	
+	// edge line, eventually with arrow
 	var attrs = {'d': 'M'+p1+'L'+p2, "style": "fill:none;stroke:black;stroke-width:1;"};
 	if (this.jsdot.graph.directed) attrs['marker-end'] = 'url(#Arrow)';
 	var l = $e('path');
 	l.setAttribute('id', 'e_'+edge.getName()+'+line');
 	l.setAttrs(attrs);
+	
+	// selection handle for right-click menu
+	// and path with the right direction for the label
+	var h = $e('path');
+	if (p2[0] < p1[0])
+		attrs = {'d': 'M'+p2+'L'+p1};
+	else
+		attrs ={'d': 'M'+p1+'L'+p2};
+	attrs.style = "fill:none;stroke:yellow;opacity:0;stroke-width:8;";
+	attrs.id = 'e_'+edge.getName()+'+handle';
+	h.setAttrs(attrs);
 
 	var g = $e('g');
 	g.setAttribute('id', 'e_'+edge.getName());
+	g.appendChild(h);
 	g.appendChild(l);
 	
 	var label = edge.getLabel();
@@ -98,12 +112,13 @@ JSVG.prototype.drawEdge = function(edge) {
 		s.setAttribute('dy', '-5');
 		s.textContent = label;
 		var p = $e('textPath');
-		p.setAttributeNS(xlinkns, 'xlink:href', '#e_'+edge.getName()+'+line');
+		p.setAttributeNS(xlinkns, 'xlink:href', '#e_'+edge.getName()+'+handle');
 		p.setAttrs({'startOffset': '50%', 'text-anchor': 'middle'});
 		p.appendChild(s);
 		var t = $e('text');
 		//t.setAttribute('font-size', 20);
 		t.setAttribute('fill', 'black');
+		t.setAttribute('id', 'e_'+edge.getName()+'+text');
 		t.appendChild(p);
 		g.appendChild(t);
 	}
