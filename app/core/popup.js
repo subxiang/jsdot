@@ -124,9 +124,10 @@ Popup.prototype = {
 				id: "label",
 				name: 'label',
 				type: "text",
-				value: node.getLabel()
+				value:  node.getLabel(),
 			});
-			var lab = $e('label',true); lab.setAttribute('for','label');lab.innerHTML ="Background ";
+			var lab = $e('label',true); lab.setAttribute('for','label');lab.innerHTML ="Label ";
+			
 			
 			// color 
 			var fill_color = $e("select", true);
@@ -190,10 +191,15 @@ Popup.prototype = {
 			}, false);
 			
 			p.appends([save_button,exit_button]);
-			this.attrs.appends([lab,this.label,fill_color,p]);
+			
+			var br = $e('br', true);
+			var lab1 = $e('label',true); lab1.setAttribute('for','label');lab1.innerHTML ="Background ";
+
+			this.attrs.appends([lab,this.label,br,lab1,fill_color,p]);
 			this.newDiv.appendChild(this.attrs);
 			this.show();
 		} else {
+			this.label.setAttribute("value", node.getLabel());
 			this.current.value = node.getFillColor();
 			this.show();
 		}
