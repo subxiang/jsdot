@@ -96,6 +96,21 @@ JSVG.prototype = {
 				self.showRightMenu(evt);
 			}
 		}, false);
+        // Right click listener
+        window.addEventListener('keypress', function(evt){
+			
+			switch(evt.keyCode){
+				case 27: // escape
+					self.popup.hide();
+					self.selected = null;
+					self.pointOne = false;
+					if (self.edge) {
+						self.edge.parentNode.removeChild(self.edge);
+						self.edge = null;
+					}	
+				break;
+			}
+		}, false);
 		document.oncontextmenu = new Function("return false");
     },
 	
@@ -125,6 +140,14 @@ JSVG.prototype = {
 				},
 				'show attributes': function(){
 					self.popup.show_attributes(self.node_name.slice(2), self.node_name[0]);
+				},
+				'undo': function(){
+					self.selected = null;
+					self.pointOne = false;
+					if (self.edge) {
+						self.edge.parentNode.removeChild(self.edge);
+						self.edge = null;
+					}			
 				}
 			};
 			
@@ -330,15 +353,14 @@ JSVG.prototype = {
 		'style': 'font-size:12.0;fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round;fill:yellow'});
 		path.setAttribute('transform', 'translate(10, 10) scale(3.5) rotate(45)');
 		selBtn.appendChild(path);
-		path.addEventListener('click', function(evt){ 
-											self.selected = null; 
-											this.pointOne = false; 
-											if (self.edge) {
-												self.edge.parentNode.removeChild(self.edge);
-												self.edge = null;
-											}
-											}, 
-								false);
+		path.addEventListener('click', function(evt){
+			self.selected = null;
+			this.pointOne = false;
+			if (self.edge) {
+				self.edge.parentNode.removeChild(self.edge);
+				self.edge = null;
+			}
+		}, false);
 		// -->
 		
         // <-- Rectangle button
