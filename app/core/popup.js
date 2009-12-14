@@ -69,11 +69,6 @@ Popup.prototype = {
 	 * the JSON string that represents the graph
 	 */
 	show_JSON:function() {
-
-		this.show();
-        if(this.attrs) this.attrs.parentNode.removeChild(this.attrs);
-		if (!this.text_area) {
-
 	        var self = this;
 			this.text_area = $e("textarea", true);
 			var exit_button = $e("input",true);			
@@ -103,8 +98,9 @@ Popup.prototype = {
 			}, false);
 			p.appends([save_button,exit_button]);
 			this.newDiv.appends([this.text_area,p]);
-		}
+			
 		this.text_area.innerHTML = this.jsdot.toJSON();
+		this.show();
 	},
 	
 	/**
@@ -112,67 +108,47 @@ Popup.prototype = {
 	 * @param {Object} Node or Edge
 	 * @param {String} type of first argument: 'n' for node, 'e' for edge
 	 */
-	show_attributes:function(node, kind) {
+	show_attributes:function(element, kind) {
 		
-		if (typeof node == "string") {
+		if (typeof element == "string") {
 			if (kind && kind == 'e')
-				node = this.jsdot.getEdgeByName(node);
+				element = this.jsdot.getEdgeByName(element);
 			else
-				node = this.jsdot.getNodeByName(node);
+				element = this.jsdot.getNodeByName(element);
+		} else {
+			if (element instanceof this.jsdot.Edge) kind = 'e';
+			else kind = 'n';
 		}
-		var self = this;
 		
-		if(this.text_area) this.text_area.parentNode.removeChild(this.text_area);
-		if (!this.attrs) {
-			this.attrs = $e('div',true);
-			this.label = $e("input", true);
-			this.label.setAttrs({
+		var self = this;
+		var div = $e('div',true);
+		var childs = [];
+		
+			/**** Label */
+			var label = $e("input", true);
+			label.setAttrs({
 				id: "label",
 				name: 'label',
 				type: "text",
-				value:  node.getLabel(),
+				value:  element.getLabel(),
 			});
 			var lab = $e('label',true); lab.setAttribute('for','label');lab.innerHTML ="Label ";
+			childs.push(lab);
+			childs.push(label);
 			
+			/**** Line color */
+			var line_color = this.colorPicker('line_color', 'Line Color', element.getColor());
+			childs.push(line_color);
 			
-			// color 
-			var fill_color = $e("select", true);
-			fill_color.setAttrs({
-				name: "color",
-				id: "fill_color"
-			});
+			/**** Fill color */
+			var fill_color;
+			if (kind == 'n') {
+				fill_color = this.colorPicker('fill_color', 'Fill Color', element.getFillColor());
+				childs.push(fill_color);
+			}
 			
-			var current_value = node.getFillColor();
-			this.current = $e("option", true);
-			
-			this.current.setAttrs({
-				value: current_value,
-				selected: true
-			});
-			this.current.appendChild(document.createTextNode(current_value));
-			fill_color.appendChild(this.current);
-			
-			var blue = document.createElement("option");
-			blue.setAttribute("value", "blue");
-			blue.appendChild(document.createTextNode('blue'));
-			fill_color.appendChild(blue);
-			
-			var yellow = document.createElement("option");
-			yellow.setAttribute("value", "yellow");
-			yellow.appendChild(document.createTextNode('yellow'));
-			fill_color.appendChild(yellow);
-			
-			var red = document.createElement("option");
-			red.setAttribute("value", "red");
-			red.appendChild(document.createTextNode('red'));
-			fill_color.appendChild(red);
-			
-			var green = document.createElement("option");
-			green.setAttribute("value", "green");
-			green.appendChild(document.createTextNode('green'));
-			fill_color.appendChild(green);
-			
-			var p = document.createElement("p");
+			/**** Buttons */
+			var p = $e("p", true);
 			
 			var save_button = document.createElement("input");
 			var save_button_attr = {
@@ -182,7 +158,7 @@ Popup.prototype = {
 			}
 			save_button.setAttrs(save_button_attr);
 			save_button.addEventListener("click", function(evt){
-				self.change_node(evt, node);
+				self.change_element(evt, element, kind);
 			}, false);
 			
 			var exit_button = document.createElement("input");
@@ -197,19 +173,11 @@ Popup.prototype = {
 			}, false);
 			
 			p.appends([save_button,exit_button]);
+			childs.push(p);
 			
-			var br = $e('br', true);
-			var lab1 = $e('label',true); lab1.setAttribute('for','label');lab1.innerHTML ="Background ";
-
-			this.attrs.appends([lab,this.label,br,lab1,fill_color,p]);
-			this.newDiv.appendChild(this.attrs);
+			div.appends(childs);
+			this.newDiv.appendChild(div);
 			this.show();
-		} else {
-			this.label.setAttribute("value", node.getLabel());
-			this.current.value = node.getFillColor();
-			this.show();
-		}
-
 	},
 	
 	/**
@@ -219,6 +187,10 @@ Popup.prototype = {
 	hide:function(evt) { 
 		(this.backDiv).style.display = 'none';
 		(this.newDiv).style.display = 'none';
+		var children = this.newDiv.childNodes;
+		while(children.length >= 1) {
+			this.newDiv.removeChild(this.newDiv.firstChild);
+		}
 	},
 
 	/**
@@ -250,18 +222,49 @@ Popup.prototype = {
 	 * @param {Object} evt
 	 * @param {Object} Node
 	 */
-	change_node:function(evt, node) {
-		var fill_color = $('fill_color').value;
-		var label = $('label').value;
+	change_element:function(evt, element, kind) {
+		element.setLabel($('label').value);
+		element.setColor($('line_color').value);
 		
-		if(label != "") {
-			node.setLabel(label);
+		if (kind == 'n') {
+			element.setFillColor($('fill_color').value);
 		}
-		node.setFillColor(fill_color);
-		
 		this.jsdot.draw();
 		
 		var exit_button = $('exit button');
 		exit_button.click();
+	},
+	
+	/** Create a dropdown box with a list of colors
+	 * 
+	 * @param {String} id id of the 'select' tag
+	 * @param {String} label content of label tag
+	 * @param {String} selected name of pre-selected entry
+	 * @param {DOMElement} parent optional, tag to append the created div to
+	 */
+	colorPicker: function(id, label, selected, parent) {
+		var colors = ["black", "blue", "yellow", "red", "green", "lightgrey", "white"];
+		
+		var div = $e('div', true);
+		if (label) {
+			var lab = $e('label', true);
+			lab.innerHTML = label;
+			div.appendChild(lab);
+		}
+		var sel = $e('select', true);
+		sel.setAttribute('id', id);
+		
+		for (var i in colors) {
+			var y = $e("option", true);
+			y.setAttribute("value", colors[i]);
+			if (colors[i] == selected) y.setAttribute('selected', 'true');
+			y.appendChild(document.createTextNode(colors[i]));
+			sel.appendChild(y);
+		}
+		
+		div.appendChild(sel);
+		
+		if (parent) parent.appendChild(div);
+		return div;
 	}
 }
