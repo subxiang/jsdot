@@ -282,7 +282,7 @@ Popup.prototype = {
 		var div = $e('div', true);
 		if (label) {
 			var lab = $e('label', true);
-			lab.innerHTML = label;
+			lab.innerHTML = label + " ";
 			div.appendChild(lab);
 		}
 		var sel = $e('select', true);
