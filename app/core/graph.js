@@ -343,6 +343,22 @@ THE SOFTWARE.
 		this.graph.edges[e.getName()] = e;
 		return e;
 	}
+	
+	/** Returns an edge of the graph by name
+	 * @param {String} name name of the edge
+	 * @return {Node} the edge if found, undefined otherwise
+	 */
+	JSDot.prototype.getEdgeByName = function(name) {
+		return this.graph.edges[name];
+	};
+
+	/** Removes an edge from the graph
+	 * @param {Object,String} edge edge to remove or its name (as a string)
+	 */
+	JSDot.prototype.removeEdge = function(edge) {
+		if (edge instanceof this.Edge) edge = edge.getName();
+		delete(this.graph.edges[edge]);
+	}
 
 	/** Returns a new object representing an empty graph.
 	 * To reset the model to an empty graph use emptyGraph().

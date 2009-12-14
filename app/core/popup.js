@@ -109,11 +109,17 @@ Popup.prototype = {
 	
 	/**
 	 * Make visible the popup for changing attributes of the node
-	 * @param {Object} Node
+	 * @param {Object} Node or Edge
+	 * @param {String} type of first argument: 'n' for node, 'e' for edge
 	 */
-	show_attributes:function(node) {
+	show_attributes:function(node, kind) {
 		
-		if (typeof node == "string") node = this.jsdot.getNodeByName(node);
+		if (typeof node == "string") {
+			if (kind && kind == 'e')
+				node = this.jsdot.getEdgeByName(node);
+			else
+				node = this.jsdot.getNodeByName(node);
+		}
 		var self = this;
 		
 		if(this.text_area) this.text_area.parentNode.removeChild(this.text_area);
