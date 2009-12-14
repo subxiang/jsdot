@@ -124,10 +124,10 @@ JSVG.prototype = {
 			 *  @struct { label : function } */
 			var func = {
 				'delete': function(){
-					self.deleteElement(self.node_name);
+					self.deleteElement(self.node_name.slice(2), self.node_name[0]);
 				},
 				'show attributes': function(){
-					self.popup.show_attributes(self.node_name);
+					self.popup.show_attributes(self.node_name.slice(2), self.node_name[0]);
 				}
 			};
 			
@@ -148,7 +148,7 @@ JSVG.prototype = {
 		}
 		
 		// get affected node
-		this.node_name = evt.target.parentNode.id.slice(2);
+		this.node_name = evt.target.parentNode.id;
 		var time;		
 		
 		this.rightMenuCnt.addEventListener('mouseout', function(evt){
@@ -161,8 +161,11 @@ JSVG.prototype = {
 		}, false);		
 	},
 	
-	deleteElement:function(name){
-		this.jsdot.removeNode(name);
+	deleteElement:function(name, kind){
+		if (kind == 'e')
+			this.jsdot.removeEdge(name);
+		else
+			this.jsdot.removeNode(name);
 		this.jsdot.draw();
 	},
     
