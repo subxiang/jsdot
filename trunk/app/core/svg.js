@@ -412,13 +412,19 @@ JSVG.prototype = {
 		}
 		examples.appendChild(sel);
 		// -->
+		
+		// <-- help button
+		var stringBtn2 = $e("div",true); stringBtn2.setAttribute("class","btn");
+		stringBtn2.addEventListener('click', function(){ self.popup.show_help(); }, false);
+		stringBtn2.innerHTML = "Help";	
+		// -->
 	
         // <-- Copyright footer
 		var footer = $e("div",true); footer.setAttribute("id","footer");
 		footer.innerHTML = 'JSDot 2009 - USI Lugano<br /><a href="#">Lucia Blondel</a> | <a href="#">Nicos Giuliani</a> | <a href="#">Carlo Vanini</a>';	
         // -->		
 		
-		this.cnt.appends([toggle,circleBtn,arrowBtn,footer,stringBtn,examples]);
+		this.cnt.appends([toggle,circleBtn,arrowBtn,footer,stringBtn,stringBtn2, examples]);
 		this.container.appendChild(this.cnt);
 
     },
