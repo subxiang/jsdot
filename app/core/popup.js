@@ -180,6 +180,40 @@ Popup.prototype = {
 			this.show();
 	},
 	
+	show_help:function(){
+		var div = $e('div',true);
+		var p = $e('p',true);
+		var self = this;
+		
+		str = "You can click on one of those item in the right menu:\
+				<ul>\
+  				<li>Selection: allow you to drag and drop and right click, such that you can make some changes, on the elements of the draw area</li>\
+ 				<li>Node: allow you to draw nodes </li>\
+				<li>Edge: allow you to draw edges</li>\
+				<li>Insert or see JSON: allow you to insert your graph model or to see the changes that you have done to the model</li>\
+				<li>Examples: some graph examples that we provide </li></ul>\
+				Have fun!\
+				For more informations visit <a href=\"http://code.google.com/p/jsdot/\" target=\"_blank\"> JSDot website</a>";		
+		div.innerHTML = str;
+		
+		var exit_button = document.createElement("input");
+			var exit_button_attr = {
+				id: "exit button",
+				value: "Exit",
+				type: "submit"
+			}
+		exit_button.setAttrs(exit_button_attr);
+		exit_button.addEventListener("click", function(evt){
+				self.hide(evt);
+			}, false);
+		
+		p.appends([exit_button]);
+		div.appends([p])
+		
+		this.newDiv.appendChild(div);
+		this.show();
+	},
+	
 	/**
 	 * Hide the popup
 	 * @param {Object} evt
