@@ -197,34 +197,6 @@ JSVG.prototype = {
     },
     
     /**
-     * Drag the element throught the design area
-     * @param {Object} evt
-     */
-    drag: function(evt){
-    
-        if (this.dragElement) {
-            this.getCoords(evt);
-            this.dragElement.setAttributeNS(null, 'transform', 'translate(' + (this.coords.x - this.grabPoint.x) + ',' + (this.coords.y - this.grabPoint.y) + ')');
-        }
-    },
-    
-    /**
-     * Drop the element after mouseup event
-     * @param {Object} evt
-     */
-    drop: function(evt){
-    
-        if (this.dragElement != null) {
-        
-            // Set the selected style
-            this.selected.setAttrs({"fill-opacity": 1});
-            this.dragElement.setAttributeNS(null, 'pointer-events', 'all');
-            this.dragElement = null;
-            this.selected = null;
-        }
-    },
-    
-    /**
      * Get and set the true coordinates
      * @param {Object} evt
      */
@@ -342,17 +314,6 @@ JSVG.prototype = {
 			
 			this.jsdot.draw();
         }
-    },
-    
-    /**
-     * Get and set the true coordinates
-     * @param {Object} evt
-     */
-    getCoords: function(evt){
-    
-        var scale = this.svgroot.currentScale, translation = this.svgroot.currentTranslate;
-        this.coords.x = (evt.clientX - translation.x) / scale;
-        this.coords.y = (evt.clientY - translation.y) / scale;
     },
     
     /** Builds the left menu, buttons and all listeners */
