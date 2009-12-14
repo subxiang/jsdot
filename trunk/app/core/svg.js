@@ -151,14 +151,18 @@ JSVG.prototype = {
 		this.node_name = evt.target.parentNode.id;
 		var time;		
 		
-		this.rightMenuCnt.addEventListener('mouseout', function(evt){
-			var self = this;
-			time = setTimeout(function(){ self.style.display = 'none'; }, 500);
-		}, false);
-		
-		this.rightMenuCnt.addEventListener('mouseover', function(evt){
-			clearTimeout(time);
-		}, false);		
+		if ((this.node_name[0] == 'n' || this.node_name[0] == 'e') && this.node_name[1] == '_') {
+			this.rightMenuCnt.addEventListener('mouseout', function(evt){
+				var self = this;
+				time = setTimeout(function(){ self.style.display = 'none'; }, 500);
+			}, false);
+			
+			this.rightMenuCnt.addEventListener('mouseover', function(evt){
+				clearTimeout(time);
+			}, false);
+		} else {
+			this.rightMenuCnt.style.display = 'none';
+		}
 	},
 	
 	deleteElement:function(name, kind){
