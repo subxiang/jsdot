@@ -147,6 +147,11 @@ Popup.prototype = {
 				childs.push(fill_color);
 			}
 			
+			/**** Font color */
+			var font_color;
+			font_color = this.colorPicker('font_color', 'Font Color', element.getFontColor());
+			childs.push(font_color);
+			
 			/**** Buttons */
 			var p = $e("p", true);
 			
@@ -259,6 +264,7 @@ Popup.prototype = {
 	change_element:function(evt, element, kind) {
 		element.setLabel($('label').value);
 		element.setColor($('line_color').value);
+		element.setFontColor($('font_color').value);
 		
 		if (kind == 'n') {
 			element.setFillColor($('fill_color').value);

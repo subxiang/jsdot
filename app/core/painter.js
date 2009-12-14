@@ -67,7 +67,8 @@ JSVG.prototype.drawNode = function(n) {
 	var t = $e('text');
 	t.setAttrs({
 		'x': pos[0], 'y': pos[1],
-		'stroke': n.getColor(),
+		'stroke': 'none',
+		'fill': n.getFontColor(),
 		'text-anchor': "middle",
 		'dominant-baseline': 'middle'
 	});
@@ -119,7 +120,7 @@ JSVG.prototype.drawEdge = function(edge) {
 		p.appendChild(s);
 		var t = $e('text');
 		//t.setAttribute('font-size', 20);
-		t.setAttribute('fill', 'black');
+		t.setAttribute('fill', edge.getFontColor());
 		t.setAttribute('id', 'e_'+edge.getName()+'+text');
 		t.appendChild(p);
 		g.appendChild(t);
