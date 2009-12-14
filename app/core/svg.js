@@ -218,9 +218,6 @@ JSVG.prototype = {
         if (this.designArea != targetElement) {
         
             this.selected = targetElement;
-            targetElement.setAttrs( {
-                "fill-opacity": 0.5
-            });
             
             // Calculates the element's coords
             var transMatrix = targetElement.getCTM();
@@ -293,11 +290,6 @@ JSVG.prototype = {
     drop: function(evt){
     
         if (this.dragElement != null) {
-        
-            // Set the selected style
-            this.selected.setAttrs( {
-                "fill-opacity": 1
-            });
             
             // update node
             this.getCoords(evt);
