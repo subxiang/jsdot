@@ -84,7 +84,9 @@ JSVG.prototype.drawEdge = function(edge) {
 	var p2 = edge.dst.getPos();
 	
 	// edge line, eventually with arrow
-	var attrs = {'d': 'M'+p1+'L'+p2, "style": "fill:none;stroke:black;stroke-width:1;"};
+	var style = "fill:none;stroke-width:1;";
+	style += 'stroke:' + edge.getColor() + ';';
+	var attrs = {'d': 'M'+p1+'L'+p2, "style": style};
 	if (this.jsdot.graph.directed) attrs['marker-end'] = 'url(#Arrow)';
 	var l = $e('path');
 	l.setAttribute('id', 'e_'+edge.getName()+'+line');
@@ -97,7 +99,7 @@ JSVG.prototype.drawEdge = function(edge) {
 		attrs = {'d': 'M'+p2+'L'+p1};
 	else
 		attrs ={'d': 'M'+p1+'L'+p2};
-	attrs.style = "fill:none;stroke:yellow;opacity:0;stroke-width:8;";
+	attrs.style = "fill:none;stroke:yellow;opacity:0;stroke-width:10;";
 	attrs.id = 'e_'+edge.getName()+'+handle';
 	h.setAttrs(attrs);
 
