@@ -345,24 +345,6 @@ JSVG.prototype = {
 		toggle.addEventListener('click', function(evt){ self.toggleMenu(); }, false);
 		// -->
 		
-		// <-- Select button
-		var selBtn = $e('svg');
-		selBtn.setAttribute("class","btn");
-		var path = $e('path');
-		path.setAttrs({'d': 'M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z',
-		'style': 'font-size:12.0;fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round;fill:yellow'});
-		path.setAttribute('transform', 'translate(10, 10) scale(3.5) rotate(45)');
-		selBtn.appendChild(path);
-		path.addEventListener('click', function(evt){
-			self.selected = null;
-			this.pointOne = false;
-			if (self.edge) {
-				self.edge.parentNode.removeChild(self.edge);
-				self.edge = null;
-			}
-		}, false);
-		// -->
-		
         // <-- Rectangle button
 		var circleBtn = $e("svg"), circle = $e('circle'); circleBtn.setAttribute("class","btn");
 		circle.addEventListener('click', function(evt){ self.selected = 'circle'; }, false);
@@ -415,7 +397,7 @@ JSVG.prototype = {
 		footer.innerHTML = 'JSDot 2009 - USI Lugano<br /><a href="#">Lucia Blondel</a> | <a href="#">Nicos Giuliani</a> | <a href="#">Carlo Vanini</a>';	
         // -->		
 		
-		this.cnt.appends([toggle,selBtn,circleBtn,arrowBtn,footer,stringBtn,stringBtn2, examples]);
+		this.cnt.appends([toggle,circleBtn,arrowBtn,footer,stringBtn,stringBtn2, examples]);
 		this.container.appendChild(this.cnt);
 
     },
