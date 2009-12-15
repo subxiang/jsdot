@@ -63,7 +63,7 @@ JSVG.prototype = {
 		this.svgroot.setAttrs({
             "width": window.innerWidth - this.leftMenuSize,
             "id": "svgroot",
-			"style": "position:absolute;top:0;right:0;background:#ddd;padding:0;margin:0;",
+			"style": "position:absolute;top:0;right:0;background:#cedbc3;padding:0;margin:0;",
             "xmlns": svgns,
             "xmlns:xlink": xlinkns
         });
@@ -130,8 +130,7 @@ JSVG.prototype = {
 			});
 			
 			var self = this, el;
-			
-			
+
 			/** Object that defines the label inside the menu
 			 *  @struct { label : function } */
 			var func = {
@@ -140,14 +139,6 @@ JSVG.prototype = {
 				},
 				'show attributes': function(){
 					self.popup.show_attributes(self.node_name.slice(2), self.node_name[0]);
-				},
-				'undo': function(){
-					self.selected = null;
-					self.pointOne = false;
-					if (self.edge) {
-						self.edge.parentNode.removeChild(self.edge);
-						self.edge = null;
-					}			
 				}
 			};
 			
@@ -331,12 +322,17 @@ JSVG.prototype = {
     /** Builds the left menu, buttons and all listeners */
     buildMenu: function(){
     
-        var self = this, toggle;
+        var self = this, toggle, title;
         this.toggle = false;
 		
 		// <-- left menu container
         this.cnt = $e('div',true);
 		this.cnt.setAttrs({'id':'leftMenu' });
+		// -->
+
+		// <-- Title container
+        title = $e('div',true);
+		title.innerHTML = '<h3>Javascript Dot</h3>';
 		// -->
 
 		// <-- toggle container
@@ -345,24 +341,24 @@ JSVG.prototype = {
 		toggle.addEventListener('click', function(evt){ self.toggleMenu(); }, false);
 		// -->
 		
-        // <-- Rectangle button
+        // <-- Circle button
 		var circleBtn = $e("svg"), circle = $e('circle'); circleBtn.setAttribute("class","btn");
 		circle.addEventListener('click', function(evt){ self.selected = 'circle'; }, false);
-		circle.setAttrs({"r": "24","cx":"25","cy":"25"});
+		circle.setAttrs({"r": "22","cx":"25","cy":"25","stroke":"#ffa500", "fill":"#bfbfbf"});
 		circleBtn.appendChild(circle);
         // -->	
 	
         // <-- Edge button
 		var arrowBtn = $e("svg"), arrow = $e('line'); arrowBtn.setAttribute("class","btn");
 		arrowBtn.addEventListener('click', function(evt){ self.selected = 'edge'; }, false);
-		arrow.setAttrs({"x1": "0", "y1": "0", "x2": "5em", "y2": "5em","stroke":"yellow"});
+		arrow.setAttrs({"x1": "0", "y1": "0", "x2": "50", "y2": "50","stroke":"yellow"});
 		arrowBtn.appendChild(arrow);		
         // -->	
 
         // <-- Insert string button
 		var stringBtn = $e("div",true); stringBtn.setAttribute("class","btn");
 		stringBtn.addEventListener('click', function(){ self.popup.show_JSON(); }, false);
-		stringBtn.innerHTML = "Insert or see JSON";	
+		stringBtn.innerHTML = "Code";	
         // -->	
 		
 		// <-- Drop down examples
@@ -394,10 +390,10 @@ JSVG.prototype = {
 	
         // <-- Copyright footer
 		var footer = $e("div",true); footer.setAttribute("id","footer");
-		footer.innerHTML = 'JSDot 2009 - USI Lugano<br /><a href="#">Lucia Blondel</a> | <a href="#">Nicos Giuliani</a> | <a href="#">Carlo Vanini</a>';	
+		footer.innerHTML = 'JSDot 2009 - USI Lugano<br /><a href="http://atelier.inf.usi.ch/~blondell/">Lucia Blondel</a> | <a href="http://atelier.inf.usi.ch/~giuliann/">Nicos Giuliani</a> | <a href="http://atelier.inf.usi.ch/~vaninic/">Carlo Vanini</a>';	
         // -->		
 		
-		this.cnt.appends([toggle,circleBtn,arrowBtn,footer,stringBtn,stringBtn2, examples]);
+		this.cnt.appends([title,toggle,circleBtn,arrowBtn,footer,stringBtn,stringBtn2, examples]);
 		this.container.appendChild(this.cnt);
 
     },
