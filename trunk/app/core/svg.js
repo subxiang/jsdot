@@ -336,7 +336,9 @@ JSVG.prototype = {
 
 		// <-- Title container
         title = $e('div',true);
-		title.innerHTML = '<h3>Javascript Dot</h3>';
+		title.setAttribute('class','title');
+        h3 = $e('h3',true);	
+		h3.innerHTML = 'Javascript Dot';
 		// -->
 
 		// <-- toggle container
@@ -351,13 +353,15 @@ JSVG.prototype = {
 		circle.setAttrs({"r": "22","cx":"25","cy":"25","stroke":"#ffa500", "fill":"#bfbfbf"});
 		circleBtn.appendChild(circle);
         // -->	
-	
+		
         // <-- Edge button
-		var arrowBtn = $e("svg"), arrow = $e('line'); arrowBtn.setAttribute("class","btn");
+		var arrowBtn = $e('svg'), path = $e('path');
+		path.setAttrs({'d': 'M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z','style': 'font-size:12.0;fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round;fill:grey'});
+		path.setAttribute('transform', 'translate(10, 10) scale(3.5) rotate(45)');
 		arrowBtn.addEventListener('click', function(evt){ self.selected = 'edge'; }, false);
-		arrow.setAttrs({"x1": "0", "y1": "0", "x2": "50", "y2": "50","stroke":"yellow"});
-		arrowBtn.appendChild(arrow);		
-        // -->	
+		arrowBtn.setAttribute("class","btn");
+		arrowBtn.appendChild(path);
+		// -->
 
         // <-- Insert string button
 		var stringBtn = $e("div",true); stringBtn.setAttribute("class","btn");
@@ -397,7 +401,7 @@ JSVG.prototype = {
 		footer.innerHTML = 'JSDot 2009 - USI Lugano<br /><a href="http://atelier.inf.usi.ch/~blondell/">Lucia Blondel</a> | <a href="http://atelier.inf.usi.ch/~giuliann/">Nicos Giuliani</a> | <a href="http://atelier.inf.usi.ch/~vaninic/">Carlo Vanini</a>';	
         // -->		
 		
-		this.cnt.appends([title,toggle,circleBtn,arrowBtn,footer,stringBtn,stringBtn2, examples]);
+		this.cnt.appends([title,h3,toggle,circleBtn,arrowBtn,footer,stringBtn,stringBtn2, examples]);
 		this.container.appendChild(this.cnt);
 
     },
