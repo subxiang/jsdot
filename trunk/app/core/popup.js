@@ -196,6 +196,7 @@ Popup.prototype = {
  				<li>Node: allow you to draw nodes </li>\
 				<li>Edge: allow you to draw edges</li>\
 				<li>Insert or see JSON: allow you to insert your graph model or to see the changes that you have done to the model</li>\
+				<li>Escape button: undo any action<\li>\
 				<li>Examples: some graph examples that we provide </li></ul>\
 				Have fun!\
 				For more informations visit <a href=\"http://code.google.com/p/jsdot/\" target=\"_blank\"> JSDot website</a>";		
