@@ -53,14 +53,13 @@ Popup.prototype = {
 		this.backDiv = this.doc.createElement('div');
 		this.backDiv.setAttribute('style', 'position:absolute; height:100%; width:100%; opacity: 0.9; background-color:#000; display:none; z-index:1000');
 		this.newDiv = this.doc.createElement('div');
-		this.newDiv.setAttribute('style', 'position:absolute; left:10%; top:10%; padding:5px; height:80%; width:80%; background:#ddd; border-color:black; opacity: 1.0; border-width:0.5em; padding:0.4em; display:None; z-index:1000');
+		this.newDiv.setAttribute('style', 'border:2px solid #666; -moz-border-radius: 5px; -webkit-border-radius: 5px;position:absolute; left:10%; top:10%; padding:8px; height:80%; width:80%; background:#ddd; padding:0.4em; display:none; z-index:1000');
 		
-		var tl = $e('div',true),tr = $e('div',true),bl = $e('div',true),br = $e('div',true),closeBtn = $e('div',true);
-		tl.className = "tl";tr.className = "tr";bl.className = "bl";br.className = "br"; closeBtn.className = "closeBtn";
-		closeBtn.addEventListener("click", function(evt){
+		this.closeBtn = $e('div',true); this.closeBtn.className = "closeBtn";
+		this.closeBtn.addEventListener("click", function(evt){
             self.hide(evt);
         }, false);
-		this.newDiv.appends([tl,tr,bl,br,closeBtn]);
+		this.newDiv.appendChild(this.closeBtn);
 		parent.appends([this.backDiv,this.newDiv]);
 	},
 	
@@ -78,7 +77,7 @@ Popup.prototype = {
 			this.text_area.setAttrs({
 				id: "text",
 				name: "text",
-				style: "height:80%; width:99.5%;margin:20px auto 0 auto; border:1px solid #666;padding:2px;"
+				style: "border:1px solid #666; -moz-border-radius: 5px; -webkit-border-radius: 5px;height:80%; width:99.5%;margin:20px auto 0 auto; border:1px solid #666;padding:2px;"
 			});
 			save_button.setAttrs({
 				id: "save button",
@@ -122,6 +121,7 @@ Popup.prototype = {
 		
 		var self = this;
 		var div = $e('div',true);
+			div.setAttribute('style','border:2px solid #666; -moz-border-radius: 5px; -webkit-border-radius: 5px;margin:2em;background:#eee;padding:1em;')
 		var childs = [];
 		
 			/**** Label */
@@ -187,10 +187,11 @@ Popup.prototype = {
 	
 	show_help:function(){
 		var div = $e('div',true);
+			div.setAttribute('class','help');
 		var p = $e('p',true);
 		var self = this;
 		
-		str = "You can click on one of those item in the right menu:\
+		str = "<h2>You can click on one of those item in the right menu:</h2>\
 				<ul>\
   				<li>Selection: allow you to drag and drop and right click, such that you can make some changes, on the elements of the draw area</li>\
  				<li>Node: allow you to draw nodes </li>\
@@ -240,6 +241,7 @@ Popup.prototype = {
 	show:function(evt) { 
 		this.backDiv.style.display = '';
 		this.newDiv.style.display = '';
+		this.newDiv.appendChild(this.closeBtn);
 	},
 	
 	/**
