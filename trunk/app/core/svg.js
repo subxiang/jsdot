@@ -129,7 +129,7 @@ JSVG.prototype = {
 			
 			this.rightMenuCnt = $e('div', true);
 			this.rightMenuCnt.setAttrs({
-				'style': 'top:' + evt.clientY + 'px;left:' + evt.clientX + 'px;',
+				'style': 'top:' + evt.clientY + 'px;left:' + evt.clientX + 'px;border:2px solid #999;-moz-border-radius: 5px; -webkit-border-radius: 5px;',
 				'class' : 'rightMenu'
 			});
 			
