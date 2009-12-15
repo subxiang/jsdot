@@ -71,12 +71,12 @@ JSDot.template = [
 											{"name":"node7","attributes":{"label":"14","color":"green","pos":"186,366"}}\
 											],\
 									"edges":[\
-											{"src":"node1","dst":"node2","attributes":{"label":"edge1","style":"solid"}},\
-											{"src":"node2","dst":"node3","attributes":{"label":"edge2","style":"solid"}},\
-											{"src":"node2","dst":"node4","attributes":{"label":"edge3","style":"solid"}},\
-											{"src":"node1","dst":"node5","attributes":{"label":"edge4","style":"solid"}},\
-											{"src":"node5","dst":"node6","attributes":{"label":"edge5","style":"solid"}},\
-											{"src":"node5","dst":"node7","attributes":{"label":"edge6","style":"solid"}}\
+											{"src":"node1","dst":"node2","attributes":{"label":"","style":"solid"}},\
+											{"src":"node2","dst":"node3","attributes":{"label":"","style":"solid"}},\
+											{"src":"node2","dst":"node4","attributes":{"label":"","style":"solid"}},\
+											{"src":"node1","dst":"node5","attributes":{"label":"","style":"solid"}},\
+											{"src":"node5","dst":"node6","attributes":{"label":"","style":"solid"}},\
+											{"src":"node5","dst":"node7","attributes":{"label":"","style":"solid"}}\
 											],\
 									"attributes":{\
 											"label":"binary tree example"\
@@ -117,5 +117,23 @@ JSDot.template = [
 									"attributes":{\
 											"label":"directed graph"\
 											}\
-									}']
+									}'],
+				["Star graph", '{\
+								"name":"Star graph",\
+								"directed":false,\
+								"nodes":[\
+									{"name":"node1","attributes":{"pos":"580,100","label":"A1","color":"black","fontcolor":"black","fillcolor":"yellow"}},\
+									{"name":"node2", "attributes":{"pos":"780, 250","label":"A2","color":"black","fontcolor":"black","fillcolor":"yellow"}},\
+									{"name":"node3", "attributes":{"pos":"380, 250","label":"A3","color":"black","fontcolor":"black","fillcolor":"yellow"}},\
+									{"name":"node4", "attributes":{"pos":"680, 450","label":"A4","color":"black","fontcolor":"black","fillcolor":"yellow"}},\
+									{"name":"node5", "attributes":{"pos":"480, 450","label":"A5","color":"black","fontcolor":"black","fillcolor":"yellow"}},\
+									],\
+								"edges":[\
+									{"src":"node3","dst":"node2","attributes":{"fillcolor":"yellow","label":"","color":"yellow","fontcolor":"black"}},\
+									{"src":"node4","dst":"node1","attributes":{"fillcolor":"yellow","label":"","color":"yellow","fontcolor":"black"}},\
+									{"src":"node1","dst":"node5","attributes":{"fillcolor":"yellow","label":"","color":"yellow","fontcolor":"black"}},\
+									{"src":"node3","dst":"node4","attributes":{"fillcolor":"yellow","label":"","color":"yellow","fontcolor":"black"}},\
+									{"src":"node5","dst":"node2","attributes":{"fillcolor":"yellow","label":"","color":"yellow","fontcolor":"black"}},\
+								],\
+								"attributes":{}}']
 				];
