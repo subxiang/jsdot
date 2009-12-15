@@ -52,7 +52,7 @@ JSVG.prototype = {
 		JSVG.svgroot = this.svgroot;
         this.container.appendChild(this.svgroot);
         this.container.style.position = "relative";
-        this.popup = new Popup(this.jsdot, this.container, 'popup');
+        this.popup = new Popup(this, this.container, 'popup');
         
 		if(params.leftMenu) {
 	        this.buildMenu();
@@ -355,18 +355,24 @@ JSVG.prototype = {
         // -->	
 		
         // <-- Edge button
-		var arrowBtn = $e('svg'), path = $e('path');
+		var arrowBtn = $e('svg'), path = $e('path'); arrowBtn.setAttribute("class","btn");
 		path.setAttrs({'d': 'M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z','style': 'font-size:12.0;fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round;fill:grey'});
-		path.setAttribute('transform', 'translate(10, 10) scale(3.5) rotate(45)');
+		path.setAttribute('transform', 'translate(10, 10) scale(4) rotate(45)');
 		arrowBtn.addEventListener('click', function(evt){ self.selected = 'edge'; }, false);
 		arrowBtn.setAttribute("class","btn");
 		arrowBtn.appendChild(path);
 		// -->
 
-        // <-- Insert string button
+        // <-- Show JSON code button
 		var stringBtn = $e("div",true); stringBtn.setAttribute("class","btn");
 		stringBtn.addEventListener('click', function(){ self.popup.show_JSON(); }, false);
-		stringBtn.innerHTML = "Code";	
+		stringBtn.innerHTML = "<span>JSON Code</span>";	
+        // -->	
+
+        // <-- Show SVG code button
+		var svgBtn = $e("div",true); svgBtn.setAttribute("class","btn");
+		svgBtn.addEventListener('click', function(){ self.popup.show_SVG(); }, false);
+		svgBtn.innerHTML = "<span>SVG Code</span>";	
         // -->	
 		
 		// <-- Drop down examples
@@ -378,7 +384,7 @@ JSVG.prototype = {
 		sel.setAttribute("id", "examples");
 		
 		for(var i = 0; i < JSDot.template.length; i++) {
-			var o =  document.createElement("option");
+			var o =  $e("option",true);
 			o.setAttribute("value", JSDot.template[i][0]);
 			o.appendChild(document.createTextNode(JSDot.template[i][0]));
 			o.addEventListener('click', function(i){ return function(){
@@ -393,7 +399,7 @@ JSVG.prototype = {
 		// <-- help button
 		var stringBtn2 = $e("div",true); stringBtn2.setAttribute("class","btn");
 		stringBtn2.addEventListener('click', function(){ self.popup.show_help(); }, false);
-		stringBtn2.innerHTML = "Help";	
+		stringBtn2.innerHTML = "<span>Help</span>";	
 		// -->
 	
         // <-- Copyright footer
@@ -401,7 +407,7 @@ JSVG.prototype = {
 		footer.innerHTML = 'JSDot 2009 - USI Lugano<br /><a href="http://atelier.inf.usi.ch/~blondell/">Lucia Blondel</a> | <a href="http://atelier.inf.usi.ch/~giuliann/">Nicos Giuliani</a> | <a href="http://atelier.inf.usi.ch/~vaninic/">Carlo Vanini</a>';	
         // -->		
 		
-		this.cnt.appends([title,h3,toggle,circleBtn,arrowBtn,footer,stringBtn,stringBtn2, examples]);
+		this.cnt.appends([title,h3,toggle,circleBtn,arrowBtn,footer,stringBtn,svgBtn,stringBtn2, examples]);
 		this.container.appendChild(this.cnt);
 
     },
@@ -471,6 +477,10 @@ JSVG.prototype = {
 				this.pointOne = true;
 			}
 		}
+	},
+	
+	getSVGContent: function(){
+		return this.svgroot;
 	}
 }
 

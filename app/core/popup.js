@@ -45,15 +45,16 @@ Popup.prototype = {
 	 * @param {Object} parent
 	 * @param {Object} type
 	 */
-	init:function(jsdot, parent, type) {
+	init:function(svg, parent, type) {
 		
 		var self = this;
-		this.jsdot = jsdot;
+		this.svg = svg;
+		this.jsdot = svg.jsdot;
 		this.doc = parent.ownerDocument;
 		this.backDiv = this.doc.createElement('div');
 		this.backDiv.setAttribute('style', 'position:absolute; height:100%; width:100%; opacity: 0.9; background-color:#000; display:none; z-index:1000');
 		this.newDiv = this.doc.createElement('div');
-		this.newDiv.setAttribute('style', 'border:2px solid #666; -moz-border-radius: 5px; -webkit-border-radius: 5px;position:absolute; left:10%; top:10%; padding:8px; height:80%; width:80%; background:#ddd; padding:0.4em; display:none; z-index:1000');
+		this.newDiv.setAttribute('style', 'border:2px solid #666;overflow:hidden; -moz-border-radius: 5px; -webkit-border-radius: 5px;position:absolute; left:10%; top:10%; padding:8px; height:80%; width:80%; background:#ddd; padding:0.4em; display:none; z-index:1000');
 		
 		this.closeBtn = $e('div',true); this.closeBtn.className = "closeBtn";
 		this.closeBtn.addEventListener("click", function(evt){
@@ -77,7 +78,7 @@ Popup.prototype = {
 			this.text_area.setAttrs({
 				id: "text",
 				name: "text",
-				style: "border:1px solid #666; -moz-border-radius: 5px; -webkit-border-radius: 5px;height:80%; width:99.5%;margin:20px auto 0 auto; border:1px solid #666;padding:2px;"
+				style: "border:1px solid #666; -moz-border-radius: 5px; -webkit-border-radius: 5px;height:80%; width:97.5%;margin:20px auto 0 auto; border:1px solid #666;"
 			});
 			save_button.setAttrs({
 				id: "save button",
@@ -121,7 +122,7 @@ Popup.prototype = {
 		
 		var self = this;
 		var div = $e('div',true);
-			div.setAttribute('style','border:2px solid #666; -moz-border-radius: 5px; -webkit-border-radius: 5px;margin:2em;background:#eee;padding:1em;')
+			div.setAttribute('style','border:2px solid #666; -moz-border-radius: 5px; -webkit-border-radius: 5px;margin:2em;background:#eee;')
 		var childs = [];
 		
 			/**** Label */
@@ -185,6 +186,26 @@ Popup.prototype = {
 			this.show();
 	},
 	
+	/**
+	 * Shows the svg content code
+	 */
+	show_SVG:function() {
+
+        var self = this;
+		this.text_area = $e("textarea", true), svgImg = $e('div',true);
+		this.text_area.setAttrs({
+			id: "text",
+			name: "text",
+			style: "border:1px solid #666; -moz-border-radius: 5px;float:left;"+
+					"-webkit-border-radius: 5px;height:80%; width:97.5%;margin:20px auto 0 auto; border:1px solid #666;"
+		});
+		svgImg.appendChild(this.svg.getSVGContent());
+		this.text_area.innerHTML = svgImg.innerHTML;
+		this.svg.container.appendChild(this.svg.getSVGContent());
+		this.newDiv.appends([this.text_area]);
+		this.show();
+	},
+		
 	show_help:function(){
 		var div = $e('div',true);
 			div.setAttribute('class','help');

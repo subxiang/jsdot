@@ -47,7 +47,6 @@ Element.prototype.getPos = function(){
     return { x: left, y: top }
 }
 // <--
-
 function $e(i){ if(arguments[1]) return document.createElement(i); return document.createElementNS(svgns, i);};
 function $(i) { return document.getElementById(i); };
 function Class(){ return function(arguments){ this.init(arguments); } }
