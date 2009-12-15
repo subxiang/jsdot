@@ -111,6 +111,10 @@ JSVG.prototype = {
 				break;
 			}
 		}, false);
+		 // Resize listener
+        window.addEventListener('resize', function(evt){
+			self.svgroot.setAttribute("width", window.innerWidth - self.leftMenuSize);
+		}, false);
 		document.oncontextmenu = new Function("return false");
     },
 	

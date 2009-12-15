@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<title>Untitled Document</title>
+		<script type="text/javascript">
+			// <![CDATA[
+			var JSDOT_PATH = "../core/";
+			// ]]>
+		</script>
+		<script type="text/javascript" src="../core/jsdot-dev.js"></script>
+	</head>
+	<body>
+		<div id="dest" style="height:100%"></div>
+		<script type="text/javascript">
+			var tree = '{"name":"directed graph","directed":true,"nodes":[{"name":"l6","attributes":{"color":"black","pos":"93.2000732421875,522","fontcolor":"black","fillcolor":"lightgrey","label":"l6"}},{"name":"b2","attributes":{"color":"green","pos":"396.70013427734375,605"}},{"name":"b1","attributes":{"color":"yellow","pos":"397.40008544921875,522","fontcolor":"black","fillcolor":"lightgrey"}},{"name":"l1","attributes":{"pos":"308.10003662109375,158"}},{"name":"l2","attributes":{"pos":"209.50006103515625,265"}},{"name":"l3","attributes":{"pos":"311.50006103515625,264"}},{"name":"l4","attributes":{"pos":"132.800048828125,392"}},{"name":"top","attributes":{"pos":"392.2000732421875,73"}},{"name":"l5","attributes":{"pos":"243.50006103515625,396"}},{"name":"r6","attributes":{"pos":"707.400146484375,519"}},{"name":"r1","attributes":{"pos":"482.800048828125,154"}},{"name":"r2","attributes":{"pos":"581.4000244140625,263"}},{"name":"r3","attributes":{"pos":"481.10003662109375,261"}},{"name":"r4","attributes":{"pos":"655.9000854492188,389"}},{"name":"r5","attributes":{"pos":"547.5000610351562,389"}}],"edges":[{"src":"b2","dst":"b1","attributes":{}},{"src":"b1","dst":"l6","attributes":{}},{"src":"l6","dst":"l5","attributes":{}},{"src":"l5","dst":"l4","attributes":{}},{"src":"l4","dst":"l3","attributes":{}},{"src":"l3","dst":"l2","attributes":{}},{"src":"l2","dst":"l1","attributes":{}},{"src":"l1","dst":"top","attributes":{}},{"src":"b1","dst":"r6","attributes":{}},{"src":"r6","dst":"r5","attributes":{}},{"src":"r5","dst":"r4","attributes":{}},{"src":"r4","dst":"r3","attributes":{}},{"src":"r3","dst":"r2","attributes":{}},{"src":"r2","dst":"r1","attributes":{}},{"src":"r1","dst":"top","attributes":{}}],"attributes":{"label":"directed graph"}}';
+
+			var g = new JSDot({
+				targetId: "dest",
+				leftMenu:true
+			});
+			g.loadJSON(tree);
+			for (var i in g.graph.nodes) {
+				var n = g.graph.nodes[i];
+				n.setColor('green');
+				n.setFillColor('darkgreen');
+			}
+			g.getNodeByName('b2').setFillColor('sienna');
+			
+			/**** define sets */
+			var sets = [
+			{'set': ['l1', 'r1', 'l4', 'r4'],
+			'seq': ['blue', 'darkgreen', 'red'],
+			'st': 0},
+			{'set': ['top', 'l2', 'r2', 'l6', 'r6'],
+			'seq': ['darkgreen', 'yellow'],
+			'st': 1}
+			];
+			
+			/**** prepare sets */
+			for (var i in sets) {
+				for (var j in sets[i].set)
+					sets[i].set[j] = g.getNodeByName(sets[i].set[j]);
+			}
+			
+			/**** controller */
+			function toggle(set) {
+				sets[set].st += 1;
+				if (sets[set].st >= sets[set].seq.length) sets[set].st = 0;
+				for (var i in sets[set].set) {
+					sets[set].set[i].setFillColor(sets[set].seq[sets[set].st]);
+				}
+				g.draw();
+				setTimeout("toggle("+set+")", 1000);
+			}
+			
+			//g.draw();
+			toggle(0);
+			toggle(1);
+		</script>
+	</body>
+</html>
