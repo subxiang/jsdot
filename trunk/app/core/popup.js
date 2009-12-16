@@ -61,6 +61,16 @@ Popup.prototype = {
             self.hide(evt);
         }, false);
 		this.newDiv.appendChild(this.closeBtn);
+		window.addEventListener('keypress', function(evt){
+			
+			switch(evt.keyCode){
+				case 13: // enter
+					if(self.newDiv.innerHTML != '') {
+						$('save button').click();
+					}
+				break;
+			}
+		}, false);
 		parent.appends([this.backDiv,this.newDiv]);
 	},
 	
@@ -158,7 +168,7 @@ Popup.prototype = {
 			
 			var save_button = document.createElement("input");
 			var save_button_attr = {
-				id: "change",
+				id: "save button",
 				value: "change",
 				type: "submit",
 			}
