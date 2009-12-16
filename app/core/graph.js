@@ -318,7 +318,7 @@ THE SOFTWARE.
 	JSDot.prototype.newNode = function(name) {
 		if (!name) {
 			// no name was given, generate one
-			while (this.getNodeByName(name = 'n' + (new Date()).getTime())) {};
+			while (this.getNodeByName(name = this._getNextGenName())) {};
 		} else {
 			// a name was given, check that it isn't already in use
 			if (this.getNodeByName(name)) {
@@ -408,3 +408,30 @@ THE SOFTWARE.
 	JSDot.prototype.emptyGraph = function() {
 		this.graph = this.getEmptyGraph();
 	};
+	
+	/** Generate progressive names
+	 * 
+	 */
+	JSDot.prototype._getNextGenName = function() {
+		var ct = [-1];
+		return function() {
+			var a = 'abcdefghijklmnopqrstuvwxyz';
+			var max = a.length;
+			
+			//increment
+			ct[0]++;
+			var i = 0;
+			while (ct[i] >= max) {
+				ct[i] = 0;
+				ct[i + 1] = (ct[i + 1] != undefined ? ct[i + 1] + 1 : 0);
+				i++;
+			}
+			
+			var res='';
+			for (var i = ct.length-1; i >= 0; i--) {
+				res += a[ct[i]];
+			}
+			
+			return res;
+		};
+	}();
