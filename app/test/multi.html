@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<title>Multiple graphs in a single document</title>
+		<script type="text/javascript">
+			// <![CDATA[
+			var JSDOT_PATH = "../core/";
+			// ]]>
+		</script>
+		<script type="text/javascript" src="../core/jsdot-dev.js"></script>
+	</head>
+	<body>
+		
+		<p>Text before</p>
+		
+		<div id="dest" style="height:10cm;width:80%;margin:0px auto;"></div>
+		<script type="text/javascript">
+			var g = new JSDot({
+				targetId: "dest",
+				leftMenu:true
+			});
+			var n1 = g.newNode("a");
+			n1.setPos(250,100);
+			var n2 = g.newNode("b");
+			n2.setPos(400,100);
+			g.newEdge(n1, n2).setLabel("edge");
+			g.draw();
+		</script>
+		
+		<p>Text between</p>
+		
+		<div id="dest2" style="height:10cm;width:10cm;margin:0px auto;"></div>
+		<script type="text/javascript">
+			var g = new JSDot("dest2");
+			var n1 = g.newNode("a");
+			n1.setPos(250,100);
+			var n2 = g.newNode("b");
+			n2.setPos(400,100);
+			g.newEdge(n1, n2).setLabel("second");
+			g.draw();
+		</script>
+		
+		<p>Text after</p>
+		
+	</body>
+</html>
