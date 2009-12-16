@@ -375,6 +375,14 @@ JSVG.prototype = {
 		svgBtn.innerHTML = "<span>SVG Code</span>";	
         // -->	
 		
+		// <-- Layout button
+		var layoutBtn = $e("div",true); layoutBtn.setAttribute("class","btn");
+		layoutBtn.addEventListener('click', function(){
+				if (self.jsdot.layout && self.jsdot.layout.layout) {self.jsdot.layout.layout(); self.jsdot.draw();}
+				}, false);
+		layoutBtn.innerHTML = "<span>Auto Layout</span>";	
+        // -->
+		
 		// <-- Drop down examples
 		var examples = document.createElement("div"); 
 		examples.setAttribute("style", "float-left:5px");
@@ -407,7 +415,7 @@ JSVG.prototype = {
 		footer.innerHTML = 'JSDot 2009 - USI Lugano<br /><a href="http://atelier.inf.usi.ch/~blondell/">Lucia Blondel</a> | <a href="http://atelier.inf.usi.ch/~giuliann/">Nicos Giuliani</a> | <a href="http://atelier.inf.usi.ch/~vaninic/">Carlo Vanini</a>';	
         // -->		
 		
-		this.cnt.appends([title,h3,toggle,circleBtn,arrowBtn,footer,stringBtn,svgBtn,stringBtn2, examples]);
+		this.cnt.appends([title,h3,toggle,circleBtn,arrowBtn,footer,stringBtn,svgBtn,stringBtn2,layoutBtn,examples]);
 		this.container.appendChild(this.cnt);
 
     },
