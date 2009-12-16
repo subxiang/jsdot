@@ -338,6 +338,24 @@ THE SOFTWARE.
 	JSDot.prototype.getNodeByName = function(name) {
 		return this.graph.nodes[name];
 	};
+	
+	/** Returns how many nodes there are in the graph
+	 * @return {Integer} number of nodes
+	 */
+	JSDot.prototype.getNodesCount = function() {
+		return this.getNodesArray().length;
+	};
+	
+	/** Returns an array containing all nodes of the graph
+	 * @return {Array}
+	 */
+	JSDot.prototype.getNodesArray = function() {
+		var res = [];
+		for (var i in this.graph.nodes) {
+			res.push(this.graph.nodes[i]);
+		}
+		return res;
+	}
 
 	/** Removes a node from the graph
 	 * @param {Object,String} node node to remove or its name (as a string)

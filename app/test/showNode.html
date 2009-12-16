@@ -9,6 +9,7 @@
 			// ]]>
 		</script>
 		<script type="text/javascript" src="../core/jsdot-dev.js"></script>
+		<script type="text/javascript" src="../core/grid_layout.js"></script>
 	</head>
 	<body>
 	<div id="dest" style="height:100%"></div>
@@ -17,6 +18,8 @@
 				targetId: "dest",
 				leftMenu:true
 			});
+			g.layout = new JSDotGridLayout(g, 50, 50, 500, 500);
+			g.layout.setColumns(4);
 			var n1 = g.newNode("a");
 			n1.setPos(250,100);
 			var n2 = g.newNode("b");
