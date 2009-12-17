@@ -374,13 +374,13 @@ JSVG.prototype = {
 
         // <-- Show JSON code button
 		var stringBtn = $e("div",true); stringBtn.setAttribute("class","btn");
-		stringBtn.addEventListener('click', function(){ self.popup.show_JSON();self.selectObj(this); }, false);
+		stringBtn.addEventListener('click', function(){ self.popup.show_JSON();self.selectObj(null); }, false);
 		stringBtn.innerHTML = "<span>JSON Code</span>";	
         // -->	
 
         // <-- Show SVG code button
 		var svgBtn = $e("div",true); svgBtn.setAttribute("class","btn");
-		svgBtn.addEventListener('click', function(){ self.popup.show_SVG();self.selectObj(this); }, false);
+		svgBtn.addEventListener('click', function(){ self.popup.show_SVG();self.selectObj(null); }, false);
 		svgBtn.innerHTML = "<span>SVG Code</span>";	
         // -->	
 		
@@ -388,6 +388,7 @@ JSVG.prototype = {
 		var layoutBtn = $e("div",true); layoutBtn.setAttribute("class","btn");
 		layoutBtn.addEventListener('click', function(){
 				if (self.jsdot.layout && self.jsdot.layout.layout) {self.jsdot.layout.layout(); self.jsdot.draw();}
+				self.selectObj(null);
 				}, false);
 		layoutBtn.innerHTML = "<span>Auto Layout</span>";	
         // -->
@@ -399,7 +400,7 @@ JSVG.prototype = {
 		//	(this.jsdot.isDirected() ? 'checked="yes"' : '') + '/>';
 		
 		var directed = $e("div",true); directed.setAttribute("class","btn");
-		directed.addEventListener('click', function(){ self.jsdot.setDirected(!self.jsdot.isDirected()); self.jsdot.draw(); }, false);
+		directed.addEventListener('click', function(){ self.jsdot.setDirected(!self.jsdot.isDirected()); self.jsdot.draw(); self.selectObj(null); }, false);
 		directed.innerHTML = "<span>Dir / Undir</span>";
 		
 		// Why doesn't it work by creating the element?? the checkbox isn't shown in Firefox
@@ -432,7 +433,7 @@ JSVG.prototype = {
 		
 		// <-- help button
 		var stringBtn2 = $e("div",true); stringBtn2.setAttribute("class","btn");
-		stringBtn2.addEventListener('click', function(){ self.popup.show_help();self.selectObj(this); }, false);
+		stringBtn2.addEventListener('click', function(){ self.popup.show_help();self.selectObj(null); }, false);
 		stringBtn2.innerHTML = "<span>Help</span>";	
 		// -->
 	
