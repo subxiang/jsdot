@@ -49,12 +49,24 @@ JSDot.prototype.draw = function() {
  */
 JSVG.prototype.drawNode = function(n) {
 	var pos = n.getPos();
-	var e = this.Element('circle', {
-		'id': 'n_'+n.getName(),
-		'r': '2.5em', 'cx': pos[0], 'cy': pos[1],
-		'stroke': n.getColor(),
-		'fill': n.getFillColor()
+	var e;
+	if (n.getShape() == 'box') {
+		var len = n.getLabel().length;
+		e = this.Element('rect', {
+			'id': 'n_'+n.getName(),
+			'x': pos[0]-(len/2*12)-15, 'y': pos[1]-15,
+			'height': 30, 'width': len*12+30,
+			'stroke': n.getColor(),
+			'fill': n.getFillColor()
 		});
+	} else {
+		e = this.Element('circle', {
+			'id': 'n_'+n.getName(),
+			'r': '2.5em', 'cx': pos[0], 'cy': pos[1],
+			'stroke': n.getColor(),
+			'fill': n.getFillColor()
+			});
+	}
 	e.addEventListener('mousedown',
 		function(svg){
 			return function(evt) {

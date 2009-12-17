@@ -478,10 +478,10 @@ JSVG.prototype = {
 	 */
 	addEdge: function(evt) {
 		
-		if (evt.target instanceof SVGCircleElement) {
+		if (evt.currentTarget.id.slice(0,2) == 'n_') {
 			
 			// We got already a point, so fix the second
-			if(this.pointOne && evt.target instanceof SVGCircleElement) {
+			if(this.pointOne) {
 
 				var dst = evt.currentTarget.id.slice(2);
 				var e = this.jsdot.newEdge(this.src, dst);
@@ -491,9 +491,9 @@ JSVG.prototype = {
 				
 			} else { // set the start point to the target position
 				
-				var x = evt.target.getAttribute("cx"), y = evt.target.getAttribute("cy");
+				var p = this.jsdot.getNodeByName(evt.currentTarget.id.slice(2)).getPos();
 				this.src = evt.currentTarget.id.slice(2);
-				this.edge = $e('line'); this.edge.setAttrs({'stroke': 'black','x1': x,'y1': y,'x2': x,'y2': y});
+				this.edge = $e('line'); this.edge.setAttrs({'stroke': 'black','x1': p[0],'y1': p[1],'x2': p[0],'y2': p[1]});
 				this.svgroot.insertBefore(this.edge, this.svgroot.firstChild);			
 				this.pointOne = true;
 			}
