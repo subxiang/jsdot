@@ -163,6 +163,13 @@ Popup.prototype = {
 			font_color = this.colorPicker('font_color', 'Font Color', element.getFontColor());
 			childs.push(font_color);
 			
+			/**** Node shape */
+			var shape;
+			if (kind == 'n') {
+				shape = this.dropDown('shape', 'Shape', ['circle', 'box'], element.getShape());
+				childs.push(shape);
+			}
+			
 			/**** Buttons */
 			var p = $e("p", true);
 			
@@ -302,6 +309,7 @@ Popup.prototype = {
 		
 		if (kind == 'n') {
 			element.setFillColor($('fill_color').value);
+			element.setShape($('shape').value);
 		}
 		this.jsdot.draw();
 		
@@ -318,6 +326,18 @@ Popup.prototype = {
 	 */
 	colorPicker: function(id, label, selected, parent) {
 		var colors = ["black", "blue", "yellow", "red", "green", "lightgrey", "white"];
+		return this.dropDown(id, label, colors, selected, parent);
+	},
+	
+	/** Create a dropdown menu with a list of options
+	 * 
+	 * @param {String} id id of the 'select' tag
+	 * @param {String} label content of label tag
+	 * @param {Array} options array of options (strings)
+	 * @param {String} selected name of pre-selected entry
+	 * @param {DOMElement} parent optional, tag to append the created div to
+	 */
+	dropDown: function(id, label, options, selected, parent) {
 		
 		var div = $e('div', true);
 		if (label) {
@@ -328,11 +348,11 @@ Popup.prototype = {
 		var sel = $e('select', true);
 		sel.setAttribute('id', id);
 		
-		for (var i in colors) {
+		for (var i in options) {
 			var y = $e("option", true);
-			y.setAttribute("value", colors[i]);
-			if (colors[i] == selected) y.setAttribute('selected', 'true');
-			y.appendChild(document.createTextNode(colors[i]));
+			y.setAttribute("value", options[i]);
+			if (options[i] == selected) y.setAttribute('selected', 'true');
+			y.appendChild(document.createTextNode(options[i]));
 			sel.appendChild(y);
 		}
 		
