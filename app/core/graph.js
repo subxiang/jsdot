@@ -310,6 +310,21 @@ THE SOFTWARE.
 	 * 
 	 */
 	
+	/** Is the graph directed?
+	 * @return true if the graph is directed, false otherwise
+	 */
+	JSDot.prototype.isDirected = function() {
+		return this.graph.directed;
+	}
+	
+	/** Set whether the graph is directed
+	 * 
+	 * @param {Object} d true if graph is directed, false if not
+	 */
+	JSDot.prototype.setDirected = function(d) {
+		this.graph.directed = d;
+	}
+	
 	/** Creates a new node in the graph
 	 * if name is missing it will be automatically generated.
 	 * @param {String} name optional, the name of the node

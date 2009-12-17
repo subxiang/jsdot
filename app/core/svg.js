@@ -392,6 +392,23 @@ JSVG.prototype = {
 		layoutBtn.innerHTML = "<span>Auto Layout</span>";	
         // -->
 		
+		// <-- Directed / undirected
+		//var directed = document.createElement('div'); 
+		//directed.setAttribute('class', 'btn_line');
+		//directed.innerHTML = 'Directed: <input type="checkbox" id= "directed" name="directed" value="directed"' +
+		//	(this.jsdot.isDirected() ? 'checked="yes"' : '') + '/>';
+		
+		var directed = $e("div",true); directed.setAttribute("class","btn");
+		directed.addEventListener('click', function(){ self.jsdot.setDirected(!self.jsdot.isDirected()); self.jsdot.draw(); }, false);
+		directed.innerHTML = "<span>Dir / Undir</span>";
+		
+		// Why doesn't it work by creating the element?? the checkbox isn't shown in Firefox
+		//var sel =  $e('input');
+		//sel.setAttrs({'name': 'directed', 'value': 'directed'});
+		//sel.appendChild(document.createTextNode('Directed'));
+		//directed.appendChild(sel);
+		// -->
+		
 		// <-- Drop down examples
 		var examples = document.createElement("div"); 
 		examples.setAttribute("style", "float-left:5px");
@@ -424,7 +441,7 @@ JSVG.prototype = {
 		footer.innerHTML = 'JSDot 2009 - USI Lugano<br /><a href="http://atelier.inf.usi.ch/~blondell/">Lucia Blondel</a> | <a href="http://atelier.inf.usi.ch/~giuliann/">Nicos Giuliani</a> | <a href="http://atelier.inf.usi.ch/~vaninic/">Carlo Vanini</a>';	
         // -->		
 		
-		this.cnt.appends([title,h3,toggle,circleBtn,arrowBtn,footer,stringBtn,svgBtn,stringBtn2,layoutBtn,examples]);
+		this.cnt.appends([title,h3,toggle,circleBtn,arrowBtn,footer,stringBtn,svgBtn,stringBtn2,layoutBtn,directed,examples]);
 		this.container.appendChild(this.cnt);
 
     },
