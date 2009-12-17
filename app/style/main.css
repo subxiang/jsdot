@@ -12,9 +12,9 @@ textarea { color: #0000ff; font-size:1em; font-family:Script; padding:1em; }
 .rightMenu { width:120px;position:absolute;padding:5px;background:#333;z-index:10; }
 .rightMenu a { text-indent:2px; padding:2px; width:100%; color:#eee; font-size:11px; padding:2px 0; border-bottom:1px dashed #eee; float:left; margin:2px 0; display:block; }
 .rightMenu a:hover { background:#ffa500; color:#fff; }
-.btn { font-size:1em; -moz-border-radius: 5px; -webkit-border-radius: 5px; width:auto; height:auto; margin:8px; padding:0; width:50px; height:50px; float:left; border:1px solid #ddd; color:#eee; background:#111; text-align:center; vertical-align:middle; }
-.btn:hover { border:1px solid #ec8f21; }
-.btn span { margin:4px 0 0 0; float:left; width:100%; text-align:center; clear:both; }
+.btn,.btn_sel { font-size:1em; -moz-border-radius: 5px; -webkit-border-radius: 5px; width:auto; height:auto; margin:8px; padding:0; width:50px; height:50px; float:left; border:1px solid #ddd; color:#eee; background:#111; text-align:center; vertical-align:middle; }
+.btn span,.btn_sel span { margin:4px 0 0 0; float:left; width:100%; text-align:center; clear:both; }
+.btn_sel { border-color:#ec8f21; }
 .title { text-align:center; color:#fff; height:40px; border-bottom:2px double #fff; padding:0 0 5px 0; margin:2px 0 10px 0; background:#000; opacity:.4; }
 .help { margin:2em 1.5em; border:1px solid #9ab19e; -moz-border-radius: 5px; -webkit-border-radius: 5px; padding:1em; background:#fafafa; }
 .help li { margin:2px 0;}

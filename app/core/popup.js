@@ -88,7 +88,7 @@ Popup.prototype = {
 			this.text_area.setAttrs({
 				id: "text",
 				name: "text",
-				style: "border:1px solid #666; -moz-border-radius: 5px; -webkit-border-radius: 5px;height:80%; width:97.5%;margin:20px auto 0 auto; border:1px solid #666;"
+				style: "border:1px solid #666; -moz-border-radius: 5px; -webkit-border-radius: 5px;height:80%; width:97%;margin:20px auto 0 auto; border:1px solid #666;"
 			});
 			save_button.setAttrs({
 				id: "save button",
@@ -132,7 +132,7 @@ Popup.prototype = {
 		
 		var self = this;
 		var div = $e('div',true);
-			div.setAttribute('style','border:2px solid #666; -moz-border-radius: 5px; -webkit-border-radius: 5px;margin:2em;background:#eee;')
+			div.setAttribute('style','border:2px solid #666; -moz-border-radius: 5px; -webkit-border-radius: 5px;margin:2em;background:#eee;padding:1em;')
 		var childs = [];
 		
 			/**** Label */
@@ -207,7 +207,7 @@ Popup.prototype = {
 			id: "text",
 			name: "text",
 			style: "border:1px solid #666; -moz-border-radius: 5px;float:left;"+
-					"-webkit-border-radius: 5px;height:80%; width:97.5%;margin:20px auto 0 auto; border:1px solid #666;"
+					"-webkit-border-radius: 5px;height:80%; width:97%;margin:20px auto 0 auto; border:1px solid #666;"
 		});
 		svgImg.appendChild(this.svg.getSVGContent());
 		this.text_area.innerHTML = svgImg.innerHTML;

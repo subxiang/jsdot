@@ -34,8 +34,8 @@ JSVG.prototype = {
     selected: null,
     popup: null,
 	edge: null,
+	current:null,
 	leftMenuSize:220,
-	defaultMenuSize:this.lefMenuSize,
         
     /** 
      * JSVG constructor
@@ -322,6 +322,15 @@ JSVG.prototype = {
 			this.jsdot.draw();
         }
     },
+	
+	selectObj: function(obj) {
+		//alert(obj)
+		if (this.current != null) {
+			this.current.setAttribute('class', 'btn');
+		}
+		this.current = obj instanceof SVGCircleElement ? obj.parentNode: obj;
+		this.current.setAttribute('class','btn_sel');
+	},
     
     /** Builds the left menu, buttons and all listeners */
     buildMenu: function(){
@@ -349,7 +358,7 @@ JSVG.prototype = {
 		
         // <-- Circle button
 		var circleBtn = $e("svg"), circle = $e('circle'); circleBtn.setAttribute("class","btn");
-		circle.addEventListener('click', function(evt){ self.selected = 'circle'; }, false);
+		circle.addEventListener('click', function(evt){ self.selected = 'circle'; self.selectObj(this); }, false);
 		circle.setAttrs({"r": "22","cx":"25","cy":"25","stroke":"#ffa500", "fill":"#bfbfbf"});
 		circleBtn.appendChild(circle);
         // -->	
@@ -358,20 +367,20 @@ JSVG.prototype = {
 		var arrowBtn = $e('svg'), path = $e('path'); arrowBtn.setAttribute("class","btn");
 		path.setAttrs({'d': 'M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z','style': 'font-size:12.0;fill-rule:evenodd;stroke-width:0.62500000;stroke-linejoin:round;fill:grey'});
 		path.setAttribute('transform', 'translate(10, 10) scale(4) rotate(45)');
-		arrowBtn.addEventListener('click', function(evt){ self.selected = 'edge'; }, false);
+		arrowBtn.addEventListener('click', function(evt){ self.selected = 'edge';self.selectObj(this); }, false);
 		arrowBtn.setAttribute("class","btn");
 		arrowBtn.appendChild(path);
 		// -->
 
         // <-- Show JSON code button
 		var stringBtn = $e("div",true); stringBtn.setAttribute("class","btn");
-		stringBtn.addEventListener('click', function(){ self.popup.show_JSON(); }, false);
+		stringBtn.addEventListener('click', function(){ self.popup.show_JSON();self.selectObj(this); }, false);
 		stringBtn.innerHTML = "<span>JSON Code</span>";	
         // -->	
 
         // <-- Show SVG code button
 		var svgBtn = $e("div",true); svgBtn.setAttribute("class","btn");
-		svgBtn.addEventListener('click', function(){ self.popup.show_SVG(); }, false);
+		svgBtn.addEventListener('click', function(){ self.popup.show_SVG();self.selectObj(this); }, false);
 		svgBtn.innerHTML = "<span>SVG Code</span>";	
         // -->	
 		
@@ -406,7 +415,7 @@ JSVG.prototype = {
 		
 		// <-- help button
 		var stringBtn2 = $e("div",true); stringBtn2.setAttribute("class","btn");
-		stringBtn2.addEventListener('click', function(){ self.popup.show_help(); }, false);
+		stringBtn2.addEventListener('click', function(){ self.popup.show_help();self.selectObj(this); }, false);
 		stringBtn2.innerHTML = "<span>Help</span>";	
 		// -->
 	
@@ -424,18 +433,22 @@ JSVG.prototype = {
 	 * Toggle the left menu
 	 */
 	toggleMenu:function(){
-		
+		var self = this,margin,interval;
 		if(this.toogle) {
-			this.svgroot.setAttrs({"width":window.innerWidth - 220});
-			this.cnt.setAttrs({'style': "margin-left:0"});
+			margin = self.leftMenuSize, interval = setInterval(function(){
+				if(0 == margin) clearInterval(interval);
+				self.svgroot.setAttrs({"width":window.innerWidth -(self.leftMenuSize - margin - 3)});
+				self.cnt.setAttrs({'style':'margin-left:-'+((margin -= 5) - 10)+'px'});
+			},10);
 			this.toogle = false;
-			this.leftMenuSize = 220;
 			return;
 		}
-		this.svgroot.setAttrs({"width":window.innerWidth - 3});
-		this.cnt.setAttrs({'style':'margin-left:-215px'});
+		margin = 0, interval = setInterval(function(){
+			if(self.leftMenuSize == margin) clearInterval(interval);
+			self.svgroot.setAttrs({"width":window.innerWidth -(self.leftMenuSize - margin + 3)});
+			self.cnt.setAttrs({'style':'margin-left:-'+((margin += 5) - 10)+'px'});
+		},10);
 		this.toogle = true; 
-		this.leftMenuSize = 0;
 	},
 	
     /**
