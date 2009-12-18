@@ -63,7 +63,6 @@ JSVG.prototype = {
 		this.svgroot.setAttrs({
             "width": window.innerWidth - this.leftMenuSize,
             "id": "svgroot",
-			"style": "position:absolute;top:0;right:0;background:#cedbc3;padding:0;margin:0;",
             "xmlns": svgns,
             "xmlns:xlink": xlinkns
         });
