@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+		<title>Untitled Document</title>
+		<link type="text/css" rel="stylesheet" href="main.css"/>
+		<script type="text/javascript" src="jsdot-min.js"></script>
+		<script type="text/javascript" src="../core/grid_layout.js"></script>
+	</head>
+	<body>
+	<div id="dest" style="height:100%"></div>
+		<script type="text/javascript">
+			var g = new JSDot({
+				targetId: "dest",
+				leftMenu:true
+			});
+			g.layout = new JSDotGridLayout(g, 50, 50, 500, 500);
+			g.layout.setColumns(4);
+			var n1 = g.newNode("a");
+			n1.setPos(250,100);
+			var n2 = g.newNode("b");
+			n2.setPos(400,100);
+			g.newEdge(n1, n2).setLabel("edge");
+			g.draw();
+		</script>
+	</body>
+</html>
