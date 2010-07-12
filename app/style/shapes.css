@@ -1,0 +1,23 @@
+
+.jsdot_circle {
+	stroke: black;
+	fill: lightgray;
+}
+
+.jsdot_box {
+	stroke: black;
+	fill: lightgray;
+}
+
+.jsdot_line_edge {
+	stroke: black;
+	fill: none;
+	stroke-width: 1;
+	marker-end: url(#Arrow);
+}
+
+/* this must be last, so that it overrides others when used */
+.jsdot_def_hl {
+	stroke: red;
+/*	stroke-width: 2; */
+}
