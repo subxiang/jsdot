@@ -156,11 +156,8 @@ jsdot_View.prototype = {
 	*/
 	enableSelection: function() {
 		var handler = {};
-		handler.nodeclick = function(n) {
+		handler.selectionchg = function(n) {
 			n.stencil.highlight(n, n.selected);
-		};
-		handler.edgeclick = function(e) {
-			e.stencil.highlight(e, e.selected);
 		};
 		this.jsdot.addEventHandler('view', handler);
 	},

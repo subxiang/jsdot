@@ -52,22 +52,123 @@ jsdot_Selection.prototype = {
 	/** Associated view */
 	view: null,
 	
+	/** Allow nodes to be selected.
+		@note Be sure to call @link deselectAll when changing this to false.
+	*/
+	allowNodes: true,
+	
+	/** Allow edges to be selected.
+		@note Be sure to call @link deselectAll when changing this to false.
+	*/
+	allowEdges: true,
+	
+	/** Allow multiple elements to be selected */
+	allowMultiple: true,
+	
+	/** Selected elements.
+		Array of selected nodes and edges.
+		@see select
+		@see deselect
+		@see deselectAll
+	*/
+	selection: [],
+	
+	/** Handler for mousedown event on the SVG.
+		Handles mousedown events and fires the
+		triggered jsdot events.
+		
+		When selection is enabled and it changes the event
+		'selectionchg' is fired. If selection is disabled
+		then the 'neclick' is fired when clicking on edges
+		or nodes. When only one of allowEdges and allowNodes
+		is true, clicking on edge resp. node fires 'selectionchg'
+		but clicking on the other one does nothing (no 'neclick').
+		
+		@private
+	*/
 	svgMousedown: function(evt) {
 		if (evt.target.tagName.toLowerCase() == 'svg') {
 			/* click on background */
+			this.deselectAll();
 		} else {
 			/* something contained in a group */
 			var n = evt.target.parentNode.jsdot_node;
-			var e = evt.target.parentNode.jsdot_edge;
+			n = n || evt.target.parentNode.jsdot_edge;
 			if (n) {
-				/* it is a node */
-				n.selected = !n.selected;
-				this.jsdot.fireEvent('nodeclick', n, evt);
-			} else if (e) {
-				/* it is an edge */
-				e.selected = !e.selected;
-				this.jsdot.fireEvent('edgeclick', e, evt);
+				/* either node or edge */
+				if (!this.allowEdges && !this.allowNodes) {
+					/* If selection is disabled the event is 'neclick' */
+					this.jsdot.fireEvent('neclick', n, evt);
+				} else {
+					/* selection is allowed, so we (de)select */
+					if (n.selected) {
+						this.deselect(n);
+					} else {
+						this.select(n);
+					};
+				};
 			};
+		};
+	},
+	
+	/** Adds an element to the selection.
+		If the given element cannot be added to the
+		selection it will be ignored.
+		
+		Fires a 'selectionchg' event.
+		
+		If the element is already selected does nothing.
+		
+		If the selection is not multiple, already selected
+		elements will be deselected (firing the relative events).
+		@param {Object} n @ref Node or @ref Edge to add
+		@see allowNodes
+		@see allowEdges
+		@see allowMultiple
+	*/
+	select: function(n) {
+		if (n.selected) return;
+		if (n.src && this.allowEdges ||
+				!n.src && this.allowNodes) {
+			/* it is an edge and we are allowed to select them,
+			   or it is a node and they are allowed. */
+			/* n.src is defined only for edges */
+			if (!this.allowMultiple) this.deselectAll();
+			n.selected = true;
+			this.selection.push(n);
+			this.jsdot.fireEvent('selectionchg', n);
+		};
+	},
+	
+	/** Remove an element from selection.
+		Fires a 'selectionchg' event.
+	*/
+	deselect: function(n) {
+		if (n.selected) {
+			/* first find it in selection */
+			var j = null;
+			for (var i in this.selection) {
+				if (this.selection[i] == n) {
+					j = i;
+					break;
+				};
+			};
+			/* now remove */
+			this.selection.splice(j, 1);
+			n.selected = false;
+			this.jsdot.fireEvent('selectionchg', n);
+		};
+	},
+	
+	/** Deselect all nodes and edges.
+		Fires a 'selectionchg' event.
+	*/
+	deselectAll: function() {
+		var e;
+		while (e = this.selection.pop()) {
+			e.selected = false;
+			this.jsdot.fireEvent('selectionchg', e);
+			e = undefined;
 		};
 	},
 };
