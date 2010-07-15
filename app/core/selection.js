@@ -35,13 +35,28 @@ function jsdot_Selection(jsdot, view) {
 
 	this.jsdot = jsdot;
 	this.view = view;
-	
+
 	view.svgroot.addEventListener('mousedown',
 			function(obj) {
 				return function() {
 					return obj.svgMousedown.apply(obj, arguments);
 				};
-			}(this), this.svgMousedown);
+			}(this), false);
+			
+	/* create closure for mousemove listener */
+	this.svgMousemove =
+			function(obj) {
+				return function() {
+					return obj.svgMousemove_impl.apply(obj, arguments);
+				};
+			}(this);
+				
+	view.svgroot.addEventListener('mouseup',
+			function(obj) {
+				return function() {
+					return obj.svgMouseup.apply(obj, arguments);
+				};
+			}(this), false);
 }
 
 jsdot_Selection.prototype = {
@@ -65,6 +80,9 @@ jsdot_Selection.prototype = {
 	/** Allow multiple elements to be selected */
 	allowMultiple: true,
 	
+	/** Allow dragging */
+	allowDrag: true,
+	
 	/** Selected elements.
 		Array of selected nodes and edges.
 		@see select
@@ -73,42 +91,161 @@ jsdot_Selection.prototype = {
 	*/
 	selection: [],
 	
+	/** True when dragging something
+		@private
+		@see svgMousemove_impl
+	*/
+	moving: false,
+	
+	/** Event which started a move.
+		@private
+	*/
+	moveStart: null,
+	
+	/** Target object of an event.
+		@private
+		@see setEvtTarget
+	*/
+	evtTarget: null,
+	
+	/** Type of an event's target.
+		@private
+		@see setEvtTarget
+	*/
+	evtTargetType: '',
+	
 	/** Handler for mousedown event on the SVG.
-		Handles mousedown events and fires the
-		triggered jsdot events.
-		
-		When selection is enabled and it changes the event
-		'selectionchg' is fired. If selection is disabled
-		then the 'neclick' is fired when clicking on edges
-		or nodes. When only one of allowEdges and allowNodes
-		is true, clicking on edge resp. node fires 'selectionchg'
-		but clicking on the other one does nothing (no 'neclick').
+		Handles mousedown events.
 		
 		@private
 	*/
 	svgMousedown: function(evt) {
+
+		/* prevent Firefox own drag & drop of the image */
+		evt.preventDefault();
+
+		this.moving = false;
+		this.moveStart = evt;
+		this.setEvtTarget(evt);
+		if (this.allowDrag) {
+			/* if dragging is enabled, register for mousemove */
+			this.view.svgroot.addEventListener('mousemove', this.svgMousemove, false);
+		};
+		/* no matter whether it is a click or a drag, it will be handled in svgMouseup */
+	},
+	
+	/** Find the target JSDot  element of an event.
+		As a result @link evtTarget and @link evtTargetType are changed.
+		@private
+		@param {Object} evt event
+	*/
+	setEvtTarget: function(evt) {
 		if (evt.target.tagName.toLowerCase() == 'svg') {
-			/* click on background */
-			this.deselectAll();
+			/* background */
+			this.evtTarget = null;
+			this.evtTargetType = 's';
 		} else {
 			/* something contained in a group */
 			var n = evt.target.parentNode.jsdot_node;
-			n = n || evt.target.parentNode.jsdot_edge;
 			if (n) {
-				/* either node or edge */
+				/* node */
+				this.evtTarget = n;
+				this.evtTargetType = 'n';
+			} else if (n = evt.target.parentNode.jsdot_edge) {
+				/* edge */
+				this.evtTarget = n;
+				this.evtTargetType = 'e';
+			};
+		};
+	},
+	
+	/** Handle a click.
+		When selection is enabled and it changes, the event
+		'selectionchg' is fired. If selection is disabled
+		then then 'neclick' is fired when clicking on edges
+		or nodes. When only one of allowEdges and allowNodes
+		is true, clicking on edge resp. node fires 'selectionchg'
+		but clicking on the other one does nothing (no 'neclick').
+		
+		@note @link setEvtTarget must have been called before calling this!
+		
+		@private
+		@param {Object} evt event
+	*/
+	handleClick: function(evt) {
+		switch (this.evtTargetType) {
+			case 's':
+				/* click on background */
+				this.deselectAll();
+				break;
+			case 'n':
+			case 'e':
+				/* node or edge */
 				if (!this.allowEdges && !this.allowNodes) {
 					/* If selection is disabled the event is 'neclick' */
 					this.jsdot.fireEvent('neclick', n, evt);
 				} else {
 					/* selection is allowed, so we (de)select */
-					if (n.selected) {
-						this.deselect(n);
+					if (this.evtTarget.selected) {
+						this.deselect(this.evtTarget);
 					} else {
-						this.select(n);
+						this.select(this.evtTarget);
 					};
 				};
+				break;
+			default:
+				/* ignore */
+		};
+	},
+	
+	/** Handler for mousemove event on the SVG.
+		Does dragging when it is enabled.
+		
+		This is replaced on creation with a closure calling
+		@link svgMousemove_impl, where the actual implementation resides.
+		@private
+		@see svgMousemove_impl
+	*/
+	svgMousemove: function() {},
+	
+	/** Implementation of the mousemove event handler.
+		Does dragging when it is enabled.
+		
+		Use @link svgMousemove for add/remove listener.
+		@private
+	*/
+	svgMousemove_impl: function(evt) {
+		if (!this.moving) {
+			/* We are not dragging yet. Check if the mouse moved more than
+			   a given threshold, otherwise a mouseup would still be a click
+			   instead of a drop.
+			*/
+			var dx = evt.pageX - this.moveStart.pageX;
+			var dy = evt.pageY - this.moveStart.pageY;
+			if (Math.abs(dx) > 2 || Math.abs(dy) > 2) {
+				/* start moving */
+				this.moving = true;
+				this.jsdot.fireEvent('pick', this.moveTarget);
 			};
 		};
+		
+		if (this.moving) {
+			this.jsdot.fireEvent('drag', this.moveTarget);
+		};
+	},
+	
+	/** Handler for mouseup event on the SVG.
+		@private
+	*/
+	svgMouseup: function(evt) {
+		this.view.svgroot.removeEventListener('mousemove', this.svgMousemove, false);
+		if (!this.moving) {
+			this.handleClick(this.moveStart);
+		} else {
+			this.jsdot.fireEvent('drop', this.moveTarget);
+		};
+		this.moving = false;
+		this.moveStart = null;
 	},
 	
 	/** Adds an element to the selection.
