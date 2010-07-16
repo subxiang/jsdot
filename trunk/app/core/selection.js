@@ -189,7 +189,7 @@ jsdot_Selection.prototype = {
 					if (this.evtTarget.selected) {
 						this.deselect(this.evtTarget);
 					} else {
-						this.select(this.evtTarget);
+						this.select(this.evtTarget, !evt.ctrlKey);
 					};
 				};
 				break;
@@ -259,18 +259,19 @@ jsdot_Selection.prototype = {
 		If the selection is not multiple, already selected
 		elements will be deselected (firing the relative events).
 		@param {Object} n @ref Node or @ref Edge to add
+		@param {Bool} single (optional) if true all other elements are deselected, default is false
 		@see allowNodes
 		@see allowEdges
 		@see allowMultiple
 	*/
-	select: function(n) {
+	select: function(n, single) {
 		if (n.selected) return;
 		if (n.src && this.allowEdges ||
 				!n.src && this.allowNodes) {
 			/* it is an edge and we are allowed to select them,
 			   or it is a node and they are allowed. */
 			/* n.src is defined only for edges */
-			if (!this.allowMultiple) this.deselectAll();
+			if (!this.allowMultiple || single) this.deselectAll();
 			n.selected = true;
 			this.selection.push(n);
 			this.jsdot.fireEvent('selectionchg', n);
