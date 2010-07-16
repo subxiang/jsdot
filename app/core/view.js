@@ -98,6 +98,7 @@ jsdot_View.prototype = {
 		this.svgroot.appendChild(g);
 		n.view.group = g;
 		
+		
 		/* if the node doesn't have a stencil set the default one */
 		if (!n.stencil) {
 			n.stencil = this.defaultStencil;
@@ -106,6 +107,27 @@ jsdot_View.prototype = {
 		/* draw the node */
 		n.stencil.draw(n, g);
 		n.stencil.setPosition(n);
+		
+		
+		/* if the node doesn't have a label provide a default one */
+		if (!n.label) {
+			n.label = {
+				'type': 'plain',
+				'value' : n.name
+			};
+		}
+		if (!n.label.stencil) {
+			n.label.stencil = jsdot_node_label_stencils[n.label.type];
+			if (!n.label.stencil) {
+				n.label.stencil = jsdot_node_label_stencils['plain'];
+				n.label.value = n.label.value || n.name;
+			}
+		}
+		n.label.stencil.draw(n, g);
+		n.label.stencil.setPosition(n);
+		
+		/* now that the label has been drawn we can set the size of the node */
+		n.stencil.setSize(n, n.label.stencil.getSize(n));
 	},
 	
 	/** Draw an edge.
