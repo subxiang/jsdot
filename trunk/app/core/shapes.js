@@ -57,6 +57,10 @@ jsdot_shapes = {
 				c[0] + Math.cos(a) * size,
 				c[1] + Math.sin(a) * size
 			];
+		},
+		
+		setSize: function(n, s) {
+			n.view.shape.setAttribute('r', Math.max(s.height,s.width)/2+6);
 		}
 	},
 	
@@ -123,6 +127,14 @@ jsdot_shapes = {
 					return [ibt, y+height];
 				}
 			}
+		},
+		
+		setSize: function(n, s) {
+			n.view.shape.setAttrs({
+					'height': s.height+3,
+					'width': s.width+10
+				});
+			this.setPosition(n);
 		}
 	}
 };
@@ -152,6 +164,10 @@ jsdot_stencils = {
 			this.shape.setPosition(n);
 		},
 		
+		setSize: function(n, s) {
+			this.shape.setSize(n, s);
+		},
+		
 		getBoundaryTo: function(n, p) {
 			return this.shape.getBoundaryTo(n, p);
 		},
@@ -179,6 +195,10 @@ jsdot_stencils = {
 		
 		setPosition: function(n) {
 			this.shape.setPosition(n);
+		},
+		
+		setSize: function(n, s) {
+			this.shape.setSize(n, s);
 		},
 		
 		getBoundaryTo: function(n, p) {
@@ -298,4 +318,33 @@ return;
 	m.appendChild(l);
 	defs.appendChild(m);
 */
+};
+
+/** Stencils for drawing labels.
+*/
+jsdot_node_label_stencils = {
+
+	'plain': {
+	
+		draw: function(n, p) {
+			var t = $e('text');
+			t.setAttribute('class', 'jsdot_node_label');
+			t.textContent = n.label.value;
+			p.appendChild(t);
+			n.view.label = t;
+			return t;
+		},
+		
+		setPosition: function(n) {
+			n.view.label.setAttrs({
+				'x': n.position[0],
+				'y': n.position[1]
+			});
+		},
+		
+		getSize: function(n) {
+			return n.view.label.getBBox();
+			//return n.view.label.getBoundingClientRect();
+		},
+	},
 };

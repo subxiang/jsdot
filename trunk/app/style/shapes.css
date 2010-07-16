@@ -16,6 +16,13 @@
 	marker-end: url(#Arrow);
 }
 
+.jsdot_node_label {
+	stroke: none;
+	fill: black;
+	text-anchor: middle;
+	dominant-baseline: middle;
+}
+
 /* this must be last, so that it overrides others when used */
 .jsdot_def_hl {
 	stroke: red;
