@@ -3,6 +3,7 @@ This file is part of the JSDot library
  
 http://code.google.com/p/jsdot/
 
+Copyright (c) 2010 Carlo Vanini
 Copyright (c) 2009 Lucia Blondel, Nicos Giuliani, Carlo Vanini
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,12 +26,18 @@ THE SOFTWARE.
 */	
 
 
-var svgns = "http://www.w3.org/2000/svg";
-var xlinkns = "http://www.w3.org/1999/xlink";	
-var xmlns = "http://www.w3.org/2000/svg";
-var xlink = "http://www.w3.org/1999/xlink";
+jsdot_helper = {
 
-Number.prototype.NaN0 = function(){return isNaN(this)?0:this;}
+	svgns: "http://www.w3.org/2000/svg",
+	xlinkns: "http://www.w3.org/1999/xlink",
+	xmlns: "http://www.w3.org/2000/svg",
+	xlink: "http://www.w3.org/1999/xlink",
+
+	/** Create element in the SVG namespace. */
+	cesvg: function(i){ return document.createElementNS(jsdot_helper.svgns, i); },
+
+/*
+	// NaN0: function(){return isNaN(this)?0:this;}
 // Extends Element --> 
 Element.prototype.appends = function(array) { for(i in array){ this.appendChild(array[i]); }};
 Element.prototype.setAttrs = function(attrs) { for (i in attrs) { this.setAttribute(i, attrs[i]); }};
@@ -52,3 +59,6 @@ function $(i) { return document.getElementById(i); };
 function Class(){ return function(arguments){ this.init(arguments); } }
 function randColor(){ return "rgb(" + parseInt(Math.random() * 255) + "," + parseInt(Math.random() * 255) + "," + parseInt(Math.random() * 255) + ")"; }
 function counter(object) {var size = 0; var key; for(key in object) { size++; } return size;}
+*/
+
+};

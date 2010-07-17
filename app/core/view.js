@@ -35,16 +35,14 @@ function jsdot_View(jsdot, divId) {
 	this.jsdot = jsdot;
 	this.divId = divId;
 	
-	this.container = $(divId);
+	this.container = document.getElementById(divId);
 	this.svgdoc = this.container.ownerDocument;
-	this.svgroot = $e("svg"); // create element
+	this.svgroot = jsdot_helper.cesvg("svg"); // create element
 	this.container.appendChild(this.svgroot);
 	
-	this.svgroot.setAttrs({
-		"id": divId+"_svg",
-		"xmlns": svgns,
-		"xmlns:xlink": xlinkns
-	});
+	this.svgroot.setAttribute("id", divId+"_svg");
+	this.svgroot.setAttribute("xmlns", jsdot_helper.svgns);
+	this.svgroot.setAttribute("xmlns:xlink", jsdot_helper.xlinkns);
 	
 	// add event listeners for svg events
 	this.addListeners();
@@ -90,10 +88,8 @@ jsdot_View.prototype = {
 		if (!n.view) n.view = {};
 		
 		/* create group for this node */
-		var g = $e('g');
-		g.setAttrs({
-			'id': nodeId
-		});
+		var g = jsdot_helper.cesvg('g');
+		g.setAttribute('id', nodeId);
 		g.jsdot_node = n;
 		this.svgroot.appendChild(g);
 		n.view.group = g;
@@ -140,10 +136,8 @@ jsdot_View.prototype = {
 		if (!e.view) e.view = {};
 		
 		/* create a group for the edge */
-		var g = $e('g');
-		g.setAttrs({
-			'id': edgeId
-		});
+		var g = jsdot_helper.cesvg('g');
+		g.setAttribute('id', edgeId);
 		g.jsdot_edge = e;
 		this.svgroot.appendChild(g);
 		e.view.group = g;
