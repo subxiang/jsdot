@@ -33,20 +33,17 @@ jsdot_shapes = {
 		size: '2.5em',
 		
 		draw: function(n, g) {
-			var c = $e('circle');
-			c.setAttrs({
-				'r': this.size
-			})
+			var c = jsdot_helper.cesvg('circle');
+			c.setAttribute('r', this.size);
 			g.appendChild(c);
 			n.view.shape = c;
 			return c;
 		},
 		
 		setPosition: function(n) {
-			n.view.shape.setAttrs({
-				'cx': n.position[0],
-				'cy': n.position[1]
-			});
+			var s = n.view.shape;
+			s.setAttribute('cx', n.position[0]);
+			s.setAttribute('cy', n.position[1]);
 		},
 		
 		getBoundaryTo: function(n, p) {
@@ -66,21 +63,18 @@ jsdot_shapes = {
 	
 	'box': {
 		draw: function(n, g) {
-			var e = $e('rect');
-			e.setAttrs({
-				'height': 30,
-				'width': 50
-			});
+			var e = jsdot_helper.cesvg('rect');
+			e.setAttribute('height', 30);
+			e.setAttribute('width', 50);
 			g.appendChild(e);
 			n.view.shape = e;
 			return e;
 		},
 		
 		setPosition: function(n) {
-			n.view.shape.setAttrs({
-				'x': n.position[0] - n.view.shape.width.baseVal.value / 2,
-				'y': n.position[1] - n.view.shape.height.baseVal.value / 2
-			});
+			var s = n.view.shape;
+			s.setAttribute('x', n.position[0] - n.view.shape.width.baseVal.value / 2);
+			s.setAttribute('y', n.position[1] - n.view.shape.height.baseVal.value / 2);
 		},
 		
 		getBoundaryTo: function(n, p) {
@@ -130,10 +124,9 @@ jsdot_shapes = {
 		},
 		
 		setSize: function(n, s) {
-			n.view.shape.setAttrs({
-					'height': s.height+3,
-					'width': s.width+10
-				});
+			var p = n.view.shape;
+			p.setAttribute('height', s.height+3);
+			p.setAttribute('width', s.width+10);
 			this.setPosition(n);
 		}
 	}
@@ -222,7 +215,7 @@ jsdot_edge_shapes = {
 	'directed line': {
 	
 		draw: function(e, p) {
-			var l = $e('path');
+			var l = jsdot_helper.cesvg('path');
 			e.view.line = l;
 			l.setAttribute('marker-end', 'url(#Arrow)');
 			p.appendChild(l);
@@ -232,9 +225,9 @@ jsdot_edge_shapes = {
 		setPosition: function(e) {
 			var p1 = e.view.start;
 			var p2 = e.view.end;
-			e.view.line.setAttrs({
-				'd': 'M'+p1[0]+','+p1[1]+'L'+p2[0]+','+p2[1]
-			});
+			e.view.line.setAttribute(
+				'd', 'M'+p1[0]+','+p1[1]+'L'+p2[0]+','+p2[1]
+			);
 		}
 	}
 };
@@ -327,7 +320,7 @@ jsdot_node_label_stencils = {
 	'plain': {
 	
 		draw: function(n, p) {
-			var t = $e('text');
+			var t = jsdot_helper.cesvg('text');
 			t.setAttribute('class', 'jsdot_node_label');
 			t.textContent = n.label.value;
 			p.appendChild(t);
@@ -336,10 +329,9 @@ jsdot_node_label_stencils = {
 		},
 		
 		setPosition: function(n) {
-			n.view.label.setAttrs({
-				'x': n.position[0],
-				'y': n.position[1]
-			});
+			var l = n.view.label;
+			l.setAttribute('x', n.position[0]);
+			l.setAttribute('y', n.position[1]);
 		},
 		
 		getSize: function(n) {
