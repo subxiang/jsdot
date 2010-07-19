@@ -15,3 +15,8 @@ demo/jsdot-min.js: $(YUI_BIN) core/*.js style/*.css
 	cp style/main.css demo/
 
 demo: demo/jsdot-min.js
+
+doc:
+	if [ ! -d doc ] ; then mkdir doc ; fi
+	JSDOC_PATH=~/local/share/jsdoc-toolkit ; \
+	java -jar $$JSDOC_PATH/jsrun.jar $$JSDOC_PATH/app/run.js -a -p -t=$$JSDOC_PATH/templates/jsdoc -d=doc -o=doc/doc.log core/
