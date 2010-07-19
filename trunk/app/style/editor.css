@@ -1,0 +1,7 @@
+
+.jsdot-toolbar { position: absolute; top: -45px; }
+.jsdot-tb-selected { border: 2px dotted black !important; }
+
+.jsdot-icon-cursor { background-image: url(../img/cursor.png) !important; }
+.jsdot-icon-addnode { background-image: url(../img/add.png) !important; }
+.jsdot-icon-removenode { background-image: url(../img/delete.png) !important; }
