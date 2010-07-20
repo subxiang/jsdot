@@ -126,6 +126,14 @@ jsdot_View.prototype = {
 		n.stencil.setSize(n, n.label.stencil.getSize(n));
 	},
 	
+	/** Move node to a new position.
+		Move the node without redrawing it, but must already have been drawn.
+	*/
+	updateNodePos: function(n) {
+		n.stencil.setPosition(n);
+		n.label.stencil.setPosition(n);
+	},
+	
 	/** Draw an edge.
 		@param {Edge} e the edge to draw
 	*/
@@ -151,6 +159,14 @@ jsdot_View.prototype = {
 		
 		/* draw the edge */
 		e.stencil.draw(e, g);
+		e.stencil.setPosition(e);
+	},
+	
+	/** Move an edge.
+		Updates an edge's position without completely redrawing it.
+	*/
+	updateEdge: function(e) {
+		this.computeEdgePosition(e);
 		e.stencil.setPosition(e);
 	},
 	
