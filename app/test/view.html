@@ -14,6 +14,7 @@
 		<script type="text/javascript" src="../core/shapes.js"></script>
 		<script type="text/javascript" src="../core/view.js"></script>
 		<script type="text/javascript" src="../core/selection.js"></script>
+		<script type="text/javascript" src="../core/drag.js"></script>
   </head>
   <body style="background: none repeat scroll 0% 0% Lavender;">
 
@@ -51,6 +52,7 @@
 	j.view = v;
 	j.selection = s;
 	v.enableSelection();
+	j.addEventHandler('drag', new jsdot_Drag(j, v, s));
 	
 	v.drawNode(n1);
 	v.drawNode(n2);

@@ -68,12 +68,12 @@ jsdot_Selection.prototype = {
 	view: null,
 	
 	/** Allow nodes to be selected.
-		@note Be sure to call @link deselectAll when changing this to false.
+		@note Be sure to call {@link deselectAll} when changing this to false.
 	*/
 	allowNodes: true,
 	
 	/** Allow edges to be selected.
-		@note Be sure to call @link deselectAll when changing this to false.
+		@note Be sure to call {@link deselectAll} when changing this to false.
 	*/
 	allowEdges: true,
 	
@@ -135,7 +135,7 @@ jsdot_Selection.prototype = {
 	},
 	
 	/** Find the target JSDot  element of an event.
-		As a result @link evtTarget and @link evtTargetType are changed.
+		As a result {@link evtTarget} and {@link evtTargetType} are changed.
 		@private
 		@param {Object} evt event
 	*/
@@ -167,7 +167,7 @@ jsdot_Selection.prototype = {
 		is true, clicking on edge resp. node fires 'selectionchg'
 		but clicking on the other one does nothing (no 'neclick').
 		
-		@note @link setEvtTarget must have been called before calling this!
+		@note {@link setEvtTarget} must have been called before calling this!
 		
 		@private
 		@param {Object} evt event
@@ -208,7 +208,7 @@ jsdot_Selection.prototype = {
 		Does dragging when it is enabled.
 		
 		This is replaced on creation with a closure calling
-		@link svgMousemove_impl, where the actual implementation resides.
+		{@link svgMousemove_impl}, where the actual implementation resides.
 		@private
 		@see svgMousemove_impl
 	*/
@@ -217,26 +217,28 @@ jsdot_Selection.prototype = {
 	/** Implementation of the mousemove event handler.
 		Does dragging when it is enabled.
 		
-		Use @link svgMousemove for add/remove listener.
+		Use {@link svgMousemove} for add/remove listener.
 		@private
 	*/
 	svgMousemove_impl: function(evt) {
+		var dx = evt.pageX - this.moveStart.pageX;
+		var dy = evt.pageY - this.moveStart.pageY;
 		if (!this.moving) {
 			/* We are not dragging yet. Check if the mouse moved more than
 			   a given threshold, otherwise a mouseup would still be a click
 			   instead of a drop.
 			*/
-			var dx = evt.pageX - this.moveStart.pageX;
-			var dy = evt.pageY - this.moveStart.pageY;
 			if (Math.abs(dx) > 2 || Math.abs(dy) > 2) {
 				/* start moving */
 				this.moving = true;
-				this.jsdot.fireEvent('pick', this.moveTarget);
+				this.jsdot.fireEvent('pick', this.evtTarget);
 			};
 		};
 		
 		if (this.moving) {
-			this.jsdot.fireEvent('drag', this.moveTarget);
+			evt.dx = dx;
+			evt.dy = dy;
+			this.jsdot.fireEvent('drag', this.evtTarget, evt);
 		};
 	},
 	
@@ -248,7 +250,9 @@ jsdot_Selection.prototype = {
 		if (!this.moving) {
 			this.handleClick(this.moveStart);
 		} else {
-			this.jsdot.fireEvent('drop', this.moveTarget);
+			evt.dx = evt.pageX - this.moveStart.pageX;
+			evt.dy = evt.pageY - this.moveStart.pageY;
+			this.jsdot.fireEvent('drop', this.evtTarget, evt);
 		};
 		this.moving = false;
 		this.moveStart = null;
@@ -304,7 +308,7 @@ jsdot_Selection.prototype = {
 	},
 	
 	/** Deselect all nodes and edges.
-		Fires a 'selectionchg' event.
+		Fires a 'selectionchg' event for each node and edge.
 	*/
 	deselectAll: function() {
 		var e;

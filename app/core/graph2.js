@@ -3,8 +3,8 @@ This file is part of the JSDot library
  
 http://code.google.com/p/jsdot/
 
-Copyright (c) 2009 Lucia Blondel, Nicos Giuliani, Carlo Vanini
 Copyright (c) 2010 Carlo Vanini
+Copyright (c) 2009 Lucia Blondel, Nicos Giuliani, Carlo Vanini
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,6 +33,10 @@ THE SOFTWARE.
 */
 function jsdot_Graph() {
 
+}
+
+jsdot_Graph.prototype = {
+
 	/** Nodes in the graph.
 		@private
 	*/
@@ -50,4 +54,10 @@ function jsdot_Graph() {
 	getNodeByName: function(name) {
 		return this.nodes[name];
 	},
-}
+	
+	/** Create a new node in the current graph. */
+	createNode: function() {
+	
+	},
+
+};
