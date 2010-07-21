@@ -162,10 +162,10 @@ jsdot_Selection.prototype = {
 	/** Handle a click.
 		When selection is enabled and it changes, the event
 		'selectionchg' is fired. If selection is disabled
-		then then 'neclick' is fired when clicking on edges
-		or nodes. When only one of allowEdges and allowNodes
+		then then a 'click' event is fired.<br>
+		When only one of allowEdges and allowNodes
 		is true, clicking on edge resp. node fires 'selectionchg'
-		but clicking on the other one does nothing (no 'neclick').
+		but clicking on the other one does nothing (no 'click').
 		
 		@note {@link setEvtTarget} must have been called before calling this!
 		
@@ -173,18 +173,21 @@ jsdot_Selection.prototype = {
 		@param {Object} evt event
 	*/
 	handleClick: function(evt) {
-		switch (this.evtTargetType) {
-			case 's':
-				/* click on background */
-				this.deselectAll();
-				break;
-			case 'n':
-			case 'e':
-				/* node or edge */
-				if (!this.allowEdges && !this.allowNodes) {
-					/* If selection is disabled the event is 'neclick' */
-					this.jsdot.fireEvent('neclick', n, evt);
-				} else {
+		if (!this.allowEdges && !this.allowNodes) {
+			/* If selection is disabled the event is 'click' */
+			evt.relX = evt.pageX - this.view.svgroot.offsetLeft;
+			evt.relY = evt.pageY - this.view.svgroot.offsetTop;
+			this.jsdot.fireEvent('click', this.evtTarget, evt);
+		} else {
+			/* if selection is enabled we handle it */
+			switch (this.evtTargetType) {
+				case 's':
+					/* click on background */
+					this.deselectAll();
+					break;
+				case 'n':
+				case 'e':
+					/* node or edge */
 					/* selection is allowed, so we (de)select */
 					if (this.evtTarget.selected) {
 						if (evt.ctrlKey) {
@@ -197,10 +200,10 @@ jsdot_Selection.prototype = {
 						if (!evt.ctrlKey) this.deselectAll();
 						this.select(this.evtTarget);
 					};
-				};
-				break;
-			default:
-				/* ignore */
+					break;
+				default:
+					/* ignore */
+			};
 		};
 	},
 	
