@@ -43,7 +43,7 @@ jsdot_Drag = function(jsdot, view, sel) {
 		h.edges = [];
 		
 		/* if the selection is empty, but pick was on a node, drag that one. */
-		var s = (sel.selection.length == 0 ? [obj] : sel.selection);
+		var s = (sel.selection.length == 0 ? (obj ? [obj] : []) : sel.selection);
 		
 		for (var i in s) {
 			if (!s[i].src) {
