@@ -47,7 +47,7 @@ doc_Node.name = '';
 
 /** Node label.
 	This represents the label drawn inside the node.
-	@type doc_nodeLabel
+	@type doc_Node.Label
 */
 doc_Node.label = {};
 
@@ -67,14 +67,14 @@ doc_Node.stencil = jsdot_stencils['box'];
 
 
 /** @class Label of a node. */
-doc_nodeLabel = function() {};
+doc_Node.Label = function() {};
 
 /** Type of the label
 	This selects inside {@link jsdot_node_label_stencils} the functions
 	used to draw the label.
 	@type String
 */
-doc_nodeLabel.type = 'plain';
+doc_Node.Label.prototype.type = 'plain';
 
 /** Actual value of the label. */
-doc_nodeLabel.value = '';
+doc_Node.Label.prototype.value = '';
