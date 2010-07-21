@@ -54,7 +54,7 @@ doc_Handler = function() {};
 */
 doc_Handler.selectionchg = function(what) {};
 
-/** Node or edge has been clicked.
+/** Click event.
 	Fired by {@link jsdot_Selection}.<br>
 	This event is fired only when selection is disabled, otherwise {@link selectionchg}
 	or a dragging event is fired.<br>
@@ -62,10 +62,10 @@ doc_Handler.selectionchg = function(what) {};
 	Selection is disabled when both {@link jsdot_Selection#allowEdges}
 	and {@link jsdot_Selection#allowNodes} are false.
 	
-	@param {Object} what Node or Edge which has been clicked.
+	@param {Object} what Node or Edge which has been clicked, null for background.
 	@param {Event} evt original mouse event that triggered the click.
 */
-doc_Handler.neclick = function(what, evt) {};
+doc_Handler.click = function(what, evt) {};
 
 /** Element picked.
 	Generated when starting a drag&drop.

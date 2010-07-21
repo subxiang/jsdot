@@ -66,7 +66,7 @@ jsdot_Impl.prototype = {
 		@param {String} name name of the event hadler to remove
 	*/
 	removeEventHandler: function(name) {
-		if (this.handlers[name]) this.handlers[name] = undefined;
+		if (this.handlers[name]) delete this.handlers[name]
 	},
 
 	/** Triggers an event.

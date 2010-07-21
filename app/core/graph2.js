@@ -55,9 +55,23 @@ jsdot_Graph.prototype = {
 		return this.nodes[name];
 	},
 	
-	/** Create a new node in the current graph. */
-	createNode: function() {
+	/** Incremental name for new nodes. */
+	lastName: 0,
 	
+	/** Create a new node in the current graph.
+		@return {Node_impl} the created node
+	*/
+	createNode: function() {
+		var nn; // node name
+		/* generate a name which isn't already used */
+		do {nn = ++this.lastName;} while (this.nodes[nn]);
+		
+		var n = {
+			name: nn,
+			/* label: default is created in view */
+			/* position: */
+			/* stencil: default is created in view */
+		};
 	},
 
 };
