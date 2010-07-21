@@ -37,7 +37,7 @@ function jsdot_Editor(jsdot, view, sel) {
 	tb.setAttribute('class', 'ui-widget-header ui-corner-all jsdot-toolbar');
 	this.view.container.appendChild(tb);
 	//this.injectButtons(tb);
-	this.mainBar.register(this, tb);
+	new this.MainBar(this, tb);
 }
 
 jsdot_Editor.prototype = {
@@ -59,85 +59,101 @@ jsdot_Editor.prototype = {
 		$(b).addClass('jsdot-tb-selected');
 		tb.selected = b;
 	},
-
-	mainBar: {
 	
-		/** Selected tool.
-			This is used to keep track of which tool icon is highlighted.
-			@see jsdot_Editor#setSelected
-		*/
-		selected: null,
-		
-		/** Create the toolbar iside the editor. */
-		register: function(editor, p) {
-			tb = this; // closure
-			
-			this.dragH = new jsdot_Drag(editor.jsdot, editor.view, editor.selection);
-			
-			var btnSel = document.createElement('button');
-			btnSel.innerHTML = 'Select';
-			p.appendChild(btnSel);
-			$(btnSel).button({
-				text: false,
-				icons: { primary: 'jsdot-icon-cursor' }
-			})
-			.click(function() {
-				editor.setSelected(tb, btnSel);
-				editor.jsdot.addEventHandler('drag', tb.dragH);
-				var s = editor.selection;
-				s.allowNodes = true;
-				s.allowEdges = true;
-				s.allowMultiple = true;
-				s.allowDrag = true;
-			});
-			btnSel.onDeselect = function() {
-				editor.jsdot.removeEventHandler('drag');
-			};
-			btnSel.click(); // selection tool is enabled on startup
-			
-			var btnAddN = document.createElement('button');
-			btnAddN.innerHTML = 'Add node';
-			p.appendChild(btnAddN);
-			$(btnAddN).button({
-				text: false,
-				icons: { primary: 'jsdot-icon-addnode' }
-			})
-			.click(function() {
-				editor.setSelected(tb, btnAddN);
-				editor.jsdot.addEventHandler('create', tb.createNodeH);
-				var s = editor.selection;
-				s.allowNodes = false;
-				s.allowEdges = false;
-				s.allowMultiple = false;
-				s.allowDrag = false;
-				s.deselectAll();
-			});
-			btnAddN.onDeselect = function() {
-				editor.jsdot.removeEventHandler('create');
-			};
-			
-			var btnRmN = document.createElement('button');
-			btnRmN.innerHTML = 'Remove node';
-			p.appendChild(btnRmN);
-			$(btnRmN).button({
-				text: false,
-				icons: { primary: 'jsdot-icon-removenode' }
-			})
-			.click(function() {
-				editor.setSelected(tb, btnRmN);
-			});
-		},
-		
-		/** Handler for drag&drop.
-			This is a {@link jsdot_Drag} created in {@link #register}.
-		*/
-		dragH: null,
-		
-		/** Handler for creating nodes. */
-		createNodeH: {
-			click: function(obj, evt) {
-			}
-		},
-		
+};
+
+/** @class Main toolbar.
+	@creator
+	Create the toolbar iside the editor.
+	@param {jsdot_Editor} editor
+	@param {Object} p parent DOM element where to insert button elements
+*/
+jsdot_Editor.prototype.MainBar = function(editor, p) {
+	tb = this; // no need for closure actually, but use as shorthand
+	this.editor = editor;
+	
+	this.dragH = new jsdot_Drag(editor.jsdot, editor.view, editor.selection);
+	
+	var btnSel = document.createElement('button');
+	btnSel.innerHTML = 'Select';
+	p.appendChild(btnSel);
+	$(btnSel).button({
+		text: false,
+		icons: { primary: 'jsdot-icon-cursor' }
+	})
+	.click(function() {
+		editor.setSelected(tb, btnSel);
+		editor.jsdot.addEventHandler('drag', tb.dragH);
+		var s = editor.selection;
+		s.allowNodes = true;
+		s.allowEdges = true;
+		s.allowMultiple = true;
+		s.allowDrag = true;
+	});
+	btnSel.onDeselect = function() {
+		editor.jsdot.removeEventHandler('drag');
+	};
+	btnSel.click(); // selection tool is enabled on startup
+	
+	var btnAddN = document.createElement('button');
+	btnAddN.innerHTML = 'Add node';
+	p.appendChild(btnAddN);
+	$(btnAddN).button({
+		text: false,
+		icons: { primary: 'jsdot-icon-addnode' }
+	})
+	.click(function() {
+		editor.setSelected(tb, btnAddN);
+		editor.jsdot.addEventHandler('create', tb.createNodeH);
+		var s = editor.selection;
+		s.allowNodes = false;
+		s.allowEdges = false;
+		s.allowMultiple = false;
+		s.allowDrag = false;
+		s.deselectAll();
+	});
+	btnAddN.onDeselect = function() {
+		editor.jsdot.removeEventHandler('create');
+	};
+	
+	var btnRmN = document.createElement('button');
+	btnRmN.innerHTML = 'Remove node';
+	p.appendChild(btnRmN);
+	$(btnRmN).button({
+		text: false,
+		icons: { primary: 'jsdot-icon-removenode' }
+	})
+	.click(function() {
+		editor.setSelected(tb, btnRmN);
+	});
+},
+	
+jsdot_Editor.prototype.MainBar.prototype = {
+
+	/** Selected tool.
+		This is used to keep track of which tool icon is highlighted.
+		@see jsdot_Editor#setSelected
+	*/
+	selected: null,
+	
+	/** Attached editor.
+		Editor to which this toolbar is attached.
+		@type jsdot_Editor
+	*/
+	editor: null,
+	
+	/** Handler for drag&drop.
+		This is a {@link jsdot_Drag} created in {@link #register}.
+	*/
+	dragH: null,
+	
+	/** Handler for creating nodes. */
+	createNodeH: {
+		click: function(obj, evt) {
+			//var n = this.editor.jsdot.graph.createNode();
+			//n.position = [evt.relX, evt.relY];
+			//this.editor.jsdot.fireEvent('created', n);
+		}
 	},
+	
 };
