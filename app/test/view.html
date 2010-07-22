@@ -9,13 +9,14 @@
 			var JSDOT_PATH = "../core/";
 			// ]]>
 		</script>
+		<script type="text/javascript" src="../core/jsdot.js"></script>
 		<script type="text/javascript" src="../core/helpers.js"></script>
 		<script type="text/javascript" src="../core/impl.js"></script>
+		<script type="text/javascript" src="../core/graph2.js"></script>
 		<script type="text/javascript" src="../core/shapes.js"></script>
 		<script type="text/javascript" src="../core/view.js"></script>
 		<script type="text/javascript" src="../core/selection.js"></script>
 		<script type="text/javascript" src="../core/drag.js"></script>
-		<script type="text/javascript" src="../core/jsdot.js"></script>
   </head>
   <body style="background: none repeat scroll 0% 0% Lavender;">
 
@@ -32,18 +33,18 @@
 		name: "node1",
 		label: {type: "plain", value: "label1"},
 		position: [100,100],
-		stencil: jsdot_stencils['circle']
+		//stencil: jsdot_stencils['circle']
 	};
 	var n2 = {
 		name: "node2",
 		label: {type: "plain", value: "Label2"},
 		position: [160,200],
-		stencil: jsdot_stencils['box']
+		//stencil: jsdot_stencils['box']
 	};
 	var e1 = {
 		src: n1,
 		dst: n2,
-		stencil: jsdot_edge_stencils['line']
+		//stencil: jsdot_edge_stencils['line']
 	}
 	/*
 	var j = new jsdot_Impl();

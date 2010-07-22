@@ -31,11 +31,11 @@ THE SOFTWARE.
 
 	@constructor
 */
-function jsdot_Graph() {
+JSDot.Graph_impl = function() {
 
-}
+};
 
-jsdot_Graph.prototype = {
+JSDot.Graph_impl.prototype = {
 
 	/** Nodes in the graph.
 		@private

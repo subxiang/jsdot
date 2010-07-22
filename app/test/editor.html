@@ -13,6 +13,7 @@
 		</script>
 		<script type="text/javascript" src="../lib/jquery-1.4.2.js"></script>
 		<script type="text/javascript" src="../lib/jquery-ui-1.8.2.custom.min.js"></script>
+		<script type="text/javascript" src="../core/jsdot.js"></script>
 		<script type="text/javascript" src="../core/helpers.js"></script>
 		<script type="text/javascript" src="../core/impl.js"></script>
 		<script type="text/javascript" src="../core/shapes.js"></script>
@@ -36,28 +37,28 @@
 		name: "node1",
 		label: {type: "plain", value: "label1"},
 		position: [100,100],
-		stencil: jsdot_stencils['circle']
+		stencil: JSDot.stencils['circle']
 	};
 	var n2 = {
 		name: "node2",
 		label: {type: "plain", value: "Label2"},
 		position: [160,200],
-		stencil: jsdot_stencils['box']
+		stencil: JSDot.stencils['box']
 	};
 	var e1 = {
 		src: n1,
 		dst: n2,
-		stencil: jsdot_edge_stencils['line']
+		stencil: JSDot.edge_stencils['line']
 	}
 	
-	var j = new jsdot_Impl();
-	var v = new jsdot_View(j, "dest");
-	jsdot_load_svg_shapes(v, 'shapes.svg');
-	var s = new jsdot_Selection(j, v);
+	var j = new JSDot.jsdot_Impl();
+	var v = new JSDot.View(j, "dest");
+	JSDot.load_svg_shapes(v, 'shapes.svg');
+	var s = new JSDot.Selection(j, v);
 	j.view = v;
 	j.selection = s;
 	v.enableSelection();
-	var e = new jsdot_Editor(j, v, s);
+	var e = new JSDot.Editor(j, v, s);
 	
 	v.drawNode(n1);
 	v.drawNode(n2);

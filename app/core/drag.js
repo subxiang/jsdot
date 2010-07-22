@@ -28,7 +28,7 @@ THE SOFTWARE.
 	@param {jsdot_View} view view on which dragging should be visualised
 	@param {jsdot_Selection} sel selection
 */
-jsdot_Drag = function(jsdot, view, sel) {
+JSDot.Drag = function(jsdot, view, sel) {
 	var h = this; /* the handler itself */
 	
 	this.nodes = null; /** nodes involved */

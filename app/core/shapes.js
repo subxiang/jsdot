@@ -3,8 +3,8 @@
  
  http://code.google.com/p/jsdot/
  
- Copyright (c) 2009 Lucia Blondel, Nicos Giuliani, Carlo Vanini
  Copyright (c) 2010 Carlo Vanini
+ Copyright (c) 2009 Lucia Blondel, Nicos Giuliani, Carlo Vanini
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -26,14 +26,14 @@
 /** Node shapes.
 	The shape of a node. It is drawn by using a @ref stencil.
 */
-jsdot_shapes = {
+JSDot.shapes = {
 
 	'circle': {
 	
 		size: '2.5em',
 		
 		draw: function(n, g) {
-			var c = jsdot_helper.cesvg('circle');
+			var c = JSDot.helper.cesvg('circle');
 			c.setAttribute('r', this.size);
 			g.appendChild(c);
 			n.view.shape = c;
@@ -63,7 +63,7 @@ jsdot_shapes = {
 	
 	'box': {
 		draw: function(n, g) {
-			var e = jsdot_helper.cesvg('rect');
+			var e = JSDot.helper.cesvg('rect');
 			e.setAttribute('height', 30);
 			e.setAttribute('width', 50);
 			g.appendChild(e);
@@ -139,11 +139,11 @@ jsdot_shapes = {
 	Differenct stencils may share the same shape and apply
 	different styles.
 */
-jsdot_stencils = {
+JSDot.stencils = {
 
 	'circle': {
 	
-		shape: jsdot_shapes.circle,
+		shape: JSDot.shapes.circle,
 		
 		cssClass: 'jsdot_circle',
 		cssHl: 'jsdot_def_hl',
@@ -176,7 +176,7 @@ jsdot_stencils = {
 	
 	'box': {
 	
-		shape: jsdot_shapes.box,
+		shape: JSDot.shapes.box,
 		
 		cssClass: 'jsdot_box',
 		cssHl: 'jsdot_def_hl',
@@ -210,12 +210,12 @@ jsdot_stencils = {
 
 /** Edge shapes.
 */
-jsdot_edge_shapes = {
+JSDot.edge_shapes = {
 
 	'directed line': {
 	
 		draw: function(e, p) {
-			var l = jsdot_helper.cesvg('path');
+			var l = JSDot.helper.cesvg('path');
 			e.view.line = l;
 			l.setAttribute('marker-end', 'url(#Arrow)');
 			p.appendChild(l);
@@ -235,11 +235,11 @@ jsdot_edge_shapes = {
 /** Edge stencils.
 	Stencils used to draw edges.
 */
-jsdot_edge_stencils = {
+JSDot.edge_stencils = {
 
 	'line': {
 	
-		shape: jsdot_edge_shapes['directed line'],
+		shape: JSDot.edge_shapes['directed line'],
 		
 		cssClass: 'jsdot_line_edge',
 		cssHl: 'jsdot_def_hl',
@@ -271,7 +271,7 @@ jsdot_edge_stencils = {
 	@param {jsdot_View} view view of a JSDot instance to which the elements will be added
 	@param {String} file SVG file to load
 */
-jsdot_load_svg_shapes = function(view, file) {
+JSDot.load_svg_shapes = function(view, file) {
 
 	var request = new XMLHttpRequest();
 	if (request.overrideMimeType) {
@@ -315,12 +315,12 @@ return;
 
 /** Stencils for drawing labels.
 */
-jsdot_node_label_stencils = {
+JSDot.node_label_stencils = {
 
 	'plain': {
 	
 		draw: function(n, p) {
-			var t = jsdot_helper.cesvg('text');
+			var t = JSDot.helper.cesvg('text');
 			t.setAttribute('class', 'jsdot_node_label');
 			t.textContent = n.label.value;
 			p.appendChild(t);
