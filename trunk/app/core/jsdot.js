@@ -34,25 +34,25 @@ function JSDot() {
 	var views = [];
 	var editors = [];
 	
-	var jsdot = new jsdot_Impl();
+	var jsdot = new JSDot.jsdot_Impl();
 	
 	this.addView = function(divId, mode) {
 		if (views[divId]) return; /* view already exists */
 		
-		var v = new jsdot_View(this, divId);
+		var v = new JSDot.View(jsdot, divId);
 		views[divId] = v;
-		var s = new jsdot_Selection(jsdot, v);
+		var s = new JSDot.Selection(jsdot, v);
 		switch (mode) {
 			case 'drag':
 				s.allowNodes = true;
 				s.allowEdges = true;
 				s.allowMultiple = true;
 				s.allowDrag = true;
-				jsdot.addEventHandler('drag', new jsdot_Drag(jsdot, v, s));
+				jsdot.addEventHandler('drag', new JSDot.Drag(jsdot, v, s));
 				break;
 			case 'editor':
 				/* selection is set up by the editor itself */
-				editors[divId] = new jsdot_Editor(jsdot, v, s);
+				editors[divId] = new JSDot.Editor(jsdot, v, s);
 			case 'hiddeneditor':
 				break;
 			case 'static':

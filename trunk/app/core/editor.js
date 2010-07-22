@@ -3,8 +3,8 @@
  
  http://code.google.com/p/jsdot/
  
- Copyright (c) 2009 Lucia Blondel, Nicos Giuliani, Carlo Vanini
  Copyright (c) 2010 Carlo Vanini
+ Copyright (c) 2009 Lucia Blondel, Nicos Giuliani, Carlo Vanini
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,7 @@
 	@class JSDot editor.
 	@constructor
 */
-function jsdot_Editor(jsdot, view, sel) {
+JSDot.Editor = function(jsdot, view, sel) {
 	this.jsdot = jsdot;
 	this.view = view;
 	this.selection = sel;
@@ -37,10 +37,10 @@ function jsdot_Editor(jsdot, view, sel) {
 	tb.setAttribute('class', 'ui-widget-header ui-corner-all jsdot-toolbar');
 	this.view.container.appendChild(tb);
 	//this.injectButtons(tb);
-	new this.MainBar(this, tb);
-}
+	new JSDot.Editor.MainBar(this, tb);
+};
 
-jsdot_Editor.prototype = {
+JSDot.Editor.prototype = {
 
 	/** Set selected button.
 		Change tool icon highlighting to show which button is selected
@@ -68,11 +68,11 @@ jsdot_Editor.prototype = {
 	@param {jsdot_Editor} editor
 	@param {Object} p parent DOM element where to insert button elements
 */
-jsdot_Editor.prototype.MainBar = function(editor, p) {
+JSDot.Editor.MainBar = function(editor, p) {
 	tb = this; // no need for closure actually, but use as shorthand
 	this.editor = editor;
 	
-	this.dragH = new jsdot_Drag(editor.jsdot, editor.view, editor.selection);
+	this.dragH = new JSDot.Drag(editor.jsdot, editor.view, editor.selection);
 	
 	var btnSel = document.createElement('button');
 	btnSel.innerHTML = 'Select';
@@ -126,9 +126,9 @@ jsdot_Editor.prototype.MainBar = function(editor, p) {
 	.click(function() {
 		editor.setSelected(tb, btnRmN);
 	});
-},
-	
-jsdot_Editor.prototype.MainBar.prototype = {
+};
+
+JSDot.Editor.MainBar.prototype = {
 
 	/** Selected tool.
 		This is used to keep track of which tool icon is highlighted.

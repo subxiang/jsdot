@@ -26,7 +26,7 @@ THE SOFTWARE.
 */	
 
 
-jsdot_helper = {
+JSDot.helper = {
 
 	svgns: "http://www.w3.org/2000/svg",
 	xlinkns: "http://www.w3.org/1999/xlink",
@@ -34,7 +34,7 @@ jsdot_helper = {
 	xlink: "http://www.w3.org/1999/xlink",
 
 	/** Create element in the SVG namespace. */
-	cesvg: function(i){ return document.createElementNS(jsdot_helper.svgns, i); },
+	cesvg: function(i){ return document.createElementNS(JSDot.helper.svgns, i); },
 
 /*
 	// NaN0: function(){return isNaN(this)?0:this;}

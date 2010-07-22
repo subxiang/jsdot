@@ -1,10 +1,10 @@
 /*
 This file is part of the JSDot library 
- 
+
 http://code.google.com/p/jsdot/
 
-Copyright (c) 2009 Lucia Blondel, Nicos Giuliani, Carlo Vanini
 Copyright (c) 2010 Carlo Vanini
+Copyright (c) 2009 Lucia Blondel, Nicos Giuliani, Carlo Vanini
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -32,11 +32,11 @@ THE SOFTWARE.
 
 	@constructor
 */
-function jsdot_Impl() {
+JSDot.jsdot_Impl = function() {
 
-}
+};
 
-jsdot_Impl.prototype = {
+JSDot.jsdot_Impl.prototype = {
 
 	view: null,
 	
@@ -83,4 +83,4 @@ jsdot_Impl.prototype = {
 			if (h[name]) h[name].apply(h, arguments);
 		};
 	},
-}
+};

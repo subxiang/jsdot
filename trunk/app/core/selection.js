@@ -3,8 +3,8 @@
  
  http://code.google.com/p/jsdot/
  
- Copyright (c) 2009 Lucia Blondel, Nicos Giuliani, Carlo Vanini
  Copyright (c) 2010 Carlo Vanini
+ Copyright (c) 2009 Lucia Blondel, Nicos Giuliani, Carlo Vanini
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,7 @@
 	@param {JSDot} jsdot JSDot instance
 	@param {jsdot_View} view JSDot view
 */
-function jsdot_Selection(jsdot, view) {
+JSDot.Selection = function(jsdot, view) {
 
 	this.jsdot = jsdot;
 	this.view = view;
@@ -57,9 +57,9 @@ function jsdot_Selection(jsdot, view) {
 					return obj.svgMouseup.apply(obj, arguments);
 				};
 			}(this), false);
-}
+};
 
-jsdot_Selection.prototype = {
+JSDot.Selection.prototype = {
 
 	/** Associated JSDot instance */
 	jsdot: null,

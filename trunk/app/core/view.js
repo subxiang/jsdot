@@ -3,8 +3,8 @@
  
  http://code.google.com/p/jsdot/
  
- Copyright (c) 2009 Lucia Blondel, Nicos Giuliani, Carlo Vanini
  Copyright (c) 2010 Carlo Vanini
+ Copyright (c) 2009 Lucia Blondel, Nicos Giuliani, Carlo Vanini
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -31,24 +31,24 @@
 	@param {JSDot} jsdot JSDot instance
 	@param {String} divId id of the div container
 */
-function jsdot_View(jsdot, divId) {
+JSDot.View = function(jsdot, divId) {
 	this.jsdot = jsdot;
 	this.divId = divId;
 	
 	this.container = document.getElementById(divId);
 	this.svgdoc = this.container.ownerDocument;
-	this.svgroot = jsdot_helper.cesvg("svg"); // create element
+	this.svgroot = JSDot.helper.cesvg("svg"); // create element
 	this.container.appendChild(this.svgroot);
 	
 	this.svgroot.setAttribute("id", divId+"_svg");
-	this.svgroot.setAttribute("xmlns", jsdot_helper.svgns);
-	this.svgroot.setAttribute("xmlns:xlink", jsdot_helper.xlinkns);
+	this.svgroot.setAttribute("xmlns", JSDot.helper.svgns);
+	this.svgroot.setAttribute("xmlns:xlink", JSDot.helper.xlinkns);
 	
 	// add event listeners for svg events
 	this.addListeners();
-}
+};
 
-jsdot_View.prototype = {
+JSDot.View.prototype = {
 
 	/** Associated JSDot instance */
 	jsdot: null,
@@ -88,7 +88,7 @@ jsdot_View.prototype = {
 		if (!n.view) n.view = {};
 		
 		/* create group for this node */
-		var g = jsdot_helper.cesvg('g');
+		var g = JSDot.helper.cesvg('g');
 		g.setAttribute('id', nodeId);
 		g.jsdot_node = n;
 		this.svgroot.appendChild(g);
@@ -113,9 +113,9 @@ jsdot_View.prototype = {
 			};
 		}
 		if (!n.label.stencil) {
-			n.label.stencil = jsdot_node_label_stencils[n.label.type];
+			n.label.stencil = JSDot.node_label_stencils[n.label.type];
 			if (!n.label.stencil) {
-				n.label.stencil = jsdot_node_label_stencils['plain'];
+				n.label.stencil = JSDot.node_label_stencils['plain'];
 				n.label.value = n.label.value || n.name;
 			}
 		}
@@ -144,7 +144,7 @@ jsdot_View.prototype = {
 		if (!e.view) e.view = {};
 		
 		/* create a group for the edge */
-		var g = jsdot_helper.cesvg('g');
+		var g = JSDot.helper.cesvg('g');
 		g.setAttribute('id', edgeId);
 		g.jsdot_edge = e;
 		this.svgroot.appendChild(g);
@@ -193,4 +193,4 @@ jsdot_View.prototype = {
 		};
 		this.jsdot.addEventHandler('view', handler);
 	},
-}
+};
