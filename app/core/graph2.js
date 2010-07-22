@@ -58,6 +58,9 @@ jsdot_Graph.prototype = {
 	/** Incremental name for new nodes. */
 	lastName: 0,
 	
+	/** Incremental index for edges. */
+	lastEId: 0,
+	
 	/** Create a new node in the current graph.
 		@return {Node_impl} the created node
 	*/
@@ -71,7 +74,35 @@ jsdot_Graph.prototype = {
 			/* label: default is created in view */
 			/* position: */
 			/* stencil: default is created in view */
+			edges: {},
 		};
+		
+		this.nodes[nn] = n;
+		return n;
+	},
+	
+	/** Create a new edge in the current graph.
+		@param {Node_impl} src starting node
+		@param {Node_impl} dst ending node
+		@return {Edge_impl} the created edge
+	*/
+	createEdge: function(src, dst) {
+		var id; // node name
+		/* generate an index which isn't already used */
+		do {id = ++this.lastEId;} while (this.edges[id]);
+		
+		var e = {
+			'id': id,
+			'src': src,
+			'dst': dst,
+			/* stencil: default is created in view */
+		};
+		
+		src.edges[dst.name] = e;
+		dst.edges[src.name] = e;
+		
+		this.edges[id] = e;
+		return e;
 	},
 
 };

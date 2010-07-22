@@ -42,6 +42,8 @@ jsdot_Impl.prototype = {
 	
 	selection: null,
 	
+	graph: null,
+	
 	/** Registered event handlers.
 		@private
 		@see addEventHandler
