@@ -15,6 +15,7 @@
 		<script type="text/javascript" src="../core/view.js"></script>
 		<script type="text/javascript" src="../core/selection.js"></script>
 		<script type="text/javascript" src="../core/drag.js"></script>
+		<script type="text/javascript" src="../core/jsdot.js"></script>
   </head>
   <body style="background: none repeat scroll 0% 0% Lavender;">
 
@@ -44,7 +45,7 @@
 		dst: n2,
 		stencil: jsdot_edge_stencils['line']
 	}
-	
+	/*
 	var j = new jsdot_Impl();
 	var v = new jsdot_View(j, "dest");
 	jsdot_load_svg_shapes(v, 'shapes.svg');
@@ -57,6 +58,10 @@
 	v.drawNode(n1);
 	v.drawNode(n2);
 	v.drawEdge(e1);
+	*/
+	
+	var j = new JSDot();
+	j.addView('dest');
 	
 	</script>
   </body>
