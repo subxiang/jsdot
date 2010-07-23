@@ -33,7 +33,7 @@ THE SOFTWARE.
 	@constructor
 */
 JSDot.jsdot_Impl = function() {
-
+	this.graph = new JSDot.Graph_impl();
 };
 
 JSDot.jsdot_Impl.prototype = {
@@ -42,6 +42,10 @@ JSDot.jsdot_Impl.prototype = {
 	
 	selection: null,
 	
+	/** Attached graph.
+		The graph on which the instance is working.
+		@type Graph_impl
+	*/
 	graph: null,
 	
 	/** Registered event handlers.

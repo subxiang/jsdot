@@ -32,7 +32,8 @@ THE SOFTWARE.
 	@constructor
 */
 JSDot.Graph_impl = function() {
-
+	this.defaultNodeStencil = JSDot.stencils.circle;
+	this.defaultEdgeStencil = JSDot.edge_stencils.line;
 };
 
 JSDot.Graph_impl.prototype = {
@@ -46,6 +47,10 @@ JSDot.Graph_impl.prototype = {
 		@private
 	*/
 	edges: {},
+	
+	defaultNodeStencil: null,
+	
+	defaultEdgeStencil: null,
 	
 	/** Returns a node by name.
 		@param {String} name name of the node
@@ -71,9 +76,9 @@ JSDot.Graph_impl.prototype = {
 		
 		var n = {
 			name: nn,
-			/* label: default is created in view */
-			/* position: */
-			/* stencil: default is created in view */
+			label: {'type': 'plain', 'value': nn},
+			position: [0,0],
+			stencil: this.defaultNodeStencil,
 			edges: {},
 		};
 		
@@ -103,6 +108,23 @@ JSDot.Graph_impl.prototype = {
 		
 		this.edges[id] = e;
 		return e;
+	},
+	
+	/** Remove a node from current graph.
+		@param {Node_impl} n node to remove
+	*/
+	removeNode: function(n) {
+		/* remove edges */
+		for (e in n.edges) {
+			delete this.edges[e.id];
+			if (e.src == n) {
+				delete e.dst.edges[n.name];
+			} else {
+				delete e.src.edges[n.name];
+			}
+		}
+		
+		delete this.nodes[n.name];
 	},
 
 };
