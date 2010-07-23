@@ -104,13 +104,13 @@ JSDot.Editor.MainBar = function(editor, p) {
 	})
 	.click(function() {
 		editor.setSelected(tb, btnAddN);
-		editor.jsdot.addEventHandler('create', tb.createNodeH);
 		var s = editor.selection;
 		s.allowNodes = false;
 		s.allowEdges = false;
 		s.allowMultiple = false;
 		s.allowDrag = false;
 		s.deselectAll();
+		editor.jsdot.addEventHandler('create', tb.createNodeH(editor.jsdot));
 	});
 	btnAddN.onDeselect = function() {
 		editor.jsdot.removeEventHandler('create');
@@ -125,7 +125,17 @@ JSDot.Editor.MainBar = function(editor, p) {
 	})
 	.click(function() {
 		editor.setSelected(tb, btnRmN);
+		var s = editor.selection;
+		s.allowNodes = false;
+		s.allowEdges = false;
+		s.allowMultiple = false;
+		s.allowDrag = false;
+		s.deselectAll();
+		editor.jsdot.addEventHandler('remove', tb.removeNodeH(editor.jsdot));
 	});
+	btnRmN.onDeselect = function() {
+		editor.jsdot.removeEventHandler('remove');
+	};
 };
 
 JSDot.Editor.MainBar.prototype = {
@@ -147,13 +157,30 @@ JSDot.Editor.MainBar.prototype = {
 	*/
 	dragH: null,
 	
-	/** Handler for creating nodes. */
-	createNodeH: {
-		click: function(obj, evt) {
-			//var n = this.editor.jsdot.graph.createNode();
-			//n.position = [evt.relX, evt.relY];
-			//this.editor.jsdot.fireEvent('created', n);
-		}
+	/** Construct handler for creating nodes.
+		@param {jsdot_Impl} jsdot jsdot instance
+		@return {doc_Handler} handler
+	*/
+	createNodeH: function(jsdot) {
+		return {
+			click: function(obj, evt) {
+				var n = jsdot.graph.createNode();
+				n.position = [evt.relX, evt.relY];
+				jsdot.fireEvent('created', n);
+			}
+		};
+	},
+	
+	removeNodeH: function(jsdot) {
+		return {
+			click: function(obj, evt) {
+				/* if it is a node remove it */
+				if (obj && !obj.src) {
+					jsdot.graph.removeNode(obj);
+					jsdot.fireEvent('removed', obj);
+				}
+			}
+		};
 	},
 	
 };

@@ -37,15 +37,17 @@ JSDot.View = function(jsdot, divId) {
 	
 	this.container = document.getElementById(divId);
 	this.svgdoc = this.container.ownerDocument;
+	var div = document.createElement('div'); // used to get the offset of the svg inside the page
+	this.container.appendChild(div);
 	this.svgroot = JSDot.helper.cesvg("svg"); // create element
-	this.container.appendChild(this.svgroot);
+	div.appendChild(this.svgroot);
 	
+	div.setAttribute('style', 'height: 100%; width: 100%;'); // fills container size
 	this.svgroot.setAttribute("id", divId+"_svg");
 	this.svgroot.setAttribute("xmlns", JSDot.helper.svgns);
 	this.svgroot.setAttribute("xmlns:xlink", JSDot.helper.xlinkns);
 	
-	// add event listeners for svg events
-	this.addListeners();
+	this.addHandler(); /* add listener to receive graph updates */
 };
 
 JSDot.View.prototype = {
@@ -66,16 +68,6 @@ JSDot.View.prototype = {
 		This is where we draw.
 	*/
 	svgroot: null,
-	
-	/** Add event listeners.
-		Adds listeners for events on the SVG image.
-		
-		Which handlers will be triggered depends on the
-		view mode, whether it is read-only and static or
-		nodes can be moved and selected.
-	*/
-	addListeners: function(){
-	},
 	
 	/** Draw a node.
 		@param {Node} n the node to draw
@@ -134,6 +126,24 @@ JSDot.View.prototype = {
 		n.label.stencil.setPosition(n);
 	},
 	
+	/** Draw a node and its edges.
+		Draw a node and all edges it is connected to (both in- and out-bound).
+		@param {Node_impl} n node to be drawn
+	*/
+	drawNodeWithEdges: function(n) {
+		this.drawNode(n);
+		for (var e in n.edges) {
+			this.drawEdge(n.edges[e]);
+		}
+	},
+	
+	/** Remove a node from the drawing.
+	@param {Node_impl} n node to remove
+	*/
+	removeNode: function(n) {
+		if (n.view.group) this.svgroot.removeChild(n.view.group);
+	},
+	
 	/** Draw an edge.
 		@param {Edge} e the edge to draw
 	*/
@@ -165,7 +175,7 @@ JSDot.View.prototype = {
 	/** Move an edge.
 		Updates an edge's position without completely redrawing it.
 	*/
-	updateEdge: function(e) {
+	updateEdgePos: function(e) {
 		this.computeEdgePosition(e);
 		e.stencil.setPosition(e);
 	},
@@ -183,14 +193,41 @@ JSDot.View.prototype = {
 		e.view.end = e.dst.stencil.getBoundaryTo(e.dst, e.src.position);
 	},
 	
-	/** Enable selection.
-		Defines and registers the event handler for selection.
+	/** Remove an edge from the drawing.
+	@param {Edge_impl} e edge to remove
 	*/
-	enableSelection: function() {
+	removeEdge: function(e) {
+		if (e.view.group) this.svgroot.removeChild(e.view.group);
+	},
+	
+	/** Register handler needed by the view.
+		Defines and registers the event handler that allows the view to receive
+		madel and selection updates notifications.
+	*/
+	addHandler: function() {
 		var handler = {};
+		var view = this;
+		
 		handler.selectionchg = function(n) {
 			n.stencil.highlight(n, n.selected);
 		};
+		
+		handler.created = function(n) {
+			if (n.src) {
+				view.drawEdge(n);
+			} else {
+				view.drawNodeWithEdges(n);
+			}
+		};
+		
+		handler.removed = function(n) {
+			if (n.src) {
+				view.removeEdge(n);
+			} else {
+				view.removeNode(n);
+			}
+		};
+		
 		this.jsdot.addEventHandler('view', handler);
 	},
 };

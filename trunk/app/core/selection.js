@@ -159,6 +159,20 @@ JSDot.Selection.prototype = {
 		};
 	},
 	
+	/** DOM Element offset relative to document.
+		@param {DOM Element} e
+		@return {Array(left, top)} offsetLeft and offsetTop relative to document
+	*/
+	getOffset: function(e) {
+		var l = 0, t = 0;
+		do {
+			l += e.offsetLeft;
+			t += e.offsetTop;
+			e = e.offsetParent;
+		} while (e);
+		return [l, t];
+	},
+	
 	/** Handle a click.
 		When selection is enabled and it changes, the event
 		'selectionchg' is fired. If selection is disabled
@@ -175,8 +189,9 @@ JSDot.Selection.prototype = {
 	handleClick: function(evt) {
 		if (!this.allowEdges && !this.allowNodes) {
 			/* If selection is disabled the event is 'click' */
-			evt.relX = evt.pageX - this.view.svgroot.offsetLeft;
-			evt.relY = evt.pageY - this.view.svgroot.offsetTop;
+			var offset = this.getOffset(this.view.svgroot.parentNode);
+			evt.relX = evt.pageX - offset[0];
+			evt.relY = evt.pageY - offset[1];
 			this.jsdot.fireEvent('click', this.evtTarget, evt);
 		} else {
 			/* if selection is enabled we handle it */

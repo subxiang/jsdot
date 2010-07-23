@@ -72,7 +72,7 @@ JSDot.Drag = function(jsdot, view, sel) {
 			view.updateNodePos(h.nodes[i]);
 		}
 		for (var i in h.edges) {
-			view.updateEdge(h.edges[i]);
+			view.updateEdgePos(h.edges[i]);
 		}
 	};
 	
