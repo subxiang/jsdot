@@ -126,5 +126,13 @@ JSDot.Graph_impl.prototype = {
 		
 		delete this.nodes[n.name];
 	},
-
+	
+	/** Remove an edge from current graph.
+		@param {Edge_impl} e edge to remove
+	*/
+	removeEdge: function(e) {
+		delete this.edges[e.id];
+		delete e.src.edges[e.dst.name];
+		delete e.dst.edges[e.src.name];
+	},
 };
