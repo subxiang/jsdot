@@ -116,24 +116,24 @@ JSDot.Editor.MainBar = function(editor, p) {
 		editor.jsdot.removeEventHandler('create');
 	};
 	
-	var btnRmN = document.createElement('button');
-	btnRmN.innerHTML = 'Remove node';
-	p.appendChild(btnRmN);
-	$(btnRmN).button({
+	var btnRm = document.createElement('button');
+	btnRm.innerHTML = 'Remove node';
+	p.appendChild(btnRm);
+	$(btnRm).button({
 		text: false,
 		icons: { primary: 'jsdot-icon-removenode' }
 	})
 	.click(function() {
-		editor.setSelected(tb, btnRmN);
+		editor.setSelected(tb, btnRm);
 		var s = editor.selection;
 		s.allowNodes = false;
 		s.allowEdges = false;
 		s.allowMultiple = false;
 		s.allowDrag = false;
 		s.deselectAll();
-		editor.jsdot.addEventHandler('remove', tb.removeNodeH(editor.jsdot));
+		editor.jsdot.addEventHandler('remove', tb.removeH(editor.jsdot));
 	});
-	btnRmN.onDeselect = function() {
+	btnRm.onDeselect = function() {
 		editor.jsdot.removeEventHandler('remove');
 	};
 };
@@ -171,12 +171,14 @@ JSDot.Editor.MainBar.prototype = {
 		};
 	},
 	
-	removeNodeH: function(jsdot) {
+	removeH: function(jsdot) {
 		return {
 			click: function(obj, evt) {
-				/* if it is a node remove it */
-				if (obj && !obj.src) {
+				if (obj && !obj.src) { /* node */
 					jsdot.graph.removeNode(obj);
+					jsdot.fireEvent('removed', obj);
+				} else if (obj && obj.src) { /* edge */
+					jsdot.graph.removeEdge(obj);
 					jsdot.fireEvent('removed', obj);
 				}
 			}

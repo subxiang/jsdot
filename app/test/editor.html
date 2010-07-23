@@ -38,19 +38,23 @@
 		name: "node1",
 		label: {type: "plain", value: "label1"},
 		position: [100,100],
-		stencil: JSDot.stencils['circle']
+		stencil: JSDot.stencils['circle'],
+		edges: {},
 	};
 	var n2 = {
 		name: "node2",
 		label: {type: "plain", value: "Label2"},
 		position: [160,200],
-		stencil: JSDot.stencils['box']
+		stencil: JSDot.stencils['box'],
+		edges: {},
 	};
 	var e1 = {
 		src: n1,
 		dst: n2,
 		stencil: JSDot.edge_stencils['line']
-	}
+	};
+	n1.edges[n2.name] = e1;
+	n2.edges[n1.name] = e1;
 	
 	var j = new JSDot.jsdot_Impl();
 	var v = new JSDot.View(j, "dest");
