@@ -73,6 +73,7 @@ JSDot.Editor.MainBar = function(editor, p) {
 	this.editor = editor;
 	
 	this.dragH = new JSDot.Drag(editor.jsdot, editor.view, editor.selection);
+	this.createEdgeH = new JSDot.EdgeViz(editor.jsdot, editor.view);
 	
 	var btnSel = document.createElement('button');
 	btnSel.innerHTML = 'Select';
@@ -113,6 +114,27 @@ JSDot.Editor.MainBar = function(editor, p) {
 		editor.jsdot.addEventHandler('create', tb.createNodeH(editor.jsdot));
 	});
 	btnAddN.onDeselect = function() {
+		editor.jsdot.removeEventHandler('create');
+	};
+	
+	var btnAddE = document.createElement('button');
+	btnAddE.innerHTML = 'Add node';
+	p.appendChild(btnAddE);
+	$(btnAddE).button({
+		text: false,
+		icons: { primary: 'jsdot-icon-addedge' }
+	})
+	.click(function() {
+		editor.setSelected(tb, btnAddE);
+		var s = editor.selection;
+		s.allowNodes = false;
+		s.allowEdges = false;
+		s.allowMultiple = false;
+		s.allowDrag = false;
+		s.deselectAll();
+		editor.jsdot.addEventHandler('create', tb.createEdgeH);
+	});
+	btnAddE.onDeselect = function() {
 		editor.jsdot.removeEventHandler('create');
 	};
 	
@@ -171,6 +193,16 @@ JSDot.Editor.MainBar.prototype = {
 		};
 	},
 	
+	/** Handler for creating edges.
+		This is created in {@link #register}.
+		@type JSDot.EdgeViz
+	*/
+	createEdgeH: null,
+	
+	/** Construct handler for removing nodes and edges.
+		@param {jsdot_Impl} jsdot jsdot instance
+		@return {doc_Handler} handler
+	*/
 	removeH: function(jsdot) {
 		return {
 			click: function(obj, evt) {
