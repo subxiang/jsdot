@@ -50,12 +50,13 @@
 		edges: {},
 	};
 	var e1 = {
+		id: 'e1',
 		src: n1,
 		dst: n2,
 		stencil: JSDot.edge_stencils['line']
 	};
-	n1.edges[n2.name] = e1;
-	n2.edges[n1.name] = e1;
+	n1.edges[e1.id] = e1;
+	n2.edges[e1.id] = e1;
 	
 	var j = new JSDot.jsdot_Impl();
 	var v = new JSDot.View(j, "dest");

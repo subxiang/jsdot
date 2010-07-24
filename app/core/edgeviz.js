@@ -38,6 +38,13 @@ JSDot.EdgeViz = function(jsdot, view) {
 	
 	this.view = view;
 	
+	/** SVG line drawn on the view */
+	this.line = null;
+	
+	/** The register mousemove listener. */
+	this.moveH = null;
+	
+	/** Handler for the JSDot click event. */
 	this.click = function(obj, evt) {
 	
 		/* if it's not a node do noting */
@@ -46,13 +53,35 @@ JSDot.EdgeViz = function(jsdot, view) {
 		/* selection of first node */
 		if (!this.start) {
 			this.start = obj;
+			this.line = JSDot.helper.cesvg('line');
+			this.line.setAttribute('class', 'jsdot_edgeviz_line');
+			this.view.svgroot.appendChild(this.line);
+			this.line.setAttribute('x1', evt.relX);
+			this.line.setAttribute('y1', evt.relY);
+			this.line.setAttribute('x2', evt.relX);
+			this.line.setAttribute('y2', evt.relY);
+			this.moveH = this.mousemove(this.view, this.line);
+			this.view.svgroot.addEventListener('mousemove', this.moveH, false);
 			return;
 		}
 		
 		/* selection of second node */
+		this.view.svgroot.removeEventListener('mousemove', this.moveH, false);
+		this.view.svgroot.removeChild(this.line);
+		this.moveH = null;
+		this.line = null;
 		var e = this.jsdot.graph.createEdge(this.start, obj);
 		this.start = null;
 		this.jsdot.fireEvent('created', e);
+	};
+	
+	/** Creates the mousemove handler. */
+	this.mousemove = function(view, line) {
+		return function(evt) {
+			view.addRelCoord(evt);
+			line.setAttribute('x2', evt.relX);
+			line.setAttribute('y2', evt.relY);
+		};
 	};
 
 };

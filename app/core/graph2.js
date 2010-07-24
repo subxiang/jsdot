@@ -115,13 +115,16 @@ JSDot.Graph_impl.prototype = {
 	*/
 	removeNode: function(n) {
 		/* remove edges */
-		for (e in n.edges) {
-			delete this.edges[e.id];
+		var e;
+		for (id in n.edges) {
+			e = n.edges[id];
+			/* remove edge from the other connected node, but not from the one we are removing */
 			if (e.src == n) {
-				delete e.dst.edges[n.name];
+				delete e.dst.edges[id];
 			} else {
-				delete e.src.edges[n.name];
+				delete e.src.edges[id];
 			}
+			delete this.edges[id];
 		}
 		
 		delete this.nodes[n.name];
