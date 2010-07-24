@@ -103,8 +103,8 @@ JSDot.Graph_impl.prototype = {
 			'stencil': JSDot.edge_stencils['line'],
 		};
 		
-		src.edges[dst.name] = e;
-		dst.edges[src.name] = e;
+		src.edges[id] = e;
+		dst.edges[id] = e;
 		
 		this.edges[id] = e;
 		return e;
@@ -132,7 +132,7 @@ JSDot.Graph_impl.prototype = {
 	*/
 	removeEdge: function(e) {
 		delete this.edges[e.id];
-		delete e.src.edges[e.dst.name];
-		delete e.dst.edges[e.src.name];
+		delete e.src.edges[e.id];
+		delete e.dst.edges[e.id];
 	},
 };
