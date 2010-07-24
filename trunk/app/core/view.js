@@ -225,9 +225,38 @@ JSDot.View.prototype = {
 				view.removeEdge(n);
 			} else {
 				view.removeNode(n);
+				for (e in n.edges) {
+					view.removeEdge(n.edges[e]);
+				}
 			}
 		};
 		
 		this.jsdot.addEventHandler('view', handler);
 	},
+	
+	/** DOM Element offset relative to document.
+		@param {DOM Element} e
+		@return {Array(left, top)} offsetLeft and offsetTop relative to document
+	*/
+	getOffset: function(e) {
+		var l = 0, t = 0;
+		do {
+			l += e.offsetLeft;
+			t += e.offsetTop;
+			e = e.offsetParent;
+		} while (e);
+		return [l, t];
+	},
+	
+	/** Add relative coordinates to an event.
+		Takes an event and add to it .relX and .relY which are the coordinates
+		relative to this view.
+		@param {DOM Event} evt event for which the relative coordinates are computed
+	*/
+	addRelCoord: function(evt) {
+		var offset = this.getOffset(this.svgroot.parentNode);
+		evt.relX = evt.pageX - offset[0];
+		evt.relY = evt.pageY - offset[1];
+	},
+	
 };

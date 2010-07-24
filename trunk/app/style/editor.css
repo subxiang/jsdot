@@ -1,6 +1,7 @@
 
 .jsdot-toolbar { position: absolute; top: -45px; }
 .jsdot-tb-selected { border: 2px dotted black !important; }
+.jsdot_edgeviz_line { stroke: black; stroke-width: 1; stroke-dasharray: 8, 5; pointer-events: none; }
 
 .jsdot-icon-cursor { background-image: url(../img/cursor.png) !important; }
 .jsdot-icon-addnode { background-image: url(../img/add.png) !important; }
