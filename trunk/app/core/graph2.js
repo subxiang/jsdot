@@ -100,7 +100,7 @@ JSDot.Graph_impl.prototype = {
 			'id': id,
 			'src': src,
 			'dst': dst,
-			/* stencil: default is created in view */
+			'stencil': JSDot.edge_stencils['line'],
 		};
 		
 		src.edges[dst.name] = e;
