@@ -231,6 +231,15 @@ JSDot.View.prototype = {
 			}
 		};
 		
+		handler.moved = function(n) {
+			if (n.edges) { /* it is a node */
+				view.updateNodePos(n);
+				for (var i in n.edges) {
+					view.updateEdgePos(n.edges[i]);
+				}
+			}
+		};
+		
 		this.jsdot.addEventHandler('view', handler);
 	},
 	
