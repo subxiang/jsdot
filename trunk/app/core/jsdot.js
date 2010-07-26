@@ -34,8 +34,20 @@ function JSDot() {
 	var views = [];
 	var editors = [];
 	
+	/* instantiate the internal implementation */
 	var jsdot = new JSDot.jsdot_Impl();
 	
+	/** Object to interact with the graph.
+		@return {Graph} graph interface
+	*/
+	this.getGraph = function() {
+		return new JSDot.Graph(jsdot, jsdot.graph);
+	};
+	
+	/** Add a view
+		@param {String} divId id of a div tag where the view will be placed
+		@param {String} mode type of view to create
+	*/
 	this.addView = function(divId, mode) {
 		if (views[divId]) return; /* view already exists */
 		

@@ -17,6 +17,8 @@
 		<script type="text/javascript" src="../core/view.js"></script>
 		<script type="text/javascript" src="../core/selection.js"></script>
 		<script type="text/javascript" src="../core/drag.js"></script>
+		<script type="text/javascript" src="../core/node.js"></script>
+		<script type="text/javascript" src="../core/graph.js"></script>
   </head>
   <body style="background: none repeat scroll 0% 0% Lavender;">
 
@@ -63,6 +65,10 @@
 	
 	var j = new JSDot();
 	j.addView('dest');
+	
+	var g = j.getGraph();
+	var n = g.createNode();
+	n.setPosition([100, 150]);
 	
 	</script>
   </body>
