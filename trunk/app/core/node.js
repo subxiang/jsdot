@@ -36,6 +36,7 @@ THE SOFTWARE.
 JSDot.Node = function(jsdot, impl) {
 
 	/** Set node's label.
+		Fires a {@link doc_Handler.changed} event.
 		@param {String} l new label
 	*/
 	this.setLabel = function(l) {
@@ -44,9 +45,11 @@ JSDot.Node = function(jsdot, impl) {
 		} else {
 			impl.label = {'type': 'plain', 'value': l};
 		}
+		jsdot.fireEvent('changed', impl);
 	};
 	
 	/** Set node's position.
+		Fires a {@link doc_Handler.moved} event.
 		@param {Array} p new position in the form [x, y]
 	*/
 	this.setPosition = function(p) {
@@ -59,6 +62,16 @@ JSDot.Node = function(jsdot, impl) {
 	*/
 	this.getPosition = function() {
 		return this.position;
+	};
+
+	/** Set node stencil.
+		Set which stencil should be used to draw the node.
+		<br>If the choosen stencil doesn't exist, the default one is set.
+		@param {String} name name of the stencil
+	*/
+	this.setStencil = function(name) {
+		impl.stencil = JSDot.stencils[name] || jsdot.graph.defaultNodeStencil;
+		jsdot.fireEvent('changed', impl);
 	};
 
 };

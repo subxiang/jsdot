@@ -37,7 +37,7 @@ THE SOFTWARE.
 JSDot.Graph = function(jsdot, graph) {
 
 	/** Creates a new node.
-		Fires a 'created' JSDot event.
+		Fires a {@link doc_Handler.created} event.
 		@return {Node} the new node
 	*/
 	this.createNode = function() {
