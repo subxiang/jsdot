@@ -240,6 +240,20 @@ JSDot.View.prototype = {
 			}
 		};
 		
+		handler.changed = function(n) {
+			if (n.src) { /* edge */
+				view.removeEdge(n);
+				view.drawEdge(n);
+			} else { /* node */
+				view.removeNode(n);
+				view.drawNode(n);
+				/* edges do not need to be redrawn, just update them */
+				for (i in n.edges) {
+					view.updateEdgePos(n.edges[i]);
+				}
+			}
+		};
+		
 		this.jsdot.addEventHandler('view', handler);
 	},
 	

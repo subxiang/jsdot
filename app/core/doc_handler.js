@@ -86,3 +86,30 @@ doc_Handler.drag = function(what, evt) {};
 	@param {Event} evt browser event with added dx and dy (distance from pick)
 */
 doc_Handler.drop = function(what, evt) {};
+
+/** Element created.
+	Generated when a new node or edge has been created.
+	@param {Object} what {@link Node_impl} or {@link Edge_impl} created element
+*/
+doc_Handler.created = function(what) {};
+
+/** Element removed.
+	An element has been removed from the graph. It may be either a node or an edge.
+	@param {Object} what {@link Node_impl} or {@link Edge_impl} removed element
+*/
+doc_Handler.removed = function(what) {};
+
+/** Node moved.
+	The position of a node has been changed, either by a terminated drag&drop or
+	by {@link Node#setPosition}.
+	@param {Node_impl} node node whose position has changed
+*/
+doc_Handler.moved = function(node) {};
+
+/** Element style changed.
+	Generated when the stencil or the label of a node or edge has been changed.<br>
+	This is not generated when the stencil itself changes, but only when which stencil
+	is assigned to the element changes.
+	@param {Object} what element whose style changed
+*/
+doc_Handler.changed = function(what) {};
