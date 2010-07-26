@@ -35,16 +35,9 @@ var f= function() {
 	var files = [
 		"../lib/json_sans_eval.js",
 		"helpers.js",
-		"main.js",
 		"graph.js",
-		"template.js",
-		"svg.js",
 		"shapes.js"
 		"view.js",
-		"painter.js",
-		"json.js",
-		"popup.js",
-		"check.js"
 	];
 	
 	var ip = JSDOT_PATH || "../";
