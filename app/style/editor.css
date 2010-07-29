@@ -5,8 +5,9 @@
 .jsdot-tb-hiddentb { display: none; }
 .jsdot_edgeviz_line { stroke: black; stroke-width: 1; stroke-dasharray: 8, 5; pointer-events: none; }
 
-.jsdot-icon-cursor { background-image: url(../img/cursor.png) !important; }
-.jsdot-icon-addnode { background-image: url(../img/add.png) !important; }
-.jsdot-icon-addedge { background-image: url(../img/arrow_right.png) !important; }
-.jsdot-icon-removenode { background-image: url(../img/cross.png) !important; }
-.jsdot-icon-alignleft { background-image: url(../img/cursor.png) !important; }
+.ui-icon { width: 16px; height: 16px; background-image: url(../img/icons-all.png) !important; }
+.jsdot-icon-cursor { background-position: -112px -240px; }
+.jsdot-icon-addnode { background-position: -16px 0; }
+.jsdot-icon-addedge { background-position: -192px -32px; }
+.jsdot-icon-removenode { background-position: -208px -224px; }
+.jsdot-icon-alignleft { background-position: -256px -624px; }
