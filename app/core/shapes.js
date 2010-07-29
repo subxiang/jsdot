@@ -94,7 +94,13 @@ JSDot.shapes = {
 			var slope = (p[1]-(y+height/2)) / (p[0]-(x+width/2));
 			/* division by 0 gives Infinity, which is fine! */
 			
-			if (p[1] <= y) {
+			if (Math.abs(p[1] - (y+height/2)) < 2) {
+				if (p[0] < xr) {
+					return [xl, p[1]];
+				} else {
+					return [xr, p[1]];
+				}
+			} else if (p[1] < y+height/2) {
 				/* intersection with upper part of rect */
 				var iup = (y-p[1]) / slope + p[0];
 				if (iup < xl) {
