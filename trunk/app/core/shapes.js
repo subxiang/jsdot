@@ -56,6 +56,10 @@ JSDot.shapes = {
 			];
 		},
 		
+		getBBox: function(n) {
+			return n.view.shape.getBBox(n);
+		},
+		
 		setSize: function(n, s) {
 			n.view.shape.setAttribute('r', Math.max(s.height,s.width)/2+6);
 		}
@@ -123,6 +127,10 @@ JSDot.shapes = {
 			}
 		},
 		
+		getBBox: function(n) {
+			return n.view.shape.getBBox(n);
+		},
+		
 		setSize: function(n, s) {
 			var p = n.view.shape;
 			p.setAttribute('height', s.height+3);
@@ -165,6 +173,10 @@ JSDot.stencils = {
 			return this.shape.getBoundaryTo(n, p);
 		},
 		
+		getBBox: function(n) {
+			return this.shape.getBBox(n);
+		},
+		
 		highlight: function(n, y) {
 			if (y) {
 				n.view.group.setAttribute('class', this.cssClass+' '+this.cssHl);
@@ -196,6 +208,10 @@ JSDot.stencils = {
 		
 		getBoundaryTo: function(n, p) {
 			return this.shape.getBoundaryTo(n, p);
+		},
+		
+		getBBox: function(n) {
+			return this.shape.getBBox(n);
 		},
 		
 		highlight: function(n, y) {
