@@ -36,11 +36,17 @@ JSDot.Editor = function(jsdot, view, sel) {
 	var tb = document.createElement('div');
 	tb.setAttribute('class', 'ui-widget-header ui-corner-all jsdot-toolbar');
 	this.view.container.appendChild(tb);
-	//this.injectButtons(tb);
+	this.tbContainer = tb;
 	new JSDot.Editor.MainBar(this, tb);
 };
 
 JSDot.Editor.prototype = {
+
+	/** Toolbar container.
+		Div element containig the toolbar elements.
+		@type {DOM Element}
+	*/
+	tbContainer: null,
 
 	/** Set selected button.
 		Change tool icon highlighting to show which button is selected
@@ -60,6 +66,31 @@ JSDot.Editor.prototype = {
 		tb.selected = b;
 	},
 	
+	/** The nested bar currently shown */
+	activeNested: null,
+	
+	/** List of registered nested bars. */
+	nestedBars: {},
+
+	/** Register a new nested bar. */
+	addNestedBar: function(bar) {
+		this.nestedBars[bar.name] = bar;
+		$(bar.container).addClass('jsdot-tb-nested jsdot-tb-hiddentb');
+		this.tbContainer.appendChild(bar.container);
+	},
+	
+	/** Show a registered nested bar. */
+	showNestedBar: function(name) {
+		this.hideNestedBar();
+		if (this.nestedBars[name]) $(this.nestedBars[name].container).removeClass('jsdot-tb-hiddentb');
+		this.activeNested = this.nestedBars[name];
+	},
+	
+	/** Hides the currently active nested bar. */
+	hideNestedBar: function() {
+		if (this.activeNested) $(this.activeNested.container).addClass('jsdot-tb-hiddentb');
+		this.activeNested = null;
+	},
 };
 
 /** @class Main toolbar.
@@ -74,6 +105,8 @@ JSDot.Editor.MainBar = function(editor, p) {
 	
 	this.dragH = new JSDot.Drag(editor.jsdot, editor.view, editor.selection);
 	this.createEdgeH = new JSDot.EdgeViz(editor.jsdot, editor.view);
+	this.layoutBar = new JSDot.Editor.LayoutBar(editor);
+	editor.addNestedBar(this.layoutBar);
 	
 	var btnSel = document.createElement('button');
 	btnSel.innerHTML = 'Select';
@@ -90,9 +123,11 @@ JSDot.Editor.MainBar = function(editor, p) {
 		s.allowEdges = true;
 		s.allowMultiple = true;
 		s.allowDrag = true;
+		editor.showNestedBar('layout');
 	});
 	btnSel.onDeselect = function() {
 		editor.jsdot.removeEventHandler('drag');
+		editor.hideNestedBar('layout');
 	};
 	btnSel.click(); // selection tool is enabled on startup
 	
@@ -174,6 +209,12 @@ JSDot.Editor.MainBar.prototype = {
 	*/
 	editor: null,
 	
+	/** Nested bar or layout operations.
+		Created in {@link #MainBar}.
+		@type JSDot.Editor.LayoutBar
+	*/
+	layoutBar: null,
+	
 	/** Handler for drag&drop.
 		This is a {@link jsdot_Drag} created in {@link #register}.
 	*/
@@ -217,4 +258,31 @@ JSDot.Editor.MainBar.prototype = {
 		};
 	},
 	
+};
+
+/** @class Layout toolbar.
+	@constructor
+	@param {jsdot_Editor} editor
+	@param {Object} p parent DOM element where to insert button elements
+*/
+JSDot.Editor.LayoutBar = function(editor) {
+	var d = document.createElement('div');
+	d.setAttribute('class', 'jsdot-tb-nested');
+	
+	// mandatory fields for nested bars
+	this.name = 'layout';
+	this.container = d;
+	
+	var btnL = document.createElement('button');
+	btnL.innerHTML = 'Align left';
+	d.appendChild(btnL);
+	$(btnL).button({
+		text: false,
+		icons: { primary: 'jsdot-icon-alignleft' }
+	})
+	.click(function() {});
+};
+
+JSDot.Editor.LayoutBar.prototype = {
+
 };
