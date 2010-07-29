@@ -281,8 +281,75 @@ JSDot.Editor.LayoutBar = function(editor) {
 		icons: { primary: 'jsdot-icon-alignleft' }
 	})
 	.click(function() {});
+	
+	var btnC = document.createElement('button');
+	btnC.innerHTML = 'Center';
+	d.appendChild(btnC);
+	$(btnC).button({
+		text: false,
+		icons: { primary: 'jsdot-icon-aligncenter' }
+	})
+	.click(this.centerH(editor));
+	
+	var btnR = document.createElement('button');
+	btnR.innerHTML = 'Align right';
+	d.appendChild(btnR);
+	$(btnR).button({
+		text: false,
+		icons: { primary: 'jsdot-icon-alignright' }
+	})
+	.click(function() {});
+	
+	var btnT = document.createElement('button');
+	btnT.innerHTML = 'Align top';
+	d.appendChild(btnT);
+	$(btnT).button({
+		text: false,
+		icons: { primary: 'jsdot-icon-aligntop' }
+	})
+	.click(function() {});
+	
+	var btnVC = document.createElement('button');
+	btnVC.innerHTML = 'Center vertically';
+	d.appendChild(btnVC);
+	$(btnVC).button({
+		text: false,
+		icons: { primary: 'jsdot-icon-alignvcenter' }
+	})
+	.click(function() {});
+	
+	var btnB = document.createElement('button');
+	btnB.innerHTML = 'Align bottom';
+	d.appendChild(btnB);
+	$(btnB).button({
+		text: false,
+		icons: { primary: 'jsdot-icon-alignbottom' }
+	})
+	.click(function() {});
 };
 
 JSDot.Editor.LayoutBar.prototype = {
 
+	centerH: function(editor) {
+		return function() {
+			var s = editor.selection;
+			/* find first node and initialize l and r */
+			var l = s.firstNode().position[0];
+			var r = l;
+			
+			/* find the middle */
+			s.forNodes(function(n) {
+				if (n.position[0] < l) l = n.position[0];
+				if (n.position[0] > r) r = n.position[0];
+			});
+			l = l + (r-l)/2;
+			
+			/* update nodes */
+			s.forNodes(function(n) {
+				n.position[0] = l;
+				editor.jsdot.fireEvent('moved', n);
+			});
+		};
+	},
+		
 };

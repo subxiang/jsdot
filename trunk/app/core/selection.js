@@ -320,4 +320,29 @@ JSDot.Selection.prototype = {
 			e = undefined;
 		};
 	},
+	
+	/** First node in selection.
+		Returns the first node in the selection, usually it is
+		the first that has been selected.<br>
+		Returns null if there isn't any selected node.
+		@return {Node_impl} first selected node or null
+	*/
+	firstNode: function() {
+		for (var i in this.selection) {
+			if (this.selection[i].edges) return this.selection[i];
+		}
+		return null;
+	},
+	
+	/** Apply a function to selected node.
+		For each selected node f(n) is called.
+	*/
+	forNodes: function(f) {
+		for (var i in this.selection) {
+			if (this.selection[i].edges) {
+				f(this.selection[i]);
+			}
+		}
+	},
+
 };
