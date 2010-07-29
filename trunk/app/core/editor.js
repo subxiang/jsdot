@@ -280,7 +280,7 @@ JSDot.Editor.LayoutBar = function(editor) {
 		text: false,
 		icons: { primary: 'jsdot-icon-alignleft' }
 	})
-	.click(function() {});
+	.click(this.leftH(editor));
 	
 	var btnC = document.createElement('button');
 	btnC.innerHTML = 'Center';
@@ -298,7 +298,7 @@ JSDot.Editor.LayoutBar = function(editor) {
 		text: false,
 		icons: { primary: 'jsdot-icon-alignright' }
 	})
-	.click(function() {});
+	.click(this.rightH(editor));
 	
 	var btnT = document.createElement('button');
 	btnT.innerHTML = 'Align top';
@@ -307,7 +307,7 @@ JSDot.Editor.LayoutBar = function(editor) {
 		text: false,
 		icons: { primary: 'jsdot-icon-aligntop' }
 	})
-	.click(function() {});
+	.click(this.topH(editor));
 	
 	var btnVC = document.createElement('button');
 	btnVC.innerHTML = 'Center vertically';
@@ -316,7 +316,7 @@ JSDot.Editor.LayoutBar = function(editor) {
 		text: false,
 		icons: { primary: 'jsdot-icon-alignvcenter' }
 	})
-	.click(function() {});
+	.click(this.vcenterH(editor));
 	
 	var btnB = document.createElement('button');
 	btnB.innerHTML = 'Align bottom';
@@ -325,16 +325,40 @@ JSDot.Editor.LayoutBar = function(editor) {
 		text: false,
 		icons: { primary: 'jsdot-icon-alignbottom' }
 	})
-	.click(function() {});
+	.click(this.bottomH(editor));
 };
 
 JSDot.Editor.LayoutBar.prototype = {
+
+	leftH: function(editor) {
+		return function() {
+			var s = editor.selection;
+			/* find first node and initialize l */
+			var n = s.firstNode();
+			if (!n) return;
+			var l = n.getBBox().x;
+			
+			/* find leftmost node */
+			s.forNodes(function(n) {
+				var p = n.getBBox().x;
+				if (p < l) l = p;
+			});
+			
+			/* update nodes */
+			s.forNodes(function(n) {
+				n.position[0] = l + n.getBBox().width/2;
+				editor.jsdot.fireEvent('moved', n);
+			});
+		};
+	},
 
 	centerH: function(editor) {
 		return function() {
 			var s = editor.selection;
 			/* find first node and initialize l and r */
-			var l = s.firstNode().position[0];
+			var n = s.firstNode();
+			if (!n) return;
+			var l = n.position[0];
 			var r = l;
 			
 			/* find the middle */
@@ -351,5 +375,98 @@ JSDot.Editor.LayoutBar.prototype = {
 			});
 		};
 	},
-		
+
+	rightH: function(editor) {
+		return function() {
+			var s = editor.selection;
+			/* find first node and initialize r */
+			var n = s.firstNode();
+			if (!n) return;
+			var p = n.getBBox();
+			var r = p.x + p.width;
+			
+			/* find rightmost node */
+			s.forNodes(function(n) {
+				p = n.getBBox();
+				p = p.x + p.width;
+				if (p > r) r = p;
+			});
+			
+			/* update nodes */
+			s.forNodes(function(n) {
+				n.position[0] = r - n.getBBox().width/2;
+				editor.jsdot.fireEvent('moved', n);
+			});
+		};
+	},
+
+	topH: function(editor) {
+		return function() {
+			var s = editor.selection;
+			/* find first node and initialize y */
+			var n = s.firstNode();
+			if (!n) return;
+			var y = n.getBBox().y;
+			
+			/* find topmost node */
+			s.forNodes(function(n) {
+				var p = n.getBBox().y;
+				if (p < y) y = p;
+			});
+			
+			/* update nodes */
+			s.forNodes(function(n) {
+				n.position[1] = y + n.getBBox().height/2;
+				editor.jsdot.fireEvent('moved', n);
+			});
+		};
+	},
+
+	vcenterH: function(editor) {
+		return function() {
+			var s = editor.selection;
+			/* find first node and initialize top and btm */
+			var n = s.firstNode();
+			if (!n) return;
+			var top = n.position[1];
+			var btm = top;
+			
+			/* find center */
+			s.forNodes(function(n) {
+				if (n.position[1] < top) top = n.position[1];
+				if (n.position[1] > btm) btm = n.position[1];
+			});
+			top += (btm-top)/2;
+			
+			/* update nodes */
+			s.forNodes(function(n) {
+				n.position[1] = top;
+				editor.jsdot.fireEvent('moved', n);
+			});
+		};
+	},
+
+	bottomH: function(editor) {
+		return function() {
+			var s = editor.selection;
+			/* find first node and initialize y */
+			var n = s.firstNode();
+			if (!n) return;
+			var p = n.getBBox();
+			var y = p.y + p.height;
+			
+			/* find bottom node */
+			s.forNodes(function(n) {
+				p = n.getBBox();
+				p = p.y + p.height;
+				if (p > y) y = p;
+			});
+			
+			/* update nodes */
+			s.forNodes(function(n) {
+				n.position[1] = y - n.getBBox().height/2;
+				editor.jsdot.fireEvent('moved', n);
+			});
+		};
+	},
 };
