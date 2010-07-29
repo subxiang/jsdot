@@ -52,6 +52,7 @@ function JSDot() {
 		if (views[divId]) return; /* view already exists */
 		
 		var v = new JSDot.View(jsdot, divId);
+		JSDot.load_svg_shapes(v, 'shapes.svg');
 		views[divId] = v;
 		var s = new JSDot.Selection(jsdot, v);
 		switch (mode) {
