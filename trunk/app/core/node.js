@@ -35,6 +35,14 @@ THE SOFTWARE.
 */
 JSDot.Node = function(jsdot, impl) {
 
+	/** Node's name.
+		Returns the name identifying the node inside the graph.
+		@return {String} node's name
+	*/
+	this.getName = function() {
+		return impl.name;
+	};
+
 	/** Set node's label.
 		Fires a {@link doc_Handler.changed} event.
 		@param {String} l new label

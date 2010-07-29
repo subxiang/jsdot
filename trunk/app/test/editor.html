@@ -15,8 +15,12 @@
 		<script type="text/javascript" src="../lib/jquery-ui-1.8.2.custom.min.js"></script>
 		<script type="text/javascript" src="../core/jsdot.js"></script>
 		<script type="text/javascript" src="../core/helpers.js"></script>
-		<script type="text/javascript" src="../core/graph_impl.js"></script>
 		<script type="text/javascript" src="../core/impl.js"></script>
+		<script type="text/javascript" src="../core/node_impl.js"></script>
+		<script type="text/javascript" src="../core/node.js"></script>
+		<script type="text/javascript" src="../core/edge.js"></script>
+		<script type="text/javascript" src="../core/graph_impl.js"></script>
+		<script type="text/javascript" src="../core/graph.js"></script>
 		<script type="text/javascript" src="../core/shapes.js"></script>
 		<script type="text/javascript" src="../core/view.js"></script>
 		<script type="text/javascript" src="../core/selection.js"></script>
@@ -34,43 +38,22 @@
 	
 	</div>
 	<script type="text/javascript">
+
+	var j = new JSDot();
+	j.addView('dest', 'editor');
+	var g = j.getGraph();
 	
-	var n1 = {
-		name: "node1",
-		label: {type: "plain", value: "label1"},
-		position: [100,100],
-		stencil: JSDot.stencils['circle'],
-		edges: {},
-	};
-	var n2 = {
-		name: "node2",
-		label: {type: "plain", value: "Label2"},
-		position: [160,200],
-		stencil: JSDot.stencils['box'],
-		edges: {},
-	};
-	var e1 = {
-		id: 'e1',
-		src: n1,
-		dst: n2,
-		stencil: JSDot.edge_stencils['line']
-	};
-	n1.edges[e1.id] = e1;
-	n2.edges[e1.id] = e1;
+	var n1 = g.createNode();
+	n1.setPosition([100,100]);
+	n1.setLabel('label1');
 	
-	var j = new JSDot.jsdot_Impl();
-	var v = new JSDot.View(j, "dest");
-	JSDot.load_svg_shapes(v, 'shapes.svg');
-	var s = new JSDot.Selection(j, v);
-	j.view = v;
-	j.selection = s;
-	//v.enableSelection(); done on construction
-	var e = new JSDot.Editor(j, v, s);
+	var n2 = g.createNode();
+	n2.setLabel('label2');
+	n2.setStencil('box');
+	n2.setPosition([160,200]);
 	
-	v.drawNode(n1);
-	v.drawNode(n2);
-	v.drawEdge(e1);
-	
+	g.createEdge(n1, n2);
+
 	</script>
   </body>
 </html>

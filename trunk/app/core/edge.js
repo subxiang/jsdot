@@ -4,7 +4,6 @@ This file is part of the JSDot library
 http://code.google.com/p/jsdot/
 
 Copyright (c) 2010 Carlo Vanini
-Copyright (c) 2009 Lucia Blondel, Nicos Giuliani, Carlo Vanini
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,37 +25,13 @@ THE SOFTWARE.
 
 */
 
-/** @class Graph API
-	API to populate and modify a graph.
+/** @class Edge API
+	API to modify an edge.
 	@constructor
 	@private
-	Create an object that can be used to modify a graph.
-	@param {jsdot_Impl} jsdot jsdot instance
-	@param {Graph_impl} graph internal representation of the graph that will be modified
+	Create an object that can be used to modify an edge.
+	@param {Edge_impl} impl internal representation of the edge that will be modified
 */
-JSDot.Graph = function(jsdot, graph) {
-
-	/** Creates a new node.
-		Fires a {@link doc_Handler.created} event.
-		@return {Node} the new node
-	*/
-	this.createNode = function() {
-		var n = graph.createNode();
-		jsdot.fireEvent('created', n);
-		return new JSDot.Node(jsdot, n);
-	};
-
-	/** Create an edge between two nodes.
-		@param {Node} src starting {@link Node} or its name
-		@param {Node} dst ending {@link Node} or its name
-		@return {Edge} the new edge
-	*/
-	this.createEdge = function(src, dst) {
-		if (typeof src != 'string') src = src.getName();
-		if (typeof dst != 'string') dst = dst.getName();
-		var e = graph.createEdge(graph.nodes[src], graph.nodes[dst]);
-		jsdot.fireEvent('created', e);
-		return new JSDot.Edge(jsdot, e);
-	};
+JSDot.Edge = function(jsdot, impl) {
 
 };
