@@ -74,13 +74,7 @@ JSDot.Graph_impl.prototype = {
 		/* generate a name which isn't already used */
 		do {nn = ++this.lastName;} while (this.nodes[nn]);
 		
-		var n = {
-			name: nn,
-			label: {'type': 'plain', 'value': nn},
-			position: [0,0],
-			stencil: this.defaultNodeStencil,
-			edges: {},
-		};
+		var n = new JSDot.Node_impl(this, nn);
 		
 		this.nodes[nn] = n;
 		return n;
