@@ -1,8 +1,9 @@
 /*
 This file is part of the JSDot library 
- 
+
 http://code.google.com/p/jsdot/
 
+Copyright (c) 2010 Carlo Vanini
 Copyright (c) 2009 Lucia Blondel, Nicos Giuliani, Carlo Vanini
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -31,31 +32,58 @@ THE SOFTWARE.
  * it will throw in all the pieces of JSDOT.
  * for production you should use the single-file release.
  */
-var f= function() {
+var f = function() {
+
 	var files = [
-		"../lib/json_sans_eval.js",
+//		"../lib/json_sans_eval.js",
+
+/* jsdot */
+		"jsdot.js",
 		"helpers.js",
+		"impl.js",
+
+/* graph model */
+		"node_impl.js",
+		"node.js",
+		"edge.js",
+		"graph_impl.js",
 		"graph.js",
-		"shapes.js"
+
+/* view */
+		"shapes.js",
 		"view.js",
+		"selection.js",
+		"drag.js",
+
+/* editor */
+		"../lib/jquery-1.4.2.js",
+		"../lib/jquery-ui-1.8.2.custom.min.js",
+		"edgeviz.js",
+		"editor.js",
 	];
-	
-	var ip = JSDOT_PATH || "../";
+
+	var styles = [
+		"main.css",
+		"shapes.css",
+		"editor.css",
+		"ui-lightness/jquery-ui-1.8.2.custom.css",
+	];
+
+	/* path prefixes */
+	var ip = "../core/";
+	var cssPrefix = "../style/";
 	var h = document.getElementsByTagName("head").item(0);
 
-	// Main css file
-	var style = document.createElement("link");
-	style.setAttribute("type", "text/css");
-	style.setAttribute("rel", "stylesheet");
-	style.setAttribute("href", ip + '../style/main.css');
-	h.appendChild(style);
-	
-	var style = document.createElement("link");
-	style.setAttribute("type", "text/css");
-	style.setAttribute("rel", "stylesheet");
-	style.setAttribute("href", ip + '../style/shapes.css');
-	h.appendChild(style);
+	/* add style sheets */
+	for (i in styles) {
+		var e = document.createElement("link");
+		e.setAttribute("type", "text/css");
+		e.setAttribute("rel", "stylesheet");
+		e.setAttribute("href", cssPrefix + styles[i]);
+		h.appendChild(e);
+	}
 
+	/* add scritps */
 	for (var i = 0; i < files.length; i++) {
 		var e = document.createElement("script");
 		e.setAttribute("type", "text/javascript");
