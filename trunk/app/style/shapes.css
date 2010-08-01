@@ -9,6 +9,11 @@
 	fill: lightgray;
 }
 
+.jsdot_hexagon {
+	stroke: black;
+	fill: lightgray;
+}
+
 .jsdot_line_edge {
 	stroke: black;
 	fill: none;
