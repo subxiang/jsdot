@@ -294,16 +294,7 @@ JSDot.Selection.prototype = {
 	*/
 	deselect: function(n) {
 		if (n.selected) {
-			/* first find it in selection */
-			var j = null;
-			for (var i in this.selection) {
-				if (this.selection[i] == n) {
-					j = i;
-					break;
-				};
-			};
-			/* now remove */
-			this.selection.splice(j, 1);
+			this.selection.splice(this.selection.indexOf(n), 1);
 			n.selected = false;
 			this.jsdot.fireEvent('selectionchg', n);
 		};
