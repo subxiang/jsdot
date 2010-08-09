@@ -26,6 +26,20 @@
 	marker-end: url(#Arrow);
 }
 
+.jsdot_dirline_edge {
+	stroke: black;
+	fill: none;
+	stroke-width: 1;
+	marker-end: url(#Arrow);
+}
+
+.jsdot_bidiline_edge {
+	stroke: black;
+	fill: none;
+	stroke-width: 1;
+	marker-end: url(#Arrow);
+}
+
 .jsdot_node_label {
 	stroke: none;
 	fill: black;
