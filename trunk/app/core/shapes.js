@@ -499,6 +499,24 @@ JSDot.stencils = {
 */
 JSDot.edge_shapes = {
 
+	'line': {
+	
+		draw: function(e, p) {
+			var l = JSDot.helper.cesvg('path');
+			e.view.line = l;
+			p.appendChild(l);
+			return l;
+		},
+		
+		setPosition: function(e) {
+			var p1 = e.view.start;
+			var p2 = e.view.end;
+			e.view.line.setAttribute(
+				'd', 'M'+p1[0]+','+p1[1]+'L'+p2[0]+','+p2[1]
+			);
+		}
+	},
+
 	'directed line': {
 	
 		draw: function(e, p) {
@@ -516,7 +534,27 @@ JSDot.edge_shapes = {
 				'd', 'M'+p1[0]+','+p1[1]+'L'+p2[0]+','+p2[1]
 			);
 		}
-	}
+	},
+
+	'bidi line': {
+	
+		draw: function(e, p) {
+			var l = JSDot.helper.cesvg('path');
+			e.view.line = l;
+			l.setAttribute('marker-start', 'url(#ArrowS)');
+			l.setAttribute('marker-end', 'url(#Arrow)');
+			p.appendChild(l);
+			return l;
+		},
+		
+		setPosition: function(e) {
+			var p1 = e.view.start;
+			var p2 = e.view.end;
+			e.view.line.setAttribute(
+				'd', 'M'+p1[0]+','+p1[1]+'L'+p2[0]+','+p2[1]
+			);
+		}
+	},
 };
 
 /** Edge stencils.
@@ -526,7 +564,7 @@ JSDot.edge_stencils = {
 
 	'line': {
 	
-		shape: JSDot.edge_shapes['directed line'],
+		shape: JSDot.edge_shapes['line'],
 		
 		cssClass: 'jsdot_line_edge',
 		cssHl: 'jsdot_def_hl',
@@ -547,7 +585,57 @@ JSDot.edge_stencils = {
 				e.view.group.setAttribute('class', this.cssClass);
 			};
 		}
-	}
+	},
+
+	'directed line': {
+	
+		shape: JSDot.edge_shapes['directed line'],
+		
+		cssClass: 'jsdot_dirline_edge',
+		cssHl: 'jsdot_def_hl',
+	
+		draw: function(e, p) {
+			this.shape.draw(e, p);
+			p.setAttribute('class', this.cssClass);
+		},
+		
+		setPosition: function(e) {
+			this.shape.setPosition(e);
+		},
+		
+		highlight: function(e, y) {
+			if (y) {
+				e.view.group.setAttribute('class', this.cssClass+' '+this.cssHl);
+			} else {
+				e.view.group.setAttribute('class', this.cssClass);
+			};
+		}
+	},
+
+	'bidi line': {
+	
+		shape: JSDot.edge_shapes['bidi line'],
+		
+		cssClass: 'jsdot_bidiline_edge',
+		cssHl: 'jsdot_def_hl',
+	
+		draw: function(e, p) {
+			this.shape.draw(e, p);
+			p.setAttribute('class', this.cssClass);
+		},
+		
+		setPosition: function(e) {
+			this.shape.setPosition(e);
+		},
+		
+		highlight: function(e, y) {
+			if (y) {
+				e.view.group.setAttribute('class', this.cssClass+' '+this.cssHl);
+			} else {
+				e.view.group.setAttribute('class', this.cssClass);
+			};
+		}
+	},
 };
 
 /** Insert external SVG elements.

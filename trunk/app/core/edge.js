@@ -34,4 +34,14 @@ THE SOFTWARE.
 */
 JSDot.Edge = function(jsdot, impl) {
 
+	/** Set edge stencil.
+		Set which stencil should be used to draw the edge.
+		<br>If the choosen stencil doesn't exist, the default one is set.
+		@param {String} name name of the stencil
+	*/
+	this.setStencil = function(name) {
+		impl.stencil = JSDot.edge_stencils[name] || jsdot.graph.defaultEdgeStencil;
+		jsdot.fireEvent('changed', impl);
+	};
+
 };

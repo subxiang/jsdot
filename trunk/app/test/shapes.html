@@ -38,6 +38,35 @@
 	g.createEdge('2', '3');
 	g.createEdge('1', '2');
 	g.createEdge('4', '3');
+	
+	
+	/* show edges */
+	var hbase = 250;
+	
+	n = g.createNode('l1');
+	n.setStencil('hexagon');
+	n.setPosition([100, hbase]);
+	n.setLabel('line');
+	n = g.createNode('l2');
+	n.setPosition([100, hbase+100]);
+	g.createEdge('l1', 'l2').setStencil('line');
+	
+	n = g.createNode('dl1');
+	n.setStencil('hexagon');
+	n.setPosition([200, hbase]);
+	n.setLabel('directed line');
+	n = g.createNode('dl2');
+	n.setPosition([200, hbase+100]);
+	g.createEdge('dl1', 'dl2').setStencil('directed line');
+	
+	n = g.createNode('bl1');
+	n.setStencil('hexagon');
+	n.setPosition([320, hbase]);
+	n.setLabel('bidi line');
+	n = g.createNode('bl2');
+	n.setPosition([320, hbase+100]);
+	g.createEdge('bl1', 'bl2').setStencil('bidi line');
+	
 	</script>
   </body>
 </html>
