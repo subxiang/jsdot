@@ -239,7 +239,102 @@ JSDot.shapes = {
 			n.view.shape.setAttribute('points', p.join(' '));
 			n.view.size = { height: s.height + 2*this.dh, width: s.width + 2*this.dw }; /* needed by getBoundaryTo */
 		}
-	}
+	},
+	
+	'concave hexagon': {
+	
+		dw: 8,
+		dh: 2,
+		ew: 15,
+		
+		draw: function(n, g) {
+			var e = JSDot.helper.cesvg('polygon');
+			//e.setAttribute('points', '');
+			g.appendChild(e);
+			n.view.shape = e;
+			return e;
+		},
+		
+		setPosition: function(n) {
+			n.view.shape.setAttribute('transform', 'translate('+n.position[0]+' '+n.position[1]+')');
+		},
+		
+		getBoundaryTo: function(n, p) {
+		
+			//get rect dimensions
+			var height = n.view.size.height;
+			var width = n.view.size.width;
+			var x = n.position[0] - width/2 - this.ew;  /* left */
+			var y = n.position[1] - height/2; /* top */
+			
+			var xl = x; /* left edge of rect */
+			var xr = x + width + 2*this.ew; /* right edge of rect */
+			var slope = (p[1]-n.position[1]) / (p[0]-n.position[0]);
+			/* division by 0 gives Infinity, which is fine! */
+			
+			if (Math.abs(p[1] - (y+height/2)) < 2) {
+				/* p is on a horizontal line with the center */
+				if (p[0] < xr) {
+					return [xl+this.ew, p[1]];
+				} else {
+					return [xr-this.ew, p[1]];
+				}
+			} else if (p[1] < y+height/2) {
+				/* intersection with upper part of rect */
+				var iup = (y-p[1]) / slope + p[0];
+				if (iup < xl) {
+					/* intersection on left side */
+					var s2 = (height/2) / this.ew; /* slope of the diagonal side */
+					var ix = (s2*xl - y - slope*p[0] + p[1]) / (s2 - slope);
+					return [ix, (ix-xl) * s2 + y];
+				} else if (iup > xr) {
+					/* intersection on right side */
+					var s2 = -(height/2) / this.ew; /* slope of the diagonal side */
+					var ix = (s2*xr - y - slope*p[0] + p[1]) / (s2 - slope);
+					return [ix, (ix-xr) * s2 + y];
+				} else {
+					/* intersection on top */
+					return [iup, y];
+				}
+			} else {
+				/* intersection with bottom part of rect */
+				var ibt = (y+height-p[1]) / slope + p[0];
+				if (ibt < xl) {
+					/* intersection on left side */
+					var s2 = -(height/2) / this.ew; /* slope of the diagonal side */
+					var ix = (s2*xl - (y+height) - slope*p[0] + p[1]) / (s2 - slope);
+					return [ix, (ix-xl) * s2 + y+height];
+				} else if (ibt > xr) {
+					/* intersection on right side */
+					var s2 = (height/2) / this.ew; /* slope of the diagonal side */
+					var ix = (s2*xr - (y+height) - slope*p[0] + p[1]) / (s2 - slope);
+					return [ix, (ix-xr) * s2 + y+height];
+				} else {
+					/* intersection on top */
+					return [ibt, y+height];
+				}
+			}
+		},
+		
+		getBBox: function(n) {
+			return n.view.shape.getBBox(n);
+		},
+		
+		setSize: function(n, s) {
+			var w = s.width/2 + this.dw;
+			var h = s.height/2 + this.dh;
+			var p = [
+				-w-this.ew, -h, /* top left */
+				w+this.ew, -h,  /* top right */
+				w, 0,/* > right */
+				w+this.ew, h,   /* bottom right */
+				-w-this.ew, h,  /* bottom left */
+				-w, 0/* < left */
+			];
+			n.view.shape.setAttribute('points', p.join(' '));
+			n.view.size = { height: s.height + 2*this.dh, width: s.width + 2*this.dw }; /* needed by getBoundaryTo */
+		}
+	},
 };
 
 /** Node stencils.
@@ -330,6 +425,43 @@ JSDot.stencils = {
 		shape: JSDot.shapes.hexagon,
 		
 		cssClass: 'jsdot_hexagon',
+		cssHl: 'jsdot_def_hl',
+		
+		draw: function(n, g) {
+			this.shape.draw(n, g);
+			g.setAttribute('class', this.cssClass);
+		},
+		
+		setPosition: function(n) {
+			this.shape.setPosition(n);
+		},
+		
+		setSize: function(n, s) {
+			this.shape.setSize(n, s);
+		},
+		
+		getBoundaryTo: function(n, p) {
+			return this.shape.getBoundaryTo(n, p);
+		},
+		
+		getBBox: function(n) {
+			return this.shape.getBBox(n);
+		},
+		
+		highlight: function(n, y) {
+			if (y) {
+				n.view.group.setAttribute('class', this.cssClass+' '+this.cssHl);
+			} else {
+				n.view.group.setAttribute('class', this.cssClass);
+			};
+		}
+	},
+	
+	'concave hexagon': {
+	
+		shape: JSDot.shapes['concave hexagon'],
+		
+		cssClass: 'jsdot_concave_hexagon',
 		cssHl: 'jsdot_def_hl',
 		
 		draw: function(n, g) {

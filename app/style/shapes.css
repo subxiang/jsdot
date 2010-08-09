@@ -14,6 +14,11 @@
 	fill: lightgray;
 }
 
+.jsdot_concave_hexagon {
+	stroke: black;
+	fill: lightgray;
+}
+
 .jsdot_line_edge {
 	stroke: black;
 	fill: none;
