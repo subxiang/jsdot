@@ -37,11 +37,15 @@ THE SOFTWARE.
 JSDot.Graph = function(jsdot, graph) {
 
 	/** Creates a new node.
-		Fires a {@link doc_Handler.created} event.
+		Fires a {@link doc_Handler.created} event.<br>
+		If a name is provided, and a node with the same name already exists
+		returns null.
+		@param {String} name (optional) name of the node
 		@return {Node} the new node
 	*/
-	this.createNode = function() {
-		var n = graph.createNode();
+	this.createNode = function(name) {
+		var n = graph.createNode(name);
+		if (!n) return null;
 		jsdot.fireEvent('created', n);
 		return new JSDot.Node(jsdot, n);
 	};
