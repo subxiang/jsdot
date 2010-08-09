@@ -67,12 +67,22 @@ JSDot.Graph_impl.prototype = {
 	lastEId: 0,
 	
 	/** Create a new node in the current graph.
+		If a name is provided, and a node with the same name already exists
+		returns null.
+		@param {String} name (optional) name of the node
 		@return {Node_impl} the created node
 	*/
-	createNode: function() {
+	createNode: function(name) {
 		var nn; // node name
-		/* generate a name which isn't already used */
-		do {nn = ++this.lastName;} while (this.nodes[nn]);
+		
+		if (name) {
+			/* use the provided name, if it doesn't alredy exist */
+			nn = name;
+			if (this.nodes[nn]) return null;
+		} else {
+			/* generate a name which isn't already used */
+			do {nn = ++this.lastName;} while (this.nodes[nn]);
+		}
 		
 		var n = new JSDot.Node_impl(this, nn);
 		
