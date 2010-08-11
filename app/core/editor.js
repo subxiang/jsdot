@@ -93,7 +93,7 @@ JSDot.Editor.prototype = {
 	/** Register a new nested bar. */
 	addNestedBar: function(bar) {
 		this.nestedBars[bar.name] = bar;
-		$(bar.container).addClass('jsdot-tb-nested jsdot-tb-hiddentb');
+		$(bar.container).addClass('ui-widget ui-corner-all jsdot-tb-nested jsdot-tb-hiddentb');
 		this.tbContainer.appendChild(bar.container);
 	},
 	
