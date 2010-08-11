@@ -50,4 +50,13 @@ JSDot.Node_impl.prototype = {
 		return {'height': 0, 'width': 0, 'x': this.position[0], 'y': this.position[1] };
 	},
 
+	/** Set node stencil.
+		Set which stencil should be used to draw the node.
+		<br>If the choosen stencil doesn't exist, the default one is set.
+		@param {String} name name of the stencil
+	*/
+	setStencil: function(name) {
+		this.stencil = JSDot.stencils[name] || jsdot.graph.defaultNodeStencil;
+	},
+
 };

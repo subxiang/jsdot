@@ -78,7 +78,7 @@ JSDot.Node = function(jsdot, impl) {
 		@param {String} name name of the stencil
 	*/
 	this.setStencil = function(name) {
-		impl.stencil = JSDot.stencils[name] || jsdot.graph.defaultNodeStencil;
+		impl.setStencil(name);
 		jsdot.fireEvent('changed', impl);
 	};
 

@@ -37,6 +37,8 @@ JSDot.Editor = function(jsdot, view, sel) {
 	tb.setAttribute('class', 'ui-widget-header ui-corner-all jsdot-toolbar');
 	this.view.container.appendChild(tb);
 	this.tbContainer = tb;
+	for (var i in JSDot.stencils) { this.currentNodeStencil = i; break; };
+	for (var i in JSDot.edge_stencils) { this.currentEdgeStencil = i; break; };
 	new JSDot.Editor.MainBar(this, tb);
 };
 
@@ -47,6 +49,22 @@ JSDot.Editor.prototype = {
 		@type {DOM Element}
 	*/
 	tbContainer: null,
+	
+	/** Current node stencil name.
+		The stencil that will be given to the new noded created by this editor.<br>
+		Note that this is the name of a stencil in {@link JSDot.stencils} and not
+		the stencil itself.
+		@type String
+	*/
+	currentNodeStencil: null,
+	
+	/** Current edge stencil name.
+		The stencil that will be given to the new edges created by this editor.<br>
+		Note that this is the name of a stencil in {@link JSDot.edge_stencils} and not
+		the stencil itself.
+		@type String
+	*/
+	currentEdgeStencil: null,
 
 	/** Set selected button.
 		Change tool icon highlighting to show which button is selected
@@ -106,7 +124,9 @@ JSDot.Editor.MainBar = function(editor, p) {
 	this.dragH = new JSDot.Drag(editor.jsdot, editor.view, editor.selection);
 	this.createEdgeH = new JSDot.EdgeViz(editor.jsdot, editor.view);
 	this.layoutBar = new JSDot.Editor.LayoutBar(editor);
+	this.createNodeBar = new JSDot.Editor.CreateNodeBar(editor);
 	editor.addNestedBar(this.layoutBar);
+	editor.addNestedBar(this.createNodeBar);
 	
 	var btnSel = document.createElement('button');
 	btnSel.innerHTML = 'Select';
@@ -147,9 +167,11 @@ JSDot.Editor.MainBar = function(editor, p) {
 		s.allowDrag = false;
 		s.deselectAll();
 		editor.jsdot.addEventHandler('create', tb.createNodeH(editor.jsdot));
+		editor.showNestedBar('createnode');
 	});
 	btnAddN.onDeselect = function() {
 		editor.jsdot.removeEventHandler('create');
+		editor.hideNestedBar('createnode');
 	};
 	
 	var btnAddE = document.createElement('button');
@@ -225,10 +247,12 @@ JSDot.Editor.MainBar.prototype = {
 		@return {doc_Handler} handler
 	*/
 	createNodeH: function(jsdot) {
+		var editor = this.editor;
 		return {
 			click: function(obj, evt) {
 				var n = jsdot.graph.createNode();
 				n.position = [evt.relX, evt.relY];
+				if (editor.currentNodeStencil) n.setStencil(editor.currentNodeStencil);
 				jsdot.fireEvent('created', n);
 			}
 		};
@@ -267,7 +291,6 @@ JSDot.Editor.MainBar.prototype = {
 */
 JSDot.Editor.LayoutBar = function(editor) {
 	var d = document.createElement('div');
-	d.setAttribute('class', 'jsdot-tb-nested');
 	
 	// mandatory fields for nested bars
 	this.name = 'layout';
@@ -469,4 +492,28 @@ JSDot.Editor.LayoutBar.prototype = {
 			});
 		};
 	},
+};
+
+/** @class Node creation toolbar.
+	Allows to select a stencil for the new nodes that will be created.
+	@constructor
+	@param {jsdot_Editor} editor
+*/
+JSDot.Editor.CreateNodeBar = function(editor) {
+	var d = document.createElement('div');
+	
+	// mandatory fields for nested bars
+	this.name = 'createnode';
+	this.container = d;
+	
+	var stc = document.createElement('select');
+	for (var i in JSDot.stencils) {
+		stc.add(new Option(i, i, i == editor.currentNodeStencil), null);
+	}
+	d.appendChild(stc);
+	
+	stc.addEventListener('change', function() {
+		editor.currentNodeStencil = this.value;
+		}, false);
+
 };
