@@ -335,5 +335,16 @@ JSDot.Selection.prototype = {
 			}
 		}
 	},
+	
+	/** Apply a function to selected edges.
+		For each selected edge f(n) is called.
+	*/
+	forEdges: function(f) {
+		for (var i in this.selection) {
+			if (this.selection[i].src) {
+				f(this.selection[i]);
+			}
+		}
+	},
 
 };

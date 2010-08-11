@@ -40,6 +40,7 @@ JSDot.Editor = function(jsdot, view, sel) {
 	for (var i in JSDot.stencils) { this.currentNodeStencil = i; break; };
 	for (var i in JSDot.edge_stencils) { this.currentEdgeStencil = i; break; };
 	new JSDot.Editor.MainBar(this, tb);
+	new JSDot.Editor.EditDialog(this);
 };
 
 JSDot.Editor.prototype = {
@@ -544,4 +545,119 @@ JSDot.Editor.CreateEdgeBar = function(editor) {
 		editor.currentEdgeStencil = this.value;
 		}, false);
 
+};
+
+/** @class Editing dialog.
+	This dialog allows to view and change properties like label text and stencil
+	of existing elements.
+	@constructor
+	@param {jsdot_Editor} editor
+*/
+JSDot.Editor.EditDialog = function(editor) {
+
+	/* insert html part of the dialog */
+	var dialog = document.createElement('div');
+	editor.view.container.appendChild(dialog);
+	$(dialog).dialog({ autoOpen: false });
+	
+	var msg = document.createElement('p');
+	msg.innerHTML = 'edit dialog';
+	dialog.appendChild(msg);
+	
+	var nodeForm = document.createElement('form');
+	dialog.appendChild(nodeForm);
+	var nodeFStcl = document.createElement('select');
+	nodeForm.appendChild(nodeFStcl);
+	nodeFStcl.addEventListener('change', function() {
+			var n = editor.selection.selection[0];
+			n.setStencil(this.value);
+			editor.jsdot.fireEvent('changed', n);
+			}, false);
+	var nodeFLabel = document.createElement('input');
+	nodeForm.appendChild(nodeFLabel);
+	nodeFLabel.addEventListener('change', function() {
+			var n = editor.selection.selection[0];
+			n.label.value = this.value;
+			editor.jsdot.fireEvent('changed', n);
+			}, false);
+	
+	var edgeForm = document.createElement('form');
+	dialog.appendChild(edgeForm);
+	var edgeFStcl = document.createElement('select');
+	edgeForm.appendChild(edgeFStcl);
+	edgeFStcl.addEventListener('change', function() {
+			var n = editor.selection.selection[0];
+			n.stencil = JSDot.edge_stencils[this.value] || editor.jsdot.graph.defaultEdgeStencil;
+			editor.jsdot.fireEvent('changed', n);
+			}, false);
+	var edgeFLabel = document.createElement('input');
+	edgeForm.appendChild(edgeFLabel);
+	
+	/** Toggle dialog.
+		If it's closed open it, if it's open close it.
+	*/
+	this.toggleOpen = function() {
+		if ($(dialog).dialog('isOpen')) {
+			$(dialog).dialog('close');
+		} else {
+			$(dialog).dialog('open');
+			handler.selectionchg();
+		}
+	};
+	
+	var handler = {
+		selectionchg: function(n) {
+		
+			/* if closed then do not update */
+			if (!$(dialog).dialog('isOpen')) return;
+			
+			var nnodes = 0, nedges = 0;
+			editor.selection.forNodes(function(){ ++nnodes; });
+			editor.selection.forEdges(function(){ ++nedges; });
+			if (nnodes + nedges == 0) {
+				msg.innerHTML = 'Nothing selected.';
+				$(nodeForm).hide();
+				$(edgeForm).hide();
+			} else if (nnodes + nedges > 1) {
+				/* multiple selection */
+				$(nodeForm).hide();
+				$(edgeForm).hide();
+				msg.innerHTML = (nnodes ? nnodes+' node'+(nnodes>1 ? 's' : '')+(nedges ? ' and ' : '') : '')
+						+ (nedges ? nedges+' edge'+(nedges>1 ? 's' : '') : '')
+						+ ' selected.';
+			} else {
+				/* single selection, show properties */
+				var e = editor.selection.selection[0];
+				if (e.edges) {
+					/* selected node */
+					msg.innerHTML = 'Node "'+e.name+'".';
+					
+					nodeFStcl.innerHTML = ''; /* remove options */
+					for (var i in JSDot.stencils) {
+						nodeFStcl.add(new Option(i, i, JSDot.stencils[i] == e.stencil), null);
+					}
+					
+					nodeFLabel.value = e.label.value;
+					
+					$(edgeForm).hide();
+					$(nodeForm).show();
+					
+				} else if (e.src) {
+					/* selected edge */
+					msg.innerHTML = 'Edge "'+e.id+'".';
+					
+					edgeFStcl.innerHTML = '';
+					for (var i in JSDot.edge_stencils) {
+						edgeFStcl.add(new Option(i, i, JSDot.edge_stencils[i] == e.stencil), null);
+					}
+					
+					$(nodeForm).hide();
+					$(edgeForm).show();
+				}
+			}
+		},
+	};
+	
+	editor.jsdot.addEventHandler('editdialog', handler);
+	this.toggleOpen();
 };
