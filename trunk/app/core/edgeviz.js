@@ -28,8 +28,11 @@ THE SOFTWARE.
 	then draws the line to visualize the edge being created,
 	and actually creates the edge when the second node is clicked.
 	@constuctor
+	@param {JSDot.jsdot_Impl} jsdot jsdot instance
+	@param {JSDot.View} view view where we are drawing
+	@param {JSDot.Editor} editor (optional) null or editor specifying the stencil
 */
-JSDot.EdgeViz = function(jsdot, view) {
+JSDot.EdgeViz = function(jsdot, view, editor) {
 	
 	/** Starting node for the edge. */
 	this.start = null;
@@ -37,6 +40,8 @@ JSDot.EdgeViz = function(jsdot, view) {
 	this.jsdot = jsdot;
 	
 	this.view = view;
+	
+	this.editor = editor;
 	
 	/** SVG line drawn on the view */
 	this.line = null;
@@ -71,6 +76,8 @@ JSDot.EdgeViz = function(jsdot, view) {
 		this.moveH = null;
 		this.line = null;
 		var e = this.jsdot.graph.createEdge(this.start, obj);
+		if (this.editor) e.stencil = JSDot.edge_stencils[this.editor.currentEdgeStencil]
+				|| this.jsdot.graph.defaultEdgeStencil;
 		this.start = null;
 		this.jsdot.fireEvent('created', e);
 	};

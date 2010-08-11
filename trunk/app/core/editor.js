@@ -122,11 +122,13 @@ JSDot.Editor.MainBar = function(editor, p) {
 	this.editor = editor;
 	
 	this.dragH = new JSDot.Drag(editor.jsdot, editor.view, editor.selection);
-	this.createEdgeH = new JSDot.EdgeViz(editor.jsdot, editor.view);
+	this.createEdgeH = new JSDot.EdgeViz(editor.jsdot, editor.view, editor);
 	this.layoutBar = new JSDot.Editor.LayoutBar(editor);
 	this.createNodeBar = new JSDot.Editor.CreateNodeBar(editor);
+	this.createEdgeBar = new JSDot.Editor.CreateEdgeBar(editor);
 	editor.addNestedBar(this.layoutBar);
 	editor.addNestedBar(this.createNodeBar);
+	editor.addNestedBar(this.createEdgeBar);
 	
 	var btnSel = document.createElement('button');
 	btnSel.innerHTML = 'Select';
@@ -175,7 +177,7 @@ JSDot.Editor.MainBar = function(editor, p) {
 	};
 	
 	var btnAddE = document.createElement('button');
-	btnAddE.innerHTML = 'Add node';
+	btnAddE.innerHTML = 'Add edge';
 	p.appendChild(btnAddE);
 	$(btnAddE).button({
 		text: false,
@@ -190,9 +192,11 @@ JSDot.Editor.MainBar = function(editor, p) {
 		s.allowDrag = false;
 		s.deselectAll();
 		editor.jsdot.addEventHandler('create', tb.createEdgeH);
+		editor.showNestedBar('createedge');
 	});
 	btnAddE.onDeselect = function() {
 		editor.jsdot.removeEventHandler('create');
+		editor.hideNestedBar('createedge');
 	};
 	
 	var btnRm = document.createElement('button');
@@ -238,7 +242,7 @@ JSDot.Editor.MainBar.prototype = {
 	layoutBar: null,
 	
 	/** Handler for drag&drop.
-		This is a {@link jsdot_Drag} created in {@link #register}.
+		This is a {@link jsdot_Drag} created in {@link #MainBar} constructor.
 	*/
 	dragH: null,
 	
@@ -259,7 +263,7 @@ JSDot.Editor.MainBar.prototype = {
 	},
 	
 	/** Handler for creating edges.
-		This is created in {@link #register}.
+		This is created in {@link #MainBar} constructor.
 		@type JSDot.EdgeViz
 	*/
 	createEdgeH: null,
@@ -514,6 +518,30 @@ JSDot.Editor.CreateNodeBar = function(editor) {
 	
 	stc.addEventListener('change', function() {
 		editor.currentNodeStencil = this.value;
+		}, false);
+
+};
+
+/** @class Edge creation toolbar.
+	Allows to select a stencil for the new edge that will be created.
+	@constructor
+	@param {jsdot_Editor} editor
+*/
+JSDot.Editor.CreateEdgeBar = function(editor) {
+	var d = document.createElement('div');
+	
+	// mandatory fields for nested bars
+	this.name = 'createedge';
+	this.container = d;
+	
+	var stc = document.createElement('select');
+	for (var i in JSDot.edge_stencils) {
+		stc.add(new Option(i, i, i == editor.currentEdgeStencil), null);
+	}
+	d.appendChild(stc);
+	
+	stc.addEventListener('change', function() {
+		editor.currentEdgeStencil = this.value;
 		}, false);
 
 };
