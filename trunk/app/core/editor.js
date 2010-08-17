@@ -596,17 +596,12 @@ JSDot.Editor.EditDialog = function(editor) {
 	msg.innerHTML = 'edit dialog';
 	dialog.appendChild(msg);
 	dialog.addEventListener('keypress', function(evt) {
-			switch (evt.keyCode) {
-				case 13: /* enter */
-					evt.preventDefault(); /* it would reload the page */
-					break;
-				case 27: /* escape */
-					handler.selectionchg(); /* reload values in dialog */
-					break;
+			if (evt.keyCode == 27) { /* escape */
+				handler.selectionchg(); /* reload values in dialog */
 			}
 			}, false);
 	
-	var nodeForm = document.createElement('form');
+	var nodeForm = document.createElement('div');
 	dialog.appendChild(nodeForm);
 	var nodeFStcl = document.createElement('select');
 	nodeForm.appendChild(nodeFStcl);
@@ -623,7 +618,7 @@ JSDot.Editor.EditDialog = function(editor) {
 			editor.jsdot.fireEvent('changed', n);
 			}, false);
 	
-	var edgeForm = document.createElement('form');
+	var edgeForm = document.createElement('div');
 	dialog.appendChild(edgeForm);
 	var edgeFStcl = document.createElement('select');
 	edgeForm.appendChild(edgeFStcl);
@@ -634,6 +629,11 @@ JSDot.Editor.EditDialog = function(editor) {
 			}, false);
 	var edgeFLabel = document.createElement('input');
 	edgeForm.appendChild(edgeFLabel);
+	edgeFLabel.addEventListener('change', function() {
+			var n = editor.selection.selection[0];
+			(new JSDot.Edge(editor.jsdot, n)).setLabel(this.value);
+			//editor.jsdot.fireEvent('changed', n);
+			}, false);
 	
 	/** Toggle dialog.
 		If it's closed open it, if it's open close it.
@@ -692,6 +692,8 @@ JSDot.Editor.EditDialog = function(editor) {
 					for (var i in JSDot.edge_stencils) {
 						edgeFStcl.add(new Option(i, i, JSDot.edge_stencils[i] == e.stencil), null);
 					}
+					
+					edgeFLabel.value = (e.label ? e.label.value : '');
 					
 					$(nodeForm).hide();
 					$(edgeForm).show();
