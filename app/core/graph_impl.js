@@ -68,11 +68,12 @@ JSDot.Graph_impl.prototype = {
 	
 	/** Create a new node in the current graph.
 		If a name is provided, and a node with the same name already exists
-		returns null.
+		returns null. If no name is given the next incremental one is used.
 		@param {String} name (optional) name of the node
-		@return {Node_impl} the created node
+		@param {Boolean} fire whether to fire a {@link doc_Handler.created} event or not, default is true
+		@return {JSDot.Node_impl} the created node
 	*/
-	createNode: function(name) {
+	createNode: function(name, fire) {
 		var nn; // node name
 		
 		if (name) {
@@ -87,37 +88,36 @@ JSDot.Graph_impl.prototype = {
 		var n = new JSDot.Node_impl(this, nn);
 		
 		this.nodes[nn] = n;
+		if (fire == undefined || fire) this.jsdot.fireEvent('created', n);
 		return n;
 	},
 	
 	/** Create a new edge in the current graph.
-		@param {Node_impl} src starting node
-		@param {Node_impl} dst ending node
-		@return {Edge_impl} the created edge
+		@param {JSDot.Node_impl} src starting node
+		@param {JSDot.Node_impl} dst ending node
+		@param {Boolean} fire whether to fire a {@link doc_Handler.created} event or not, default is true
+		@return {JSDot.Edge_impl} the created edge
 	*/
-	createEdge: function(src, dst) {
+	createEdge: function(src, dst, fire) {
 		var id; // node name
 		/* generate an index which isn't already used */
 		do {id = ++this.lastEId;} while (this.edges[id]);
 		
-		var e = {
-			'id': id,
-			'src': src,
-			'dst': dst,
-			'stencil': JSDot.edge_stencils['line'],
-		};
+		var e = new JSDot.Edge_impl(this, id, src, dst);
 		
 		src.edges[id] = e;
 		dst.edges[id] = e;
 		
 		this.edges[id] = e;
+		if (fire == undefined || fire) this.jsdot.fireEvent('created', e);
 		return e;
 	},
 	
 	/** Remove a node from current graph.
 		@param {Node_impl} n node to remove
+		@param {Boolean} fire whether to fire a {@link doc_Handler.removed} event or not, default is true
 	*/
-	removeNode: function(n) {
+	removeNode: function(n, fire) {
 		/* remove edges */
 		var e;
 		for (id in n.edges) {
@@ -132,14 +132,17 @@ JSDot.Graph_impl.prototype = {
 		}
 		
 		delete this.nodes[n.name];
+		if (fire == undefined || fire) this.jsdot.fireEvent('removed', n);
 	},
 	
 	/** Remove an edge from current graph.
 		@param {Edge_impl} e edge to remove
+		@param {Boolean} fire whether to fire a {@link doc_Handler.removed} event or not, default is true
 	*/
-	removeEdge: function(e) {
+	removeEdge: function(e, fire) {
 		delete this.edges[e.id];
 		delete e.src.edges[e.id];
 		delete e.dst.edges[e.id];
+		if (fire == undefined || fire) this.jsdot.fireEvent('removed', e);
 	},
 };

@@ -28,10 +28,11 @@ THE SOFTWARE.
 /** @class Node internal representation.
 	@constructor
 	Creates a new node.
-	@param {Graph_impl} graph graph to which the new node belongs
+	@param {JSDot.Graph_impl} graph graph to which the new node belongs
 	@param {String} name name of the new node
 */
 JSDot.Node_impl = function(graph, name) {
+	this.graph = graph;
 	this.name = name;
 	this.label = {'type': 'plain', 'value': name};
 	this.position = [0,0];
@@ -41,6 +42,42 @@ JSDot.Node_impl = function(graph, name) {
 
 JSDot.Node_impl.prototype = {
 
+	/** Set node's label.
+		Fires a {@link doc_Handler.changed} event.
+		@param {String} l new label
+		@param {Boolean} fire whether to fire the event or not, default is true
+	*/
+	setLabel: function(l, fire) {
+		if (this.label) {
+			this.label.value = l;
+		} else {
+			this.label = {'type': 'plain', 'value': l};
+		}
+		if (fire == undefined || fire) this.graph.jsdot.fireEvent('changed', this);
+	},
+	
+	/** Set node's position.
+		Fires a {@link doc_Handler.moved} event.
+		@param {Array} p new position in the form [x, y]
+		@param {Boolean} fire whether to fire the event or not, default is true
+	*/
+	setPosition: function(p, fire) {
+		this.position = p;
+		if (fire == undefined || fire) this.graph.jsdot.fireEvent('moved', this);
+	},
+
+	/** Set node stencil.
+		Set which stencil should be used to draw the node.
+		<br>If the choosen stencil doesn't exist, the default one is set.
+		<br>Fires a {@link doc_Handler.changed} event.
+		@param {String} name name of the stencil
+		@param {Boolean} fire whether to fire the event or not, default is true
+	*/
+	setStencil: function(name, fire) {
+		this.stencil = JSDot.stencils[name] || jsdot.graph.defaultNodeStencil;
+		if (fire == undefined || fire) this.graph.jsdot.fireEvent('changed', this);
+	},
+
 	/** Bounding box of the node's shape.
 		Bounding box contains 'height', 'width', 'x', 'y' and is relative to SVG.
 		@return {Object} bounding box
@@ -48,15 +85,6 @@ JSDot.Node_impl.prototype = {
 	getBBox: function() {
 		if (this.stencil) return this.stencil.getBBox(this);
 		return {'height': 0, 'width': 0, 'x': this.position[0], 'y': this.position[1] };
-	},
-
-	/** Set node stencil.
-		Set which stencil should be used to draw the node.
-		<br>If the choosen stencil doesn't exist, the default one is set.
-		@param {String} name name of the stencil
-	*/
-	setStencil: function(name) {
-		this.stencil = JSDot.stencils[name] || jsdot.graph.defaultNodeStencil;
 	},
 
 };

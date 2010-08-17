@@ -25,30 +25,47 @@ THE SOFTWARE.
 
 */
 
-/** @class Edge API
-	API to modify an edge.
+/** @class Edge internal representation.
 	@constructor
-	@private
-	Create an object that can be used to modify an edge.
-	@param {Edge_impl} impl internal representation of the edge that will be modified
+	Creates a new edge.
+	@param {JSDot.Graph_impl} graph graph to which the new node belongs
+	@param {String} id id of the new edge
+	@param {JSDot.Node_impl} starting node
+	@param {JSDot.Node_impl} dst ending node
 */
-JSDot.Edge = function(jsdot, impl) {
+JSDot.Edge_impl = function(graph, id, src, dst) {
+	this.id = id;
+	this.src = src;
+	this.dst = dst;
+	this.label = null;
+	this.stencil = graph.defaultEdgeStencil;
+};
+
+JSDot.Edge_impl.prototype = {
+
+	/** Set edge's label.
+		Fires a {@link doc_Handler.changed} event.
+		@param {String} l new label
+		@param {Boolean} fire whether to fire a {@link doc_Handler.changed} event or not, default is true
+	*/
+	setLabel: function(l, fire) {
+		if (this.label) {
+			this.label.value = l;
+		} else {
+			this.label = {'type': 'plain', 'value': l};
+		}
+		if (fire == undefined || fire) jsdot.fireEvent('changed', this);
+	},
 
 	/** Set edge stencil.
 		Set which stencil should be used to draw the edge.
 		<br>If the choosen stencil doesn't exist, the default one is set.
 		@param {String} name name of the stencil
+		@param {Boolean} fire whether to fire a {@link doc_Handler.changed} event or not, default is true
 	*/
-	this.setStencil = function(name) {
-		impl.setStencil(name);
-	};
-
-	/** Set edge's label.
-		Fires a {@link doc_Handler.changed} event.
-		@param {String} l new label
-	*/
-	this.setLabel = function(l) {
-		impl.setLabel(l);
-	};
+	setStencil: function(name, fire) {
+		this.stencil = JSDot.edge_stencils[name] || this.graph.defaultEdgeStencil;
+		if (fire == undefined || fire) jsdot.fireEvent('changed', this);
+	},
 
 };
