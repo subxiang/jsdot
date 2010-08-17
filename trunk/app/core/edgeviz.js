@@ -46,8 +46,11 @@ JSDot.EdgeViz = function(jsdot, view, editor) {
 	/** SVG line drawn on the view */
 	this.line = null;
 	
-	/** The register mousemove listener. */
+	/** The registered mousemove listener. */
 	this.moveH = null;
+	
+	/** Registered handler for cancelling drawing (escape key). */
+	this.cancelH = null;
 	
 	/** Handler for the JSDot click event. */
 	this.click = function(obj, evt) {
@@ -67,18 +70,18 @@ JSDot.EdgeViz = function(jsdot, view, editor) {
 			this.line.setAttribute('y2', evt.relY);
 			this.moveH = this.mousemove(this.view, this.line);
 			this.view.svgroot.addEventListener('mousemove', this.moveH, false);
+			this.cancelH = function(o) { return function(e) { if (e.keyCode == 27) o.cancel(); }; }(this);
+			document.addEventListener('keydown', this.cancelH, false);
+			window.focus();
 			return;
 		}
 		
 		/* selection of second node */
-		this.view.svgroot.removeEventListener('mousemove', this.moveH, false);
-		this.view.svgroot.removeChild(this.line);
-		this.moveH = null;
-		this.line = null;
+		
 		var e = this.jsdot.graph.createEdge(this.start, obj);
 		if (this.editor) e.stencil = JSDot.edge_stencils[this.editor.currentEdgeStencil]
 				|| this.jsdot.graph.defaultEdgeStencil;
-		this.start = null;
+		this.cancel(); /* remove line and handlers */
 		this.jsdot.fireEvent('created', e);
 	};
 	
@@ -89,6 +92,17 @@ JSDot.EdgeViz = function(jsdot, view, editor) {
 			line.setAttribute('x2', evt.relX);
 			line.setAttribute('y2', evt.relY);
 		};
+	};
+	
+	/** Stop drawing. */
+	this.cancel = function() {
+		if (this.moveH) this.view.svgroot.removeEventListener('mousemove', this.moveH, false);
+		if (this.cancelH) document.removeEventListener('keydown', this.cancelH, false);
+		if (this.line) this.view.svgroot.removeChild(this.line);
+		this.moveH = null;
+		this.cancelH = null;
+		this.line = null;
+		this.start = null;
 	};
 
 };

@@ -197,6 +197,7 @@ JSDot.Editor.MainBar = function(editor, p) {
 	});
 	btnAddE.onDeselect = function() {
 		editor.jsdot.removeEventHandler('create');
+		tb.createEdgeH.cancel(); /* stop if you were drawing */
 		editor.hideNestedBar('createedge');
 	};
 	
