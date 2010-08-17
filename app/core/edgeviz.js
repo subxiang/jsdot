@@ -55,8 +55,8 @@ JSDot.EdgeViz = function(jsdot, view, editor) {
 	/** Handler for the JSDot click event. */
 	this.click = function(obj, evt) {
 	
-		/* if it's not a node do noting */
-		if (!obj || !obj.edges) return;
+		/* if it's not a node do nothing */
+		if (!obj || !obj.isNode) return;
 		
 		/* selection of first node */
 		if (!this.start) {

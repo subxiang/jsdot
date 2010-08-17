@@ -38,6 +38,9 @@ JSDot.Node_impl = function(graph, name) {
 	this.position = [0,0];
 	this.stencil = graph.defaultNodeStencil;
 	this.edges = {};
+	
+	/** Distiguishes between nodes and edges. */
+	this.isNode = true;
 };
 
 JSDot.Node_impl.prototype = {

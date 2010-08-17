@@ -46,7 +46,7 @@ JSDot.Drag = function(jsdot, view, sel) {
 		var s = (sel.selection.length == 0 ? (obj ? [obj] : []) : sel.selection);
 		
 		for (var i in s) {
-			if (!s[i].src) {
+			if (s[i].isNode) {
 				/* it is a node, save initial position and append to list */
 				s[i].drag = s[i].position;
 				h.nodes.push(s[i]);

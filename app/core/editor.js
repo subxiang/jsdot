@@ -307,9 +307,9 @@ JSDot.Editor.MainBar.prototype = {
 	removeH: function(jsdot) {
 		return {
 			click: function(obj, evt) {
-				if (obj && !obj.src) { /* node */
+				if (obj && obj.isNode) { /* node */
 					jsdot.graph.removeNode(obj);
-				} else if (obj && obj.src) { /* edge */
+				} else if (obj && obj.isEdge) { /* edge */
 					jsdot.graph.removeEdge(obj);
 				}
 			}
@@ -658,7 +658,7 @@ JSDot.Editor.EditDialog = function(editor) {
 			} else {
 				/* single selection, show properties */
 				var e = editor.selection.selection[0];
-				if (e.edges) {
+				if (e.isNode) {
 					/* selected node */
 					msg.innerHTML = 'Node "'+e.name+'".';
 					
@@ -672,7 +672,7 @@ JSDot.Editor.EditDialog = function(editor) {
 					$(edgeForm).hide();
 					$(nodeForm).show();
 					
-				} else if (e.src) {
+				} else if (e.isEdge) {
 					/* selected edge */
 					msg.innerHTML = 'Edge "'+e.id+'".';
 					

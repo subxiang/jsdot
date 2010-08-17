@@ -40,6 +40,9 @@ JSDot.Edge_impl = function(graph, id, src, dst) {
 	this.dst = dst;
 	this.label = null;
 	this.stencil = graph.defaultEdgeStencil;
+	
+	/** Distiguishes between nodes and edges. */
+	this.isEdge = true;
 };
 
 JSDot.Edge_impl.prototype = {
