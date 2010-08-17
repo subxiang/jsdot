@@ -41,6 +41,12 @@ JSDot.Edge_impl = function(graph, id, src, dst) {
 	this.label = null;
 	this.stencil = graph.defaultEdgeStencil;
 	
+	/** This can be arbitrary data attached to the edge.
+		@see setData
+		@see getData
+	*/
+	this.userData = {};
+	
 	/** Distiguishes between nodes and edges. */
 	this.isEdge = true;
 };
@@ -70,6 +76,25 @@ JSDot.Edge_impl.prototype = {
 	setStencil: function(name, fire) {
 		this.stencil = JSDot.edge_stencils[name] || this.graph.defaultEdgeStencil;
 		if (fire == undefined || fire) this.graph.jsdot.fireEvent('changed', this);
+	},
+	
+	/** Attach data to the edge.
+		You will have to use {@link getData}(key) to retrieve it
+		at a later time.
+		@param {String} key index identifying data
+		@param {Object} value the value to store
+	*/
+	setData: function(key, value) {
+		this.userData[key] = value;
+	},
+	
+	/** Retrive data attached to the edge.
+		Retrieve data which has been set using {@link setData}.
+		@param {String} key index identifying data
+		@return {Object} attached data identified by key
+	*/
+	getData: function(key) {
+		return this.userData[key];
 	},
 
 };

@@ -39,6 +39,12 @@ JSDot.Node_impl = function(graph, name) {
 	this.stencil = graph.defaultNodeStencil;
 	this.edges = {};
 	
+	/** This can be arbitrary data attached to the node.
+		@see setData
+		@see getData
+	*/
+	this.userData = {};
+	
 	/** Distiguishes between nodes and edges. */
 	this.isNode = true;
 };
@@ -79,6 +85,25 @@ JSDot.Node_impl.prototype = {
 	setStencil: function(name, fire) {
 		this.stencil = JSDot.stencils[name] || jsdot.graph.defaultNodeStencil;
 		if (fire == undefined || fire) this.graph.jsdot.fireEvent('changed', this);
+	},
+	
+	/** Attach data to the node.
+		You will have to use {@link getData}(key) to retrieve it
+		at a later time.
+		@param {String} key index identifying data
+		@param {Object} value the value to store
+	*/
+	setData: function(key, value) {
+		this.userData[key] = value;
+	},
+	
+	/** Retrive data attached to the node.
+		Retrieve data which has been set using {@link setData}.
+		@param {String} key index identifying data
+		@return {Object} attached data identified by key
+	*/
+	getData: function(key) {
+		return this.userData[key];
 	},
 
 	/** Bounding box of the node's shape.
