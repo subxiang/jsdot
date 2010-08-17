@@ -277,11 +277,10 @@ JSDot.Selection.prototype = {
 	*/
 	select: function(n) {
 		if (n.selected) return;
-		if (n.src && this.allowEdges ||
-				!n.src && this.allowNodes) {
+		if (n.isEdge && this.allowEdges ||
+				n.isNode && this.allowNodes) {
 			/* it is an edge and we are allowed to select them,
 			   or it is a node and they are allowed. */
-			/* n.src is defined only for edges */
 			if (!this.allowMultiple) this.deselectAll();
 			n.selected = true;
 			this.selection.push(n);
@@ -320,7 +319,7 @@ JSDot.Selection.prototype = {
 	*/
 	firstNode: function() {
 		for (var i in this.selection) {
-			if (this.selection[i].edges) return this.selection[i];
+			if (this.selection[i].isNode) return this.selection[i];
 		}
 		return null;
 	},
@@ -330,7 +329,7 @@ JSDot.Selection.prototype = {
 	*/
 	forNodes: function(f) {
 		for (var i in this.selection) {
-			if (this.selection[i].edges) {
+			if (this.selection[i].isNode) {
 				f(this.selection[i]);
 			}
 		}
@@ -341,7 +340,7 @@ JSDot.Selection.prototype = {
 	*/
 	forEdges: function(f) {
 		for (var i in this.selection) {
-			if (this.selection[i].src) {
+			if (this.selection[i].isEdge) {
 				f(this.selection[i]);
 			}
 		}

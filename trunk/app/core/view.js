@@ -211,7 +211,7 @@ JSDot.View.prototype = {
 		};
 		
 		handler.created = function(n) {
-			if (n.src) {
+			if (n.isEdge) {
 				view.drawEdge(n);
 			} else {
 				view.drawNodeWithEdges(n);
@@ -219,7 +219,7 @@ JSDot.View.prototype = {
 		};
 		
 		handler.removed = function(n) {
-			if (n.src) {
+			if (n.isEdge) {
 				view.removeEdge(n);
 			} else {
 				view.removeNode(n);
@@ -230,7 +230,7 @@ JSDot.View.prototype = {
 		};
 		
 		handler.moved = function(n) {
-			if (n.edges) { /* it is a node */
+			if (n.isNode) { /* it is a node */
 				view.updateNodePos(n);
 				for (var i in n.edges) {
 					view.updateEdgePos(n.edges[i]);
@@ -239,7 +239,7 @@ JSDot.View.prototype = {
 		};
 		
 		handler.changed = function(n) {
-			if (n.src) { /* edge */
+			if (n.isEdge) { /* edge */
 				view.removeEdge(n);
 				view.drawEdge(n);
 			} else { /* node */
