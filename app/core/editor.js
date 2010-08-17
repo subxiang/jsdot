@@ -558,11 +558,21 @@ JSDot.Editor.EditDialog = function(editor) {
 	/* insert html part of the dialog */
 	var dialog = document.createElement('div');
 	editor.view.container.appendChild(dialog);
-	$(dialog).dialog({ autoOpen: false });
+	$(dialog).dialog({ autoOpen: false, closeOnEscape: false });
 	
 	var msg = document.createElement('p');
 	msg.innerHTML = 'edit dialog';
 	dialog.appendChild(msg);
+	dialog.addEventListener('keypress', function(evt) {
+			switch (evt.keyCode) {
+				case 13: /* enter */
+					evt.preventDefault(); /* it would reload the page */
+					break;
+				case 27: /* escape */
+					handler.selectionchg(); /* reload values in dialog */
+					break;
+			}
+			}, false);
 	
 	var nodeForm = document.createElement('form');
 	dialog.appendChild(nodeForm);
