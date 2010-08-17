@@ -40,7 +40,7 @@ JSDot.Editor = function(jsdot, view, sel) {
 	for (var i in JSDot.stencils) { this.currentNodeStencil = i; break; };
 	for (var i in JSDot.edge_stencils) { this.currentEdgeStencil = i; break; };
 	new JSDot.Editor.MainBar(this, tb);
-	new JSDot.Editor.EditDialog(this);
+	this.editDialog = new JSDot.Editor.EditDialog(this);
 };
 
 JSDot.Editor.prototype = {
@@ -66,6 +66,12 @@ JSDot.Editor.prototype = {
 		@type String
 	*/
 	currentEdgeStencil: null,
+	
+	/** Instance of the dialog.
+		Instance of {@link JSDot.Editor.EditDialog} created by
+		{@link JSDot.Editor} constructor.
+	*/
+	editDialog: null,
 
 	/** Set selected button.
 		Change tool icon highlighting to show which button is selected
@@ -221,6 +227,17 @@ JSDot.Editor.MainBar = function(editor, p) {
 	btnRm.onDeselect = function() {
 		editor.jsdot.removeEventHandler('remove');
 	};
+	
+	var btnED = document.createElement('button');
+	btnED.innerHTML = 'Edit properties';
+	p.appendChild(btnED);
+	$(btnED).button({
+		text: false,
+		icons: { primary: 'jsdot-icon jsdot-icon-editdialog' }
+	})
+	.click(function() {
+		editor.editDialog.toggleOpen();
+	});
 };
 
 JSDot.Editor.MainBar.prototype = {
@@ -559,7 +576,8 @@ JSDot.Editor.EditDialog = function(editor) {
 	/* insert html part of the dialog */
 	var dialog = document.createElement('div');
 	editor.view.container.appendChild(dialog);
-	$(dialog).dialog({ autoOpen: false, closeOnEscape: false });
+	$(dialog).dialog({ autoOpen: false, closeOnEscape: false,
+			position: 'right', dialogClass: 'jsdot-editdialog' });
 	
 	var msg = document.createElement('p');
 	msg.innerHTML = 'edit dialog';
