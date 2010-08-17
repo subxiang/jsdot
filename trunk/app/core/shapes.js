@@ -505,6 +505,10 @@ JSDot.edge_shapes = {
 			var l = JSDot.helper.cesvg('path');
 			e.view.line = l;
 			p.appendChild(l);
+			l = JSDot.helper.cesvg('path');
+			e.view.handle = l;
+			l.setAttribute('class', 'jsdot-edge-handle');
+			p.appendChild(l);
 			return l;
 		},
 		
@@ -512,6 +516,9 @@ JSDot.edge_shapes = {
 			var p1 = e.view.start;
 			var p2 = e.view.end;
 			e.view.line.setAttribute(
+				'd', 'M'+p1[0]+','+p1[1]+'L'+p2[0]+','+p2[1]
+			);
+			e.view.handle.setAttribute(
 				'd', 'M'+p1[0]+','+p1[1]+'L'+p2[0]+','+p2[1]
 			);
 		}
@@ -707,6 +714,36 @@ JSDot.node_label_stencils = {
 			var l = n.view.label;
 			l.setAttribute('x', n.position[0]);
 			l.setAttribute('y', n.position[1]);
+		},
+		
+		getSize: function(n) {
+			return n.view.label.getBBox();
+			//return n.view.label.getBoundingClientRect();
+		},
+	},
+};
+
+/** Stencils for drawing edge labels.
+*/
+JSDot.edge_label_stencils = {
+
+	'plain': {
+	
+		draw: function(n, p) {
+			var t = JSDot.helper.cesvg('text');
+			t.setAttribute('class', 'jsdot-edge-label');
+			t.textContent = n.label.value;
+			p.appendChild(t);
+			n.view.label = t;
+			return t;
+		},
+		
+		setPosition: function(n) {
+			var p1 = n.view.start;
+			var p2 = n.view.end;
+			var l = n.view.label;
+			l.setAttribute('x', p1[0]+(p2[0]-p1[0])/2);
+			l.setAttribute('y', p1[1]+(p2[1]-p1[1])/2);
 		},
 		
 		getSize: function(n) {

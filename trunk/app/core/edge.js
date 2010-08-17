@@ -44,4 +44,17 @@ JSDot.Edge = function(jsdot, impl) {
 		jsdot.fireEvent('changed', impl);
 	};
 
+	/** Set edge's label.
+		Fires a {@link doc_Handler.changed} event.
+		@param {String} l new label
+	*/
+	this.setLabel = function(l) {
+		if (impl.label) {
+			impl.label.value = l;
+		} else {
+			impl.label = {'type': 'plain', 'value': l};
+		}
+		jsdot.fireEvent('changed', impl);
+	};
+
 };
