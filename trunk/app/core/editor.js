@@ -279,16 +279,16 @@ JSDot.Editor.MainBar.prototype = {
 	dragH: null,
 	
 	/** Construct handler for creating nodes.
-		@param {jsdot_Impl} jsdot jsdot instance
+		@param {JSDot.jsdot_Impl} jsdot jsdot instance
 		@return {doc_Handler} handler
 	*/
 	createNodeH: function(jsdot) {
 		var editor = this.editor;
 		return {
 			click: function(obj, evt) {
-				var n = jsdot.graph.createNode();
-				n.position = [evt.relX, evt.relY];
-				if (editor.currentNodeStencil) n.setStencil(editor.currentNodeStencil);
+				var n = jsdot.graph.createNode(null, false);
+				n.setPosition([evt.relX, evt.relY], false);
+				if (editor.currentNodeStencil) n.setStencil(editor.currentNodeStencil, false);
 				jsdot.fireEvent('created', n);
 			}
 		};
@@ -309,10 +309,8 @@ JSDot.Editor.MainBar.prototype = {
 			click: function(obj, evt) {
 				if (obj && !obj.src) { /* node */
 					jsdot.graph.removeNode(obj);
-					jsdot.fireEvent('removed', obj);
 				} else if (obj && obj.src) { /* edge */
 					jsdot.graph.removeEdge(obj);
-					jsdot.fireEvent('removed', obj);
 				}
 			}
 		};
@@ -405,8 +403,7 @@ JSDot.Editor.LayoutBar.prototype = {
 			
 			/* update nodes */
 			s.forNodes(function(n) {
-				n.position[0] = l + n.getBBox().width/2;
-				editor.jsdot.fireEvent('moved', n);
+				n.setPosition([ l + n.getBBox().width/2, n.position[1] ]);
 			});
 		};
 	},
@@ -429,8 +426,7 @@ JSDot.Editor.LayoutBar.prototype = {
 			
 			/* update nodes */
 			s.forNodes(function(n) {
-				n.position[0] = l;
-				editor.jsdot.fireEvent('moved', n);
+				n.setPosition([ l, n.position[1] ]);
 			});
 		};
 	},
@@ -453,8 +449,7 @@ JSDot.Editor.LayoutBar.prototype = {
 			
 			/* update nodes */
 			s.forNodes(function(n) {
-				n.position[0] = r - n.getBBox().width/2;
-				editor.jsdot.fireEvent('moved', n);
+				n.setPosition([ r - n.getBBox().width/2, n.position[1] ]);
 			});
 		};
 	},
@@ -475,8 +470,7 @@ JSDot.Editor.LayoutBar.prototype = {
 			
 			/* update nodes */
 			s.forNodes(function(n) {
-				n.position[1] = y + n.getBBox().height/2;
-				editor.jsdot.fireEvent('moved', n);
+				n.setPosition([ n.position[0], y + n.getBBox().height/2 ]);
 			});
 		};
 	},
@@ -499,8 +493,7 @@ JSDot.Editor.LayoutBar.prototype = {
 			
 			/* update nodes */
 			s.forNodes(function(n) {
-				n.position[1] = top;
-				editor.jsdot.fireEvent('moved', n);
+				n.setPosition([ n.position[0], top ]);
 			});
 		};
 	},
@@ -523,8 +516,7 @@ JSDot.Editor.LayoutBar.prototype = {
 			
 			/* update nodes */
 			s.forNodes(function(n) {
-				n.position[1] = y - n.getBBox().height/2;
-				editor.jsdot.fireEvent('moved', n);
+				n.setPosition([ n.position[0], y - n.getBBox().height/2 ]);
 			});
 		};
 	},
@@ -608,14 +600,12 @@ JSDot.Editor.EditDialog = function(editor) {
 	nodeFStcl.addEventListener('change', function() {
 			var n = editor.selection.selection[0];
 			n.setStencil(this.value);
-			editor.jsdot.fireEvent('changed', n);
 			}, false);
 	var nodeFLabel = document.createElement('input');
 	nodeForm.appendChild(nodeFLabel);
 	nodeFLabel.addEventListener('change', function() {
 			var n = editor.selection.selection[0];
-			n.label.value = this.value;
-			editor.jsdot.fireEvent('changed', n);
+			n.setLabel(this.value);
 			}, false);
 	
 	var edgeForm = document.createElement('div');
@@ -624,15 +614,13 @@ JSDot.Editor.EditDialog = function(editor) {
 	edgeForm.appendChild(edgeFStcl);
 	edgeFStcl.addEventListener('change', function() {
 			var n = editor.selection.selection[0];
-			n.stencil = JSDot.edge_stencils[this.value] || editor.jsdot.graph.defaultEdgeStencil;
-			editor.jsdot.fireEvent('changed', n);
+			n.setStencil(this.value);
 			}, false);
 	var edgeFLabel = document.createElement('input');
 	edgeForm.appendChild(edgeFLabel);
 	edgeFLabel.addEventListener('change', function() {
 			var n = editor.selection.selection[0];
-			(new JSDot.Edge(editor.jsdot, n)).setLabel(this.value);
-			//editor.jsdot.fireEvent('changed', n);
+			n.setLabel(this.value);
 			}, false);
 	
 	/** Toggle dialog.

@@ -78,9 +78,8 @@ JSDot.EdgeViz = function(jsdot, view, editor) {
 		
 		/* selection of second node */
 		
-		var e = this.jsdot.graph.createEdge(this.start, obj);
-		if (this.editor) e.stencil = JSDot.edge_stencils[this.editor.currentEdgeStencil]
-				|| this.jsdot.graph.defaultEdgeStencil;
+		var e = this.jsdot.graph.createEdge(this.start, obj, false);
+		if (this.editor) e.setStencil(this.editor.currentEdgeStencil, false);
 		this.cancel(); /* remove line and handlers */
 		this.jsdot.fireEvent('created', e);
 	};
