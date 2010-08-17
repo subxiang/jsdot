@@ -48,12 +48,7 @@ JSDot.Node = function(jsdot, impl) {
 		@param {String} l new label
 	*/
 	this.setLabel = function(l) {
-		if (impl.label) {
-			impl.label.value = l;
-		} else {
-			impl.label = {'type': 'plain', 'value': l};
-		}
-		jsdot.fireEvent('changed', impl);
+		impl.setLabel(l);
 	};
 	
 	/** Set node's position.
@@ -61,25 +56,24 @@ JSDot.Node = function(jsdot, impl) {
 		@param {Array} p new position in the form [x, y]
 	*/
 	this.setPosition = function(p) {
-		impl.position = p;
-		jsdot.fireEvent('moved', impl);
+		impl.setPosition(p);
 	};
 	
 	/** Returns node's current position.
 		@retun {Array} node's position in the form [x, y]
 	*/
 	this.getPosition = function() {
-		return this.position;
+		return impl.position;
 	};
 
 	/** Set node stencil.
 		Set which stencil should be used to draw the node.
 		<br>If the choosen stencil doesn't exist, the default one is set.
+		<br>Fires a {@link doc_Handler.changed} event.
 		@param {String} name name of the stencil
 	*/
 	this.setStencil = function(name) {
 		impl.setStencil(name);
-		jsdot.fireEvent('changed', impl);
 	};
 
 };

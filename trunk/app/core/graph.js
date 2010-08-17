@@ -41,25 +41,26 @@ JSDot.Graph = function(jsdot, graph) {
 		If a name is provided, and a node with the same name already exists
 		returns null.
 		@param {String} name (optional) name of the node
-		@return {Node} the new node
+		@return {JSDot.Node} the new node
 	*/
 	this.createNode = function(name) {
 		var n = graph.createNode(name);
-		if (!n) return null;
-		jsdot.fireEvent('created', n);
-		return new JSDot.Node(jsdot, n);
+		if (n) {
+			return new JSDot.Node(jsdot, n);
+		} else {
+			return null;
+		}
 	};
 
 	/** Create an edge between two nodes.
-		@param {Node} src starting {@link Node} or its name
-		@param {Node} dst ending {@link Node} or its name
-		@return {Edge} the new edge
+		@param {JSDot.Node} src starting {@link JSDot.Node} or its name
+		@param {JSDot.Node} dst ending {@link JSDot.Node} or its name
+		@return {JSDot.Edge} the new edge
 	*/
 	this.createEdge = function(src, dst) {
 		if (typeof src != 'string') src = src.getName();
 		if (typeof dst != 'string') dst = dst.getName();
 		var e = graph.createEdge(graph.nodes[src], graph.nodes[dst]);
-		jsdot.fireEvent('created', e);
 		return new JSDot.Edge(jsdot, e);
 	};
 
