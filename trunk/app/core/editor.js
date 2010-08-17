@@ -135,7 +135,10 @@ JSDot.Editor.MainBar = function(editor, p) {
 	this.createEdgeBar = new JSDot.Editor.CreateEdgeBar(editor);
 	
 	var spc = document.createElement('div');
-	spc.setAttribute('class', 'jsdot-tb-handle');
+	spc.setAttribute('class', 'jsdot-tb-handleL');
+	p.appendChild(spc);
+	spc = document.createElement('div');
+	spc.setAttribute('class', 'jsdot-tb-handleR');
 	p.appendChild(spc);
 	$(p).draggable({ handle: '.jsdot-tb-handle' });
 	
