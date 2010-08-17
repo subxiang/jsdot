@@ -51,8 +51,9 @@ doc_Handler = function() {};
 	elements.
 	
 	@param {Object} what Element (node/edge) whose selected status has changed.
+	@param {Boolean} s true if the element has been selected, false if deselected
 */
-doc_Handler.selectionchg = function(what) {};
+doc_Handler.selectionchg = function(what, s) {};
 
 /** Click event.
 	Fired by {@link jsdot_Selection}.<br>

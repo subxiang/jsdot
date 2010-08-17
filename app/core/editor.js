@@ -636,7 +636,7 @@ JSDot.Editor.EditDialog = function(editor) {
 	};
 	
 	var handler = {
-		selectionchg: function(n) {
+		selectionchg: function(/*n, s*/) {
 		
 			/* if closed then do not update */
 			if (!$(dialog).dialog('isOpen')) return;
