@@ -236,8 +236,14 @@ JSDot.View.prototype = {
 		var handler = {};
 		var view = this;
 		
-		handler.selectionchg = function(n) {
-			n.stencil.highlight(n, n.selected);
+		handler.selectionchg = function(n, s) {
+			var d;
+			if (n.isNode) {
+				d = view.nodeData[n.name];
+			} else {
+				d = view.edgeData[n.id];
+			}
+			n.stencil.highlight(n, d, s);
 		};
 		
 		handler.created = function(n) {

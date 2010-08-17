@@ -376,9 +376,9 @@ JSDot.stencils = {
 		
 		highlight: function(n, d, y) {
 			if (y) {
-				n.view.group.setAttribute('class', this.cssClass+' '+this.cssHl);
+				d.group.setAttribute('class', this.cssClass+' '+this.cssHl);
 			} else {
-				n.view.group.setAttribute('class', this.cssClass);
+				d.group.setAttribute('class', this.cssClass);
 			};
 		}
 	},
@@ -413,9 +413,9 @@ JSDot.stencils = {
 		
 		highlight: function(n, d, y) {
 			if (y) {
-				n.view.group.setAttribute('class', this.cssClass+' '+this.cssHl);
+				d.group.setAttribute('class', this.cssClass+' '+this.cssHl);
 			} else {
-				n.view.group.setAttribute('class', this.cssClass);
+				d.group.setAttribute('class', this.cssClass);
 			};
 		}
 	},
@@ -450,9 +450,9 @@ JSDot.stencils = {
 		
 		highlight: function(n, d, y) {
 			if (y) {
-				n.view.group.setAttribute('class', this.cssClass+' '+this.cssHl);
+				d.group.setAttribute('class', this.cssClass+' '+this.cssHl);
 			} else {
-				n.view.group.setAttribute('class', this.cssClass);
+				d.group.setAttribute('class', this.cssClass);
 			};
 		}
 	},
@@ -487,9 +487,9 @@ JSDot.stencils = {
 		
 		highlight: function(n, d, y) {
 			if (y) {
-				n.view.group.setAttribute('class', this.cssClass+' '+this.cssHl);
+				d.group.setAttribute('class', this.cssClass+' '+this.cssHl);
 			} else {
-				n.view.group.setAttribute('class', this.cssClass);
+				d.group.setAttribute('class', this.cssClass);
 			};
 		}
 	},

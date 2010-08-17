@@ -188,7 +188,7 @@ JSDot.Selection.prototype = {
 				case 'e':
 					/* node or edge */
 					/* selection is allowed, so we (de)select */
-					if (this.evtTarget.selected) {
+					if (this.isSelected(this.evtTarget)) {
 						if (evt.ctrlKey) {
 							this.deselect(this.evtTarget);
 						} else {
@@ -276,15 +276,14 @@ JSDot.Selection.prototype = {
 		@see allowMultiple
 	*/
 	select: function(n) {
-		if (n.selected) return;
+		if (this.isSelected(n)) return;
 		if (n.isEdge && this.allowEdges ||
 				n.isNode && this.allowNodes) {
 			/* it is an edge and we are allowed to select them,
 			   or it is a node and they are allowed. */
 			if (!this.allowMultiple) this.deselectAll();
-			n.selected = true;
 			this.selection.push(n);
-			this.jsdot.fireEvent('selectionchg', n);
+			this.jsdot.fireEvent('selectionchg', n, true);
 		};
 	},
 	
@@ -292,10 +291,9 @@ JSDot.Selection.prototype = {
 		Fires a 'selectionchg' event.
 	*/
 	deselect: function(n) {
-		if (n.selected) {
+		if (this.isSelected(n)) {
 			this.selection.splice(this.selection.indexOf(n), 1);
-			n.selected = false;
-			this.jsdot.fireEvent('selectionchg', n);
+			this.jsdot.fireEvent('selectionchg', n, false);
 		};
 	},
 	
@@ -305,10 +303,17 @@ JSDot.Selection.prototype = {
 	deselectAll: function() {
 		var e;
 		while (e = this.selection.pop()) {
-			e.selected = false;
-			this.jsdot.fireEvent('selectionchg', e);
+			this.jsdot.fireEvent('selectionchg', e, false);
 			e = undefined;
 		};
+	},
+	
+	/** Check whether an element is selected.
+		@param {Object} v Node or Edge to check
+		@return {Boolean} True if v is selected, false otherwise
+	*/
+	isSelected: function (v) {
+		return (v in this.selection);
 	},
 	
 	/** First node in selection.
