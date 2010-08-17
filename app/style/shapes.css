@@ -47,6 +47,16 @@
 	dominant-baseline: middle;
 }
 
+.jsdot-edge-label {
+	stroke: none;
+	fill: black;
+}
+
+.jsdot-edge-handle {
+	stroke-width: 5;
+	opacity: 0;
+}
+
 /* this must be last, so that it overrides others when used */
 .jsdot_def_hl {
 	stroke: red;

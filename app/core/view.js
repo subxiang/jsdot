@@ -170,6 +170,19 @@ JSDot.View.prototype = {
 		/* draw the edge */
 		e.stencil.draw(e, g);
 		e.stencil.setPosition(e);
+		
+		if (e.label) {
+			/* if not already done resolve label stencil */
+			if (!e.label.stencil) {
+				e.label.stencil = JSDot.edge_label_stencils[e.label.type];
+				if (!e.label.stencil) {
+					e.label.stencil = JSDot.edge_label_stencils['plain'];
+					e.label.value = e.label.value || '';
+				}
+			}
+			e.label.stencil.draw(e, g);
+			e.label.stencil.setPosition(e);
+		}
 	},
 	
 	/** Move an edge.
@@ -178,6 +191,7 @@ JSDot.View.prototype = {
 	updateEdgePos: function(e) {
 		this.computeEdgePosition(e);
 		e.stencil.setPosition(e);
+		if (e.label) e.label.stencil.setPosition(e);
 	},
 	
 	/** Computes the position where the edge must be drawn.
