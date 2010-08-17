@@ -30,8 +30,10 @@ THE SOFTWARE.
 	@class Graph representation
 
 	@constructor
+	@param {JSDot.jsdot_Impl} jsdot JSDot instance
 */
-JSDot.Graph_impl = function() {
+JSDot.Graph_impl = function(jsdot) {
+	this.jsdot = jsdot;
 	this.defaultNodeStencil = JSDot.stencils.circle;
 	this.defaultEdgeStencil = JSDot.edge_stencils.line;
 };

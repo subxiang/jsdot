@@ -34,6 +34,7 @@ THE SOFTWARE.
 	@param {JSDot.Node_impl} dst ending node
 */
 JSDot.Edge_impl = function(graph, id, src, dst) {
+	this.graph = graph;
 	this.id = id;
 	this.src = src;
 	this.dst = dst;
@@ -54,7 +55,7 @@ JSDot.Edge_impl.prototype = {
 		} else {
 			this.label = {'type': 'plain', 'value': l};
 		}
-		if (fire == undefined || fire) jsdot.fireEvent('changed', this);
+		if (fire == undefined || fire) this.graph.jsdot.fireEvent('changed', this);
 	},
 
 	/** Set edge stencil.
@@ -65,7 +66,7 @@ JSDot.Edge_impl.prototype = {
 	*/
 	setStencil: function(name, fire) {
 		this.stencil = JSDot.edge_stencils[name] || this.graph.defaultEdgeStencil;
-		if (fire == undefined || fire) jsdot.fireEvent('changed', this);
+		if (fire == undefined || fire) this.graph.jsdot.fireEvent('changed', this);
 	},
 
 };
