@@ -32,62 +32,62 @@ JSDot.shapes = {
 	
 		size: '2.5em',
 		
-		draw: function(n, g) {
+		draw: function(n, d, g) {
 			var c = JSDot.helper.cesvg('circle');
 			c.setAttribute('r', this.size);
 			g.appendChild(c);
-			n.view.shape = c;
+			d.shape = c;
 			return c;
 		},
 		
-		setPosition: function(n) {
-			var s = n.view.shape;
+		setPosition: function(n, d) {
+			var s = d.shape;
 			s.setAttribute('cx', n.position[0]);
 			s.setAttribute('cy', n.position[1]);
 		},
 		
-		getBoundaryTo: function(n, p) {
+		getBoundaryTo: function(n, d, p) {
 			var c = n.position; // node center
 			var a = Math.atan2((p[1]-c[1]), (p[0]-c[0]));
-			var size = n.view.shape.r.baseVal.value;
+			var size = d.shape.r.baseVal.value;
 			return [
 				c[0] + Math.cos(a) * size,
 				c[1] + Math.sin(a) * size
 			];
 		},
 		
-		getBBox: function(n) {
-			return n.view.shape.getBBox(n);
+		getBBox: function(n, d) {
+			return d.shape.getBBox(n);
 		},
 		
-		setSize: function(n, s) {
-			n.view.shape.setAttribute('r', Math.max(s.height,s.width)/2+6);
+		setSize: function(n, d, s) {
+			d.shape.setAttribute('r', Math.max(s.height,s.width)/2+6);
 		}
 	},
 	
 	'box': {
-		draw: function(n, g) {
+		draw: function(n, d, g) {
 			var e = JSDot.helper.cesvg('rect');
 			e.setAttribute('height', 30);
 			e.setAttribute('width', 50);
 			g.appendChild(e);
-			n.view.shape = e;
+			d.shape = e;
 			return e;
 		},
 		
-		setPosition: function(n) {
-			var s = n.view.shape;
-			s.setAttribute('x', n.position[0] - n.view.shape.width.baseVal.value / 2);
-			s.setAttribute('y', n.position[1] - n.view.shape.height.baseVal.value / 2);
+		setPosition: function(n, d) {
+			var s = d.shape;
+			s.setAttribute('x', n.position[0] - s.width.baseVal.value / 2);
+			s.setAttribute('y', n.position[1] - s.height.baseVal.value / 2);
 		},
 		
-		getBoundaryTo: function(n, p) {
+		getBoundaryTo: function(n, d, p) {
 		
 			//get rect dimensions
-			var x = n.view.shape.x.baseVal.value; /* left */
-			var y = n.view.shape.y.baseVal.value; /* top */
-			var height = n.view.shape.height.baseVal.value;
-			var width = n.view.shape.width.baseVal.value;
+			var x = d.shape.x.baseVal.value; /* left */
+			var y = d.shape.y.baseVal.value; /* top */
+			var height = d.shape.height.baseVal.value;
+			var width = d.shape.width.baseVal.value;
 			
 			var xl = x; /* left edge of rect */
 			var xr = x + width; /* right edge of rect */
@@ -134,15 +134,15 @@ JSDot.shapes = {
 			}
 		},
 		
-		getBBox: function(n) {
-			return n.view.shape.getBBox(n);
+		getBBox: function(n, d) {
+			return d.shape.getBBox(n);
 		},
 		
-		setSize: function(n, s) {
-			var p = n.view.shape;
+		setSize: function(n, d, s) {
+			var p = d.shape;
 			p.setAttribute('height', s.height+3);
 			p.setAttribute('width', s.width+10);
-			this.setPosition(n);
+			this.setPosition(n, d);
 		}
 	},
 	
@@ -152,23 +152,23 @@ JSDot.shapes = {
 		dh: 2,
 		ew: 15,
 		
-		draw: function(n, g) {
+		draw: function(n, d, g) {
 			var e = JSDot.helper.cesvg('polygon');
 			//e.setAttribute('points', '');
 			g.appendChild(e);
-			n.view.shape = e;
+			d.shape = e;
 			return e;
 		},
 		
-		setPosition: function(n) {
-			n.view.shape.setAttribute('transform', 'translate('+n.position[0]+' '+n.position[1]+')');
+		setPosition: function(n, d) {
+			d.shape.setAttribute('transform', 'translate('+n.position[0]+' '+n.position[1]+')');
 		},
 		
-		getBoundaryTo: function(n, p) {
+		getBoundaryTo: function(n, d, p) {
 		
 			//get rect dimensions
-			var height = n.view.size.height;
-			var width = n.view.size.width;
+			var height = d.size.height;
+			var width = d.size.width;
 			var x = n.position[0] - width/2;  /* left */
 			var y = n.position[1] - height/2; /* top */
 			
@@ -221,11 +221,11 @@ JSDot.shapes = {
 			}
 		},
 		
-		getBBox: function(n) {
-			return n.view.shape.getBBox(n);
+		getBBox: function(n, d) {
+			return d.shape.getBBox(n);
 		},
 		
-		setSize: function(n, s) {
+		setSize: function(n, d, s) {
 			var w = s.width/2 + this.dw;
 			var h = s.height/2 + this.dh;
 			var p = [
@@ -236,8 +236,8 @@ JSDot.shapes = {
 				-w, h,  /* bottom left */
 				-w-this.ew, 0/* < left */
 			];
-			n.view.shape.setAttribute('points', p.join(' '));
-			n.view.size = { height: s.height + 2*this.dh, width: s.width + 2*this.dw }; /* needed by getBoundaryTo */
+			d.shape.setAttribute('points', p.join(' '));
+			d.size = { height: s.height + 2*this.dh, width: s.width + 2*this.dw }; /* needed by getBoundaryTo */
 		}
 	},
 	
@@ -247,23 +247,23 @@ JSDot.shapes = {
 		dh: 2,
 		ew: 15,
 		
-		draw: function(n, g) {
+		draw: function(n, d, g) {
 			var e = JSDot.helper.cesvg('polygon');
 			//e.setAttribute('points', '');
 			g.appendChild(e);
-			n.view.shape = e;
+			d.shape = e;
 			return e;
 		},
 		
-		setPosition: function(n) {
-			n.view.shape.setAttribute('transform', 'translate('+n.position[0]+' '+n.position[1]+')');
+		setPosition: function(n, d) {
+			d.shape.setAttribute('transform', 'translate('+n.position[0]+' '+n.position[1]+')');
 		},
 		
-		getBoundaryTo: function(n, p) {
+		getBoundaryTo: function(n, d, p) {
 		
 			//get rect dimensions
-			var height = n.view.size.height;
-			var width = n.view.size.width;
+			var height = d.size.height;
+			var width = d.size.width;
 			var x = n.position[0] - width/2 - this.ew;  /* left */
 			var y = n.position[1] - height/2; /* top */
 			
@@ -316,11 +316,11 @@ JSDot.shapes = {
 			}
 		},
 		
-		getBBox: function(n) {
-			return n.view.shape.getBBox(n);
+		getBBox: function(n, d) {
+			return d.shape.getBBox(n);
 		},
 		
-		setSize: function(n, s) {
+		setSize: function(n, d, s) {
 			var w = s.width/2 + this.dw;
 			var h = s.height/2 + this.dh;
 			var p = [
@@ -331,8 +331,8 @@ JSDot.shapes = {
 				-w-this.ew, h,  /* bottom left */
 				-w, 0/* < left */
 			];
-			n.view.shape.setAttribute('points', p.join(' '));
-			n.view.size = { height: s.height + 2*this.dh, width: s.width + 2*this.dw }; /* needed by getBoundaryTo */
+			d.shape.setAttribute('points', p.join(' '));
+			d.size = { height: s.height + 2*this.dh, width: s.width + 2*this.dw }; /* needed by getBoundaryTo */
 		}
 	},
 };
@@ -353,28 +353,28 @@ JSDot.stencils = {
 		cssClass: 'jsdot_circle',
 		cssHl: 'jsdot_def_hl',
 		
-		draw: function(n, g) {
-			this.shape.draw(n, g);
+		draw: function(n, d, g) {
+			this.shape.draw(n, d, g);
 			g.setAttribute('class', this.cssClass);
 		},
 		
-		setPosition: function(n) {
-			this.shape.setPosition(n);
+		setPosition: function(n, d) {
+			this.shape.setPosition(n, d);
 		},
 		
-		setSize: function(n, s) {
-			this.shape.setSize(n, s);
+		setSize: function(n, d, s) {
+			this.shape.setSize(n, d, s);
 		},
 		
-		getBoundaryTo: function(n, p) {
-			return this.shape.getBoundaryTo(n, p);
+		getBoundaryTo: function(n, d, p) {
+			return this.shape.getBoundaryTo(n, d, p);
 		},
 		
-		getBBox: function(n) {
-			return this.shape.getBBox(n);
+		getBBox: function(n, d) {
+			return this.shape.getBBox(n, d);
 		},
 		
-		highlight: function(n, y) {
+		highlight: function(n, d, y) {
 			if (y) {
 				n.view.group.setAttribute('class', this.cssClass+' '+this.cssHl);
 			} else {
@@ -390,28 +390,28 @@ JSDot.stencils = {
 		cssClass: 'jsdot_box',
 		cssHl: 'jsdot_def_hl',
 		
-		draw: function(n, g) {
-			this.shape.draw(n, g);
+		draw: function(n, d, g) {
+			this.shape.draw(n, d, g);
 			g.setAttribute('class', this.cssClass);
 		},
 		
-		setPosition: function(n) {
-			this.shape.setPosition(n);
+		setPosition: function(n, d) {
+			this.shape.setPosition(n, d);
 		},
 		
-		setSize: function(n, s) {
-			this.shape.setSize(n, s);
+		setSize: function(n, d, s) {
+			this.shape.setSize(n, d, s);
 		},
 		
-		getBoundaryTo: function(n, p) {
-			return this.shape.getBoundaryTo(n, p);
+		getBoundaryTo: function(n, d, p) {
+			return this.shape.getBoundaryTo(n, d, p);
 		},
 		
-		getBBox: function(n) {
-			return this.shape.getBBox(n);
+		getBBox: function(n, d) {
+			return this.shape.getBBox(n, d);
 		},
 		
-		highlight: function(n, y) {
+		highlight: function(n, d, y) {
 			if (y) {
 				n.view.group.setAttribute('class', this.cssClass+' '+this.cssHl);
 			} else {
@@ -427,28 +427,28 @@ JSDot.stencils = {
 		cssClass: 'jsdot_hexagon',
 		cssHl: 'jsdot_def_hl',
 		
-		draw: function(n, g) {
-			this.shape.draw(n, g);
+		draw: function(n, d, g) {
+			this.shape.draw(n, d, g);
 			g.setAttribute('class', this.cssClass);
 		},
 		
-		setPosition: function(n) {
-			this.shape.setPosition(n);
+		setPosition: function(n, d) {
+			this.shape.setPosition(n, d);
 		},
 		
-		setSize: function(n, s) {
-			this.shape.setSize(n, s);
+		setSize: function(n, d, s) {
+			this.shape.setSize(n, d, s);
 		},
 		
-		getBoundaryTo: function(n, p) {
-			return this.shape.getBoundaryTo(n, p);
+		getBoundaryTo: function(n, d, p) {
+			return this.shape.getBoundaryTo(n, d, p);
 		},
 		
-		getBBox: function(n) {
-			return this.shape.getBBox(n);
+		getBBox: function(n, d) {
+			return this.shape.getBBox(n, d);
 		},
 		
-		highlight: function(n, y) {
+		highlight: function(n, d, y) {
 			if (y) {
 				n.view.group.setAttribute('class', this.cssClass+' '+this.cssHl);
 			} else {
@@ -464,28 +464,28 @@ JSDot.stencils = {
 		cssClass: 'jsdot_concave_hexagon',
 		cssHl: 'jsdot_def_hl',
 		
-		draw: function(n, g) {
-			this.shape.draw(n, g);
+		draw: function(n, d, g) {
+			this.shape.draw(n, d, g);
 			g.setAttribute('class', this.cssClass);
 		},
 		
-		setPosition: function(n) {
-			this.shape.setPosition(n);
+		setPosition: function(n, d) {
+			this.shape.setPosition(n, d);
 		},
 		
-		setSize: function(n, s) {
-			this.shape.setSize(n, s);
+		setSize: function(n, d, s) {
+			this.shape.setSize(n, d, s);
 		},
 		
-		getBoundaryTo: function(n, p) {
-			return this.shape.getBoundaryTo(n, p);
+		getBoundaryTo: function(n, d, p) {
+			return this.shape.getBoundaryTo(n, d, p);
 		},
 		
-		getBBox: function(n) {
-			return this.shape.getBBox(n);
+		getBBox: function(n, d) {
+			return this.shape.getBBox(n, d);
 		},
 		
-		highlight: function(n, y) {
+		highlight: function(n, d, y) {
 			if (y) {
 				n.view.group.setAttribute('class', this.cssClass+' '+this.cssHl);
 			} else {
@@ -501,24 +501,24 @@ JSDot.edge_shapes = {
 
 	'line': {
 	
-		draw: function(e, p) {
+		draw: function(e, d, p) {
 			var l = JSDot.helper.cesvg('path');
-			e.view.line = l;
+			d.line = l;
 			p.appendChild(l);
 			l = JSDot.helper.cesvg('path');
-			e.view.handle = l;
+			d.handle = l;
 			l.setAttribute('class', 'jsdot-edge-handle');
 			p.appendChild(l);
 			return l;
 		},
 		
-		setPosition: function(e) {
-			var p1 = e.view.start;
-			var p2 = e.view.end;
-			e.view.line.setAttribute(
+		setPosition: function(e, d) {
+			var p1 = d.start;
+			var p2 = d.end;
+			d.line.setAttribute(
 				'd', 'M'+p1[0]+','+p1[1]+'L'+p2[0]+','+p2[1]
 			);
-			e.view.handle.setAttribute(
+			d.handle.setAttribute(
 				'd', 'M'+p1[0]+','+p1[1]+'L'+p2[0]+','+p2[1]
 			);
 		}
@@ -526,18 +526,18 @@ JSDot.edge_shapes = {
 
 	'directed line': {
 	
-		draw: function(e, p) {
+		draw: function(e, d, p) {
 			var l = JSDot.helper.cesvg('path');
-			e.view.line = l;
+			d.line = l;
 			l.setAttribute('marker-end', 'url(#Arrow)');
 			p.appendChild(l);
 			return l;
 		},
 		
-		setPosition: function(e) {
-			var p1 = e.view.start;
-			var p2 = e.view.end;
-			e.view.line.setAttribute(
+		setPosition: function(e, d) {
+			var p1 = d.start;
+			var p2 = d.end;
+			d.line.setAttribute(
 				'd', 'M'+p1[0]+','+p1[1]+'L'+p2[0]+','+p2[1]
 			);
 		}
@@ -545,19 +545,19 @@ JSDot.edge_shapes = {
 
 	'bidi line': {
 	
-		draw: function(e, p) {
+		draw: function(e, d, p) {
 			var l = JSDot.helper.cesvg('path');
-			e.view.line = l;
+			d.line = l;
 			l.setAttribute('marker-start', 'url(#ArrowS)');
 			l.setAttribute('marker-end', 'url(#Arrow)');
 			p.appendChild(l);
 			return l;
 		},
 		
-		setPosition: function(e) {
-			var p1 = e.view.start;
-			var p2 = e.view.end;
-			e.view.line.setAttribute(
+		setPosition: function(e, d) {
+			var p1 = d.start;
+			var p2 = d.end;
+			d.line.setAttribute(
 				'd', 'M'+p1[0]+','+p1[1]+'L'+p2[0]+','+p2[1]
 			);
 		}
@@ -576,20 +576,20 @@ JSDot.edge_stencils = {
 		cssClass: 'jsdot_line_edge',
 		cssHl: 'jsdot_def_hl',
 	
-		draw: function(e, p) {
-			this.shape.draw(e, p);
+		draw: function(e, d, p) {
+			this.shape.draw(e, d, p);
 			p.setAttribute('class', this.cssClass);
 		},
 		
-		setPosition: function(e) {
-			this.shape.setPosition(e);
+		setPosition: function(e, d) {
+			this.shape.setPosition(e, d);
 		},
 		
-		highlight: function(e, y) {
+		highlight: function(e, d, y) {
 			if (y) {
-				e.view.group.setAttribute('class', this.cssClass+' '+this.cssHl);
+				d.group.setAttribute('class', this.cssClass+' '+this.cssHl);
 			} else {
-				e.view.group.setAttribute('class', this.cssClass);
+				d.group.setAttribute('class', this.cssClass);
 			};
 		}
 	},
@@ -601,20 +601,20 @@ JSDot.edge_stencils = {
 		cssClass: 'jsdot_dirline_edge',
 		cssHl: 'jsdot_def_hl',
 	
-		draw: function(e, p) {
-			this.shape.draw(e, p);
+		draw: function(e, d, p) {
+			this.shape.draw(e, d, p);
 			p.setAttribute('class', this.cssClass);
 		},
 		
-		setPosition: function(e) {
-			this.shape.setPosition(e);
+		setPosition: function(e, d) {
+			this.shape.setPosition(e, d);
 		},
 		
-		highlight: function(e, y) {
+		highlight: function(e, d, y) {
 			if (y) {
-				e.view.group.setAttribute('class', this.cssClass+' '+this.cssHl);
+				d.group.setAttribute('class', this.cssClass+' '+this.cssHl);
 			} else {
-				e.view.group.setAttribute('class', this.cssClass);
+				d.group.setAttribute('class', this.cssClass);
 			};
 		}
 	},
@@ -626,20 +626,20 @@ JSDot.edge_stencils = {
 		cssClass: 'jsdot_bidiline_edge',
 		cssHl: 'jsdot_def_hl',
 	
-		draw: function(e, p) {
-			this.shape.draw(e, p);
+		draw: function(e, d, p) {
+			this.shape.draw(e, d, p);
 			p.setAttribute('class', this.cssClass);
 		},
 		
-		setPosition: function(e) {
-			this.shape.setPosition(e);
+		setPosition: function(e, d) {
+			this.shape.setPosition(e, d);
 		},
 		
-		highlight: function(e, y) {
+		highlight: function(e, d, y) {
 			if (y) {
-				e.view.group.setAttribute('class', this.cssClass+' '+this.cssHl);
+				d.group.setAttribute('class', this.cssClass+' '+this.cssHl);
 			} else {
-				e.view.group.setAttribute('class', this.cssClass);
+				d.group.setAttribute('class', this.cssClass);
 			};
 		}
 	},
@@ -701,23 +701,23 @@ JSDot.node_label_stencils = {
 
 	'plain': {
 	
-		draw: function(n, p) {
+		draw: function(n, d, p) {
 			var t = JSDot.helper.cesvg('text');
 			t.setAttribute('class', 'jsdot_node_label');
 			t.textContent = n.label.value;
 			p.appendChild(t);
-			n.view.label = t;
+			d.label = t;
 			return t;
 		},
 		
-		setPosition: function(n) {
-			var l = n.view.label;
+		setPosition: function(n, d) {
+			var l = d.label;
 			l.setAttribute('x', n.position[0]);
 			l.setAttribute('y', n.position[1]);
 		},
 		
-		getSize: function(n) {
-			return n.view.label.getBBox();
+		getSize: function(n, d) {
+			return d.label.getBBox();
 			//return n.view.label.getBoundingClientRect();
 		},
 	},
@@ -729,25 +729,25 @@ JSDot.edge_label_stencils = {
 
 	'plain': {
 	
-		draw: function(n, p) {
+		draw: function(n, d, p) {
 			var t = JSDot.helper.cesvg('text');
 			t.setAttribute('class', 'jsdot-edge-label');
 			t.textContent = n.label.value;
 			p.appendChild(t);
-			n.view.label = t;
+			d.label = t;
 			return t;
 		},
 		
-		setPosition: function(n) {
-			var p1 = n.view.start;
-			var p2 = n.view.end;
-			var l = n.view.label;
+		setPosition: function(n, d) {
+			var p1 = d.start;
+			var p2 = d.end;
+			var l = d.label;
 			l.setAttribute('x', p1[0]+(p2[0]-p1[0])/2);
 			l.setAttribute('y', p1[1]+(p2[1]-p1[1])/2);
 		},
 		
-		getSize: function(n) {
-			return n.view.label.getBBox();
+		getSize: function(n, d) {
+			return d.label.getBBox();
 			//return n.view.label.getBoundingClientRect();
 		},
 	},
