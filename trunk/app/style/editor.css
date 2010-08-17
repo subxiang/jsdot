@@ -5,7 +5,7 @@
 .jsdot-tb-hiddentb { display: none; }
 .jsdot_edgeviz_line { stroke: black; stroke-width: 1; stroke-dasharray: 8, 5; pointer-events: none; }
 
-.ui-icon { width: 16px; height: 16px; background-image: url(../img/icons-all.png) !important; }
+.jsdot-icon { width: 16px; height: 16px; background-image: url(../img/icons-all.png) !important; }
 .jsdot-icon-cursor { background-position: -112px -240px; }
 .jsdot-icon-addnode { background-position: -16px 0; }
 .jsdot-icon-addedge { background-position: -192px -32px; }
