@@ -1,8 +1,10 @@
 
-.jsdot-toolbar { position: absolute; top: -45px; }
+.jsdot-toolbar { position: absolute; top: -45px; padding-left: 10px; width: -moz-max-content; }
 .jsdot-tb-selected { border: 2px dotted black !important; }
-.jsdot-tb-nested { display: inline; float: right; background: none repeat scroll 0 0 #FACB7E; border: 1px solid orange; margin-left: 8px; }
+.jsdot-tb-main { display: inline; float: left; background-color: #FACB7E; border: 1px solid orange; }
+.jsdot-tb-nested { display: inline; float: right; background-color: #FACB7E; border: 1px solid orange; margin-left: 8px; }
 .jsdot-tb-hiddentb { display: none; }
+.jsdot-tb-handle { display: block; background-color: #E78F08; width: 8px; height: 100%; margin-right: 2px; position: absolute; left: 0; }
 .jsdot_edgeviz_line { stroke: black; stroke-width: 1; stroke-dasharray: 8, 5; pointer-events: none; }
 
 .jsdot-editdialog .ui-widget-content form select { display: block; margin: 0 0 8px 0; }
