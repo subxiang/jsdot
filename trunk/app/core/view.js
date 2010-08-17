@@ -86,30 +86,18 @@ JSDot.View.prototype = {
 		this.svgroot.appendChild(g);
 		n.view.group = g;
 		
-		
-		/* if the node doesn't have a stencil set the default one */
-		if (!n.stencil) {
-			n.stencil = this.defaultStencil;
-		}
-		
 		/* draw the node */
 		n.stencil.draw(n, g);
 		n.stencil.setPosition(n);
 		
-		
-		/* if the node doesn't have a label provide a default one */
-		if (!n.label) {
-			n.label = {
-				'type': 'plain',
-				'value' : n.name
-			};
-		}
+		/* if it hasn't already been done, resolve label stencil name
+		   to the actual stencil object */
 		if (!n.label.stencil) {
 			n.label.stencil = JSDot.node_label_stencils[n.label.type];
 			if (!n.label.stencil) {
 				n.label.stencil = JSDot.node_label_stencils['plain'];
-				n.label.value = n.label.value || n.name;
 			}
+			n.label.value = n.label.value || ''; /* just make sure it is there */
 		}
 		n.label.stencil.draw(n, g);
 		n.label.stencil.setPosition(n);
@@ -160,25 +148,21 @@ JSDot.View.prototype = {
 		this.svgroot.appendChild(g);
 		e.view.group = g;
 		
-		/* if the edge doesn't have a stencil set the default one */
-		if (!e.stencil) {
-			e.stencil = this.defaultEdgeStencil
-		}
-		
 		this.computeEdgePosition(e);
 		
 		/* draw the edge */
 		e.stencil.draw(e, g);
 		e.stencil.setPosition(e);
 		
+		/* draw label only if it exists */
 		if (e.label) {
 			/* if not already done resolve label stencil */
 			if (!e.label.stencil) {
 				e.label.stencil = JSDot.edge_label_stencils[e.label.type];
 				if (!e.label.stencil) {
 					e.label.stencil = JSDot.edge_label_stencils['plain'];
-					e.label.value = e.label.value || '';
 				}
+				e.label.value = e.label.value || ''; /* just make sure it is there */
 			}
 			e.label.stencil.draw(e, g);
 			e.label.stencil.setPosition(e);
@@ -216,7 +200,7 @@ JSDot.View.prototype = {
 	
 	/** Register handler needed by the view.
 		Defines and registers the event handler that allows the view to receive
-		madel and selection updates notifications.
+		model and selection updates notifications.
 	*/
 	addHandler: function() {
 		var handler = {};
