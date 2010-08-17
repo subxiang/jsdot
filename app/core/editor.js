@@ -136,7 +136,7 @@ JSDot.Editor.MainBar = function(editor, p) {
 	p.appendChild(btnSel);
 	$(btnSel).button({
 		text: false,
-		icons: { primary: 'jsdot-icon-cursor' }
+		icons: { primary: 'jsdot-icon jsdot-icon-cursor' }
 	})
 	.click(function() {
 		editor.setSelected(tb, btnSel);
@@ -159,7 +159,7 @@ JSDot.Editor.MainBar = function(editor, p) {
 	p.appendChild(btnAddN);
 	$(btnAddN).button({
 		text: false,
-		icons: { primary: 'jsdot-icon-addnode' }
+		icons: { primary: 'jsdot-icon jsdot-icon-addnode' }
 	})
 	.click(function() {
 		editor.setSelected(tb, btnAddN);
@@ -182,7 +182,7 @@ JSDot.Editor.MainBar = function(editor, p) {
 	p.appendChild(btnAddE);
 	$(btnAddE).button({
 		text: false,
-		icons: { primary: 'jsdot-icon-addedge' }
+		icons: { primary: 'jsdot-icon jsdot-icon-addedge' }
 	})
 	.click(function() {
 		editor.setSelected(tb, btnAddE);
@@ -206,7 +206,7 @@ JSDot.Editor.MainBar = function(editor, p) {
 	p.appendChild(btnRm);
 	$(btnRm).button({
 		text: false,
-		icons: { primary: 'jsdot-icon-removenode' }
+		icons: { primary: 'jsdot-icon jsdot-icon-removenode' }
 	})
 	.click(function() {
 		editor.setSelected(tb, btnRm);
@@ -307,7 +307,7 @@ JSDot.Editor.LayoutBar = function(editor) {
 	d.appendChild(btnL);
 	$(btnL).button({
 		text: false,
-		icons: { primary: 'jsdot-icon-alignleft' }
+		icons: { primary: 'jsdot-icon jsdot-icon-alignleft' }
 	})
 	.click(this.leftH(editor));
 	
@@ -316,7 +316,7 @@ JSDot.Editor.LayoutBar = function(editor) {
 	d.appendChild(btnC);
 	$(btnC).button({
 		text: false,
-		icons: { primary: 'jsdot-icon-aligncenter' }
+		icons: { primary: 'jsdot-icon jsdot-icon-aligncenter' }
 	})
 	.click(this.centerH(editor));
 	
@@ -325,7 +325,7 @@ JSDot.Editor.LayoutBar = function(editor) {
 	d.appendChild(btnR);
 	$(btnR).button({
 		text: false,
-		icons: { primary: 'jsdot-icon-alignright' }
+		icons: { primary: 'jsdot-icon jsdot-icon-alignright' }
 	})
 	.click(this.rightH(editor));
 	
@@ -334,7 +334,7 @@ JSDot.Editor.LayoutBar = function(editor) {
 	d.appendChild(btnT);
 	$(btnT).button({
 		text: false,
-		icons: { primary: 'jsdot-icon-aligntop' }
+		icons: { primary: 'jsdot-icon jsdot-icon-aligntop' }
 	})
 	.click(this.topH(editor));
 	
@@ -343,7 +343,7 @@ JSDot.Editor.LayoutBar = function(editor) {
 	d.appendChild(btnVC);
 	$(btnVC).button({
 		text: false,
-		icons: { primary: 'jsdot-icon-alignvcenter' }
+		icons: { primary: 'jsdot-icon jsdot-icon-alignvcenter' }
 	})
 	.click(this.vcenterH(editor));
 	
@@ -352,7 +352,7 @@ JSDot.Editor.LayoutBar = function(editor) {
 	d.appendChild(btnB);
 	$(btnB).button({
 		text: false,
-		icons: { primary: 'jsdot-icon-alignbottom' }
+		icons: { primary: 'jsdot-icon jsdot-icon-alignbottom' }
 	})
 	.click(this.bottomH(editor));
 };
