@@ -1,9 +1,11 @@
 
 .jsdot-toolbar { position: absolute; top: -45px; }
 .jsdot-tb-selected { border: 2px dotted black !important; }
-.jsdot-tb-nested { display: inline; float: right; background: none repeat scroll 0 0 #FACB7E; border: 1px solid orange; }
+.jsdot-tb-nested { display: inline; float: right; background: none repeat scroll 0 0 #FACB7E; border: 1px solid orange; margin-left: 8px; }
 .jsdot-tb-hiddentb { display: none; }
 .jsdot_edgeviz_line { stroke: black; stroke-width: 1; stroke-dasharray: 8, 5; pointer-events: none; }
+
+.jsdot-editdialog .ui-widget-content form select { display: block; margin: 0 0 8px 0; }
 
 .jsdot-icon { width: 16px; height: 16px; background-image: url(../img/icons-all.png) !important; }
 .jsdot-icon-cursor { background-position: -112px -240px; }
@@ -16,3 +18,4 @@
 .jsdot-icon-aligntop { background-position: -304px -624px; }
 .jsdot-icon-alignbottom { background-position: -224px -624px; }
 .jsdot-icon-alignvcenter { background-position: -272px -624px; }
+.jsdot-icon-editdialog { background-position: -208px 0px; }
