@@ -45,6 +45,7 @@ var f = function() {
 /* graph model */
 		"node_impl.js",
 		"node.js",
+		"edge_impl.js",
 		"edge.js",
 		"graph_impl.js",
 		"graph.js",

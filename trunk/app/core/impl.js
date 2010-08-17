@@ -33,7 +33,7 @@ THE SOFTWARE.
 	@constructor
 */
 JSDot.jsdot_Impl = function() {
-	this.graph = new JSDot.Graph_impl();
+	this.graph = new JSDot.Graph_impl(this);
 };
 
 JSDot.jsdot_Impl.prototype = {
