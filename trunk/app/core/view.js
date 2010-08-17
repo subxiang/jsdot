@@ -47,6 +47,12 @@ JSDot.View = function(jsdot, divId) {
 	this.svgroot.setAttribute("xmlns", JSDot.helper.svgns);
 	this.svgroot.setAttribute("xmlns:xlink", JSDot.helper.xlinkns);
 	
+	/** View data associated to nodes. */
+	this.nodeData = {};
+	
+	/** View data associated to edges. */
+	this.edgeData = {};
+	
 	this.addHandler(); /* add listener to receive graph updates */
 };
 
@@ -69,49 +75,61 @@ JSDot.View.prototype = {
 	*/
 	svgroot: null,
 	
+	/** View identifier.
+		Returns a string which can be used to build ids for DOM elements
+		belonging to the view.
+		@return {String} identifier
+	*/
+	getViewId: function() {
+		return 'jsdot-v'+this.divId;
+	},
+	
 	/** Draw a node.
 		@param {Node} n the node to draw
 	*/
 	drawNode: function(n){
 		if (!n) return;
 		
-		var nodeId = this.divId+'-n-'+n.name;
-		
-		if (!n.view) n.view = {};
+		/* get associated view data, if it doesn't exist create it */
+		var nd = this.nodeData[n.name];
+		if (!nd) {
+			nd = {};
+			this.nodeData[n.name] = nd;
+		}
 		
 		/* create group for this node */
 		var g = JSDot.helper.cesvg('g');
-		g.setAttribute('id', nodeId);
 		g.jsdot_node = n;
 		this.svgroot.appendChild(g);
-		n.view.group = g;
+		nd.group = g;
 		
 		/* draw the node */
-		n.stencil.draw(n, g);
-		n.stencil.setPosition(n);
+		n.stencil.draw(n, nd, g);
+		n.stencil.setPosition(n, nd);
 		
 		/* if it hasn't already been done, resolve label stencil name
 		   to the actual stencil object */
-		if (!n.label.stencil) {
-			n.label.stencil = JSDot.node_label_stencils[n.label.type];
-			if (!n.label.stencil) {
-				n.label.stencil = JSDot.node_label_stencils['plain'];
+		if (!nd.labelStencil) {
+			nd.labelStencil = JSDot.node_label_stencils[n.label.type];
+			if (!nd.labelStencil) {
+				nd.labelStencil = JSDot.node_label_stencils['plain'];
 			}
 			n.label.value = n.label.value || ''; /* just make sure it is there */
 		}
-		n.label.stencil.draw(n, g);
-		n.label.stencil.setPosition(n);
+		nd.labelStencil.draw(n, nd, g);
+		nd.labelStencil.setPosition(n, nd);
 		
 		/* now that the label has been drawn we can set the size of the node */
-		n.stencil.setSize(n, n.label.stencil.getSize(n));
+		n.stencil.setSize(n, nd, nd.labelStencil.getSize(n, nd));
 	},
 	
 	/** Move node to a new position.
 		Move the node without redrawing it, but must already have been drawn.
 	*/
 	updateNodePos: function(n) {
-		n.stencil.setPosition(n);
-		n.label.stencil.setPosition(n);
+		var nd = this.nodeData[n.name];
+		n.stencil.setPosition(n, nd);
+		nd.labelStencil.setPosition(n, nd);
 	},
 	
 	/** Draw a node and its edges.
@@ -129,7 +147,11 @@ JSDot.View.prototype = {
 	@param {Node_impl} n node to remove
 	*/
 	removeNode: function(n) {
-		if (n.view.group) this.svgroot.removeChild(n.view.group);
+		var nd = this.nodeData[n.name];
+		if (nd) {
+			this.svgroot.removeChild(nd.group);
+			delete this.nodeData[n.name];
+		}
 	},
 	
 	/** Draw an edge.
@@ -137,35 +159,37 @@ JSDot.View.prototype = {
 	*/
 	drawEdge: function(e) {
 		
-		var edgeId = this.divId+'-e-'+e.src.name+'-'+e.dst.name;
-		
-		if (!e.view) e.view = {};
+		/* get associated view data, if it doesn't exist create it */
+		var ed = this.edgeData[e.id];
+		if (!ed) {
+			ed = {};
+			this.edgeData[e.id] = ed;
+		}
 		
 		/* create a group for the edge */
 		var g = JSDot.helper.cesvg('g');
-		g.setAttribute('id', edgeId);
 		g.jsdot_edge = e;
 		this.svgroot.appendChild(g);
-		e.view.group = g;
+		ed.group = g;
 		
 		this.computeEdgePosition(e);
 		
 		/* draw the edge */
-		e.stencil.draw(e, g);
-		e.stencil.setPosition(e);
+		e.stencil.draw(e, ed, g);
+		e.stencil.setPosition(e, ed);
 		
 		/* draw label only if it exists */
 		if (e.label) {
 			/* if not already done resolve label stencil */
-			if (!e.label.stencil) {
-				e.label.stencil = JSDot.edge_label_stencils[e.label.type];
-				if (!e.label.stencil) {
-					e.label.stencil = JSDot.edge_label_stencils['plain'];
+			if (!ed.labelStencil) {
+				ed.labelStencil = JSDot.edge_label_stencils[e.label.type];
+				if (!ed.labelStencil) {
+					ed.labelStencil = JSDot.edge_label_stencils['plain'];
 				}
 				e.label.value = e.label.value || ''; /* just make sure it is there */
 			}
-			e.label.stencil.draw(e, g);
-			e.label.stencil.setPosition(e);
+			ed.labelStencil.draw(e, ed, g);
+			ed.labelStencil.setPosition(e, ed);
 		}
 	},
 	
@@ -174,8 +198,9 @@ JSDot.View.prototype = {
 	*/
 	updateEdgePos: function(e) {
 		this.computeEdgePosition(e);
-		e.stencil.setPosition(e);
-		if (e.label) e.label.stencil.setPosition(e);
+		var ed = this.edgeData[e.id];
+		e.stencil.setPosition(e, ed);
+		if (e.label) ed.labelStencil.setPosition(e, ed);
 	},
 	
 	/** Computes the position where the edge must be drawn.
@@ -187,15 +212,20 @@ JSDot.View.prototype = {
 		@param {Edge} e edge whose position must be updated
 	*/
 	computeEdgePosition: function(e) {
-		e.view.start = e.src.stencil.getBoundaryTo(e.src, e.dst.position);
-		e.view.end = e.dst.stencil.getBoundaryTo(e.dst, e.src.position);
+		var ed = this.edgeData[e.id];
+		ed.start = e.src.stencil.getBoundaryTo(e.src, this.nodeData[e.src.name], e.dst.position);
+		ed.end = e.dst.stencil.getBoundaryTo(e.dst, this.nodeData[e.dst.name], e.src.position);
 	},
 	
 	/** Remove an edge from the drawing.
 	@param {Edge_impl} e edge to remove
 	*/
 	removeEdge: function(e) {
-		if (e.view.group) this.svgroot.removeChild(e.view.group);
+		var ed = this.edgeData[e.id];
+		if (ed.group) {
+			this.svgroot.removeChild(ed.group);
+			delete this.edgeData[e.id];
+		}
 	},
 	
 	/** Register handler needed by the view.
