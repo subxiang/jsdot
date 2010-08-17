@@ -133,13 +133,19 @@ JSDot.Editor.MainBar = function(editor, p) {
 	this.layoutBar = new JSDot.Editor.LayoutBar(editor);
 	this.createNodeBar = new JSDot.Editor.CreateNodeBar(editor);
 	this.createEdgeBar = new JSDot.Editor.CreateEdgeBar(editor);
-	editor.addNestedBar(this.layoutBar);
-	editor.addNestedBar(this.createNodeBar);
-	editor.addNestedBar(this.createEdgeBar);
+	
+	var spc = document.createElement('div');
+	spc.setAttribute('class', 'jsdot-tb-handle');
+	p.appendChild(spc);
+	$(p).draggable({ handle: '.jsdot-tb-handle' });
+	
+	var main = document.createElement('div');
+	main.setAttribute('class', 'jsdot-tb-main');
+	p.appendChild(main);
 	
 	var btnSel = document.createElement('button');
 	btnSel.innerHTML = 'Select';
-	p.appendChild(btnSel);
+	main.appendChild(btnSel);
 	$(btnSel).button({
 		text: false,
 		icons: { primary: 'jsdot-icon jsdot-icon-cursor' }
@@ -158,11 +164,10 @@ JSDot.Editor.MainBar = function(editor, p) {
 		editor.jsdot.removeEventHandler('drag');
 		editor.hideNestedBar('layout');
 	};
-	btnSel.click(); // selection tool is enabled on startup
 	
 	var btnAddN = document.createElement('button');
 	btnAddN.innerHTML = 'Add node';
-	p.appendChild(btnAddN);
+	main.appendChild(btnAddN);
 	$(btnAddN).button({
 		text: false,
 		icons: { primary: 'jsdot-icon jsdot-icon-addnode' }
@@ -185,7 +190,7 @@ JSDot.Editor.MainBar = function(editor, p) {
 	
 	var btnAddE = document.createElement('button');
 	btnAddE.innerHTML = 'Add edge';
-	p.appendChild(btnAddE);
+	main.appendChild(btnAddE);
 	$(btnAddE).button({
 		text: false,
 		icons: { primary: 'jsdot-icon jsdot-icon-addedge' }
@@ -209,7 +214,7 @@ JSDot.Editor.MainBar = function(editor, p) {
 	
 	var btnRm = document.createElement('button');
 	btnRm.innerHTML = 'Remove node';
-	p.appendChild(btnRm);
+	main.appendChild(btnRm);
 	$(btnRm).button({
 		text: false,
 		icons: { primary: 'jsdot-icon jsdot-icon-removenode' }
@@ -230,7 +235,7 @@ JSDot.Editor.MainBar = function(editor, p) {
 	
 	var btnED = document.createElement('button');
 	btnED.innerHTML = 'Edit properties';
-	p.appendChild(btnED);
+	main.appendChild(btnED);
 	$(btnED).button({
 		text: false,
 		icons: { primary: 'jsdot-icon jsdot-icon-editdialog' }
@@ -238,6 +243,11 @@ JSDot.Editor.MainBar = function(editor, p) {
 	.click(function() {
 		editor.editDialog.toggleOpen();
 	});
+	
+	editor.addNestedBar(this.layoutBar);
+	editor.addNestedBar(this.createNodeBar);
+	editor.addNestedBar(this.createEdgeBar);
+	btnSel.click(); // selection tool is enabled on startup
 };
 
 JSDot.Editor.MainBar.prototype = {
