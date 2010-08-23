@@ -48,7 +48,7 @@ JSDot.Drag = function(jsdot, view, sel) {
 		for (var i in s) {
 			if (s[i].isNode) {
 				/* it is a node, save initial position and append to list */
-				s[i].drag = s[i].position;
+				view.nodeData[s[i].name].drag = s[i].position;
 				h.nodes.push(s[i]);
 				
 				/* get the edges connected to it */
@@ -67,8 +67,8 @@ JSDot.Drag = function(jsdot, view, sel) {
 	*/
 	this.drag = function(obj, evt) {
 		for (var i in h.nodes) {
-			var p = h.nodes[i].drag;
-			h.nodes[i].position = [p[0]+evt.dx, p[1]+evt.dy];
+			var p = view.nodeData[h.nodes[i].name].drag;
+			h.nodes[i].setPosition([p[0]+evt.dx, p[1]+evt.dy], false);
 			view.updateNodePos(h.nodes[i]);
 		}
 		for (var i in h.edges) {
