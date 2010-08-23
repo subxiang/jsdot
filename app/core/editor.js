@@ -390,20 +390,21 @@ JSDot.Editor.LayoutBar.prototype = {
 	leftH: function(editor) {
 		return function() {
 			var s = editor.selection;
+			var v = editor.view;
 			/* find first node and initialize l */
 			var n = s.firstNode();
 			if (!n) return;
-			var l = n.getBBox().x;
+			var l = v.getBBox(n).x;
 			
 			/* find leftmost node */
 			s.forNodes(function(n) {
-				var p = n.getBBox().x;
+				var p = v.getBBox(n).x;
 				if (p < l) l = p;
 			});
 			
 			/* update nodes */
 			s.forNodes(function(n) {
-				n.setPosition([ l + n.getBBox().width/2, n.position[1] ]);
+				n.setPosition([ l + v.getBBox(n).width/2, n.position[1] ]);
 			});
 		};
 	},
@@ -434,22 +435,23 @@ JSDot.Editor.LayoutBar.prototype = {
 	rightH: function(editor) {
 		return function() {
 			var s = editor.selection;
+			var v = editor.view;
 			/* find first node and initialize r */
 			var n = s.firstNode();
 			if (!n) return;
-			var p = n.getBBox();
+			var p = v.getBBox(n);
 			var r = p.x + p.width;
 			
 			/* find rightmost node */
 			s.forNodes(function(n) {
-				p = n.getBBox();
+				p = v.getBBox(n);
 				p = p.x + p.width;
 				if (p > r) r = p;
 			});
 			
 			/* update nodes */
 			s.forNodes(function(n) {
-				n.setPosition([ r - n.getBBox().width/2, n.position[1] ]);
+				n.setPosition([ r - v.getBBox(n).width/2, n.position[1] ]);
 			});
 		};
 	},
@@ -457,20 +459,21 @@ JSDot.Editor.LayoutBar.prototype = {
 	topH: function(editor) {
 		return function() {
 			var s = editor.selection;
+			var v = editor.view;
 			/* find first node and initialize y */
 			var n = s.firstNode();
 			if (!n) return;
-			var y = n.getBBox().y;
+			var y = v.getBBox(n).y;
 			
 			/* find topmost node */
 			s.forNodes(function(n) {
-				var p = n.getBBox().y;
+				var p = v.getBBox(n).y;
 				if (p < y) y = p;
 			});
 			
 			/* update nodes */
 			s.forNodes(function(n) {
-				n.setPosition([ n.position[0], y + n.getBBox().height/2 ]);
+				n.setPosition([ n.position[0], y + v.getBBox(n).height/2 ]);
 			});
 		};
 	},
@@ -501,22 +504,23 @@ JSDot.Editor.LayoutBar.prototype = {
 	bottomH: function(editor) {
 		return function() {
 			var s = editor.selection;
+			var v = editor.view;
 			/* find first node and initialize y */
 			var n = s.firstNode();
 			if (!n) return;
-			var p = n.getBBox();
+			var p = v.getBBox(n);
 			var y = p.y + p.height;
 			
 			/* find bottom node */
 			s.forNodes(function(n) {
-				p = n.getBBox();
+				p = v.getBBox(n);
 				p = p.y + p.height;
 				if (p > y) y = p;
 			});
 			
 			/* update nodes */
 			s.forNodes(function(n) {
-				n.setPosition([ n.position[0], y - n.getBBox().height/2 ]);
+				n.setPosition([ n.position[0], y - v.getBBox(n).height/2 ]);
 			});
 		};
 	},

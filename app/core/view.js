@@ -227,6 +227,19 @@ JSDot.View.prototype = {
 			delete this.edgeData[e.id];
 		}
 	},
+
+	/** Bounding box of a node's shape.
+		Bounding box contains 'height', 'width', 'x', 'y' and is relative to SVG.
+		@param {JSDot.Node_impl} v Node
+		@return {Object} bounding box
+	*/
+	getBBox: function(v) {
+		if (v.isNode) {
+			return v.stencil.getBBox(v, this.nodeData[v.name]);
+		} else {
+			return {'height': 0, 'width': 0, 'x': 0, 'y': 0 };
+		}
+	},
 	
 	/** Register handler needed by the view.
 		Defines and registers the event handler that allows the view to receive
