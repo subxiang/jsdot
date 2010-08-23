@@ -106,13 +106,4 @@ JSDot.Node_impl.prototype = {
 		return this.userData[key];
 	},
 
-	/** Bounding box of the node's shape.
-		Bounding box contains 'height', 'width', 'x', 'y' and is relative to SVG.
-		@return {Object} bounding box
-	*/
-	getBBox: function() {
-		if (this.stencil) return this.stencil.getBBox(this);
-		return {'height': 0, 'width': 0, 'x': this.position[0], 'y': this.position[1] };
-	},
-
 };
