@@ -32,11 +32,23 @@ THE SOFTWARE.
 	@param {String} name name of the new node
 */
 JSDot.Node_impl = function(graph, name) {
+
+	/** Graph containing the node.
+		@type JSDot.Graph_impl
+	*/
 	this.graph = graph;
+	
+	/** Name identifying the node inside the graph. */
 	this.name = name;
+	
 	this.label = {'type': 'plain', 'value': name};
 	this.position = [0,0];
+	
+	/** Name of the stencil to be used to represent the node.
+		@type String
+	*/
 	this.stencil = graph.defaultNodeStencil;
+	
 	this.edges = {};
 	
 	/** This can be arbitrary data attached to the node.
@@ -83,7 +95,7 @@ JSDot.Node_impl.prototype = {
 		@param {Boolean} fire whether to fire the event or not, default is true
 	*/
 	setStencil: function(name, fire) {
-		this.stencil = JSDot.stencils[name] || jsdot.graph.defaultNodeStencil;
+		this.stencil = name;
 		if (fire == undefined || fire) this.graph.jsdot.fireEvent('changed', this);
 	},
 	

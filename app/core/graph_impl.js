@@ -34,8 +34,8 @@ THE SOFTWARE.
 */
 JSDot.Graph_impl = function(jsdot) {
 	this.jsdot = jsdot;
-	this.defaultNodeStencil = JSDot.stencils.circle;
-	this.defaultEdgeStencil = JSDot.edge_stencils.line;
+	this.defaultNodeStencil = 'circle';
+	this.defaultEdgeStencil = 'line';
 };
 
 JSDot.Graph_impl.prototype = {
@@ -50,8 +50,14 @@ JSDot.Graph_impl.prototype = {
 	*/
 	edges: {},
 	
+	/** Name of the stencil applied to created nodes.
+		@type String
+	*/
 	defaultNodeStencil: null,
 	
+	/** Name of the stencil applied to created edges.
+		@type String
+	*/
 	defaultEdgeStencil: null,
 	
 	/** Returns a node by name.
