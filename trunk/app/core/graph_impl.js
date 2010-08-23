@@ -33,33 +33,46 @@ THE SOFTWARE.
 	@param {JSDot.jsdot_Impl} jsdot JSDot instance
 */
 JSDot.Graph_impl = function(jsdot) {
+
+	/** Associated JSDot instance. 
+		@type JSDot.jsdot_Impl
+	*/
 	this.jsdot = jsdot;
-	this.defaultNodeStencil = 'circle';
-	this.defaultEdgeStencil = 'line';
-};
-
-JSDot.Graph_impl.prototype = {
-
-	/** Nodes in the graph.
-		@private
-	*/
-	nodes: {},
-	
-	/** Edges in the graph
-		@private
-	*/
-	edges: {},
 	
 	/** Name of the stencil applied to created nodes.
 		@type String
 	*/
-	defaultNodeStencil: null,
+	this.defaultNodeStencil = 'circle';
 	
 	/** Name of the stencil applied to created edges.
 		@type String
 	*/
-	defaultEdgeStencil: null,
+	this.defaultEdgeStencil = 'line';
+
+	/** Nodes in the graph.
+		List of {@link JSDot.Node_impl} indexed by their name.
+	*/
+	this.nodes = {};
 	
+	/** Edges in the graph.
+		List of {@link JSDot.Edge_impl} indexed by their id.
+	*/
+	this.edges = {};
+	
+	/** Incremental name for new nodes.
+		@private
+	*/
+	this.lastName = 0;
+	
+	/** Incremental index for edges.
+		@private
+	*/
+	this.lastEId = 0;
+
+};
+
+JSDot.Graph_impl.prototype = {
+
 	/** Returns a node by name.
 		@param {String} name name of the node
 		@return {Node} the node or undefined
@@ -67,12 +80,6 @@ JSDot.Graph_impl.prototype = {
 	getNodeByName: function(name) {
 		return this.nodes[name];
 	},
-	
-	/** Incremental name for new nodes. */
-	lastName: 0,
-	
-	/** Incremental index for edges. */
-	lastEId: 0,
 	
 	/** Create a new node in the current graph.
 		If a name is provided, and a node with the same name already exists

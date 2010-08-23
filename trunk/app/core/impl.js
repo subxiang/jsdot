@@ -33,28 +33,24 @@ THE SOFTWARE.
 	@constructor
 */
 JSDot.jsdot_Impl = function() {
-	this.graph = new JSDot.Graph_impl(this);
-};
 
-JSDot.jsdot_Impl.prototype = {
-
-	view: null,
-	
-	selection: null,
-	
-	/** Attached graph.
-		The graph on which the instance is working.
-		@type Graph_impl
-	*/
-	graph: null,
-	
 	/** Registered event handlers.
 		@private
 		@see addEventHandler
 		@see fireEvent
 	*/
-	handlers: {},
+	this.handlers = {};
 	
+	/** Attached graph.
+		The graph on which the instance is working.
+		@type Graph_impl
+	*/
+	this.graph = new JSDot.Graph_impl(this);
+
+};
+
+JSDot.jsdot_Impl.prototype = {
+
 	/** Registers an event handler.
 		When an event is triggered the function
 		handler['event name'] will be called.
@@ -87,4 +83,5 @@ JSDot.jsdot_Impl.prototype = {
 			if (h[name]) h[name].apply(h, arguments);
 		};
 	},
+
 };

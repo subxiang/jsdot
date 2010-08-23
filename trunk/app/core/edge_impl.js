@@ -34,11 +34,34 @@ THE SOFTWARE.
 	@param {JSDot.Node_impl} dst ending node
 */
 JSDot.Edge_impl = function(graph, id, src, dst) {
+
+	/** Graph containing the edge.
+		@type JSDot.Graph_impl
+	*/
 	this.graph = graph;
+	
+	/** Edge identification. */
 	this.id = id;
+	
+	/** Node where the edge starts.
+		@type JSDot.Node_impl
+	*/
 	this.src = src;
+	
+	/** Node where the edge terminates.
+		@type JSDot.Node_impl
+	*/
 	this.dst = dst;
+	
+	/** Label of the edge.
+		@see setLabel
+	*/
 	this.label = null;
+	
+	/** Name of the stencil to be used to represent the edge.
+		@type String
+		@see setStencil
+	*/
 	this.stencil = graph.defaultEdgeStencil;
 	
 	/** This can be arbitrary data attached to the edge.
