@@ -74,7 +74,7 @@ JSDot.Edge_impl.prototype = {
 		@param {Boolean} fire whether to fire a {@link doc_Handler.changed} event or not, default is true
 	*/
 	setStencil: function(name, fire) {
-		this.stencil = JSDot.edge_stencils[name] || this.graph.defaultEdgeStencil;
+		this.stencil = name;
 		if (fire == undefined || fire) this.graph.jsdot.fireEvent('changed', this);
 	},
 	

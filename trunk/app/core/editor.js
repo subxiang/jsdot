@@ -668,7 +668,7 @@ JSDot.Editor.EditDialog = function(editor) {
 					
 					nodeFStcl.innerHTML = ''; /* remove options */
 					for (var i in JSDot.stencils) {
-						nodeFStcl.add(new Option(i, i, JSDot.stencils[i] == e.stencil), null);
+						nodeFStcl.add(new Option(i, i, i == e.stencil), null);
 					}
 					
 					nodeFLabel.value = e.label.value;
@@ -682,7 +682,7 @@ JSDot.Editor.EditDialog = function(editor) {
 					
 					edgeFStcl.innerHTML = '';
 					for (var i in JSDot.edge_stencils) {
-						edgeFStcl.add(new Option(i, i, JSDot.edge_stencils[i] == e.stencil), null);
+						edgeFStcl.add(new Option(i, i, i == e.stencil), null);
 					}
 					
 					edgeFLabel.value = (e.label ? e.label.value : '');

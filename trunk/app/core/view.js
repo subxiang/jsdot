@@ -103,9 +103,19 @@ JSDot.View.prototype = {
 		this.svgroot.appendChild(g);
 		nd.group = g;
 		
+		/* resolve node stencil */
+		nd.stencil = JSDot.stencils[n.stencil];
+		if (!nd.stencil) {
+			/* get a fallback */
+			for (var i in JSDot.stencils) {
+				nd.stencil = JSDot.stencils[i];
+				break;
+			}
+		}
+		
 		/* draw the node */
-		n.stencil.draw(n, nd, g);
-		n.stencil.setPosition(n, nd);
+		nd.stencil.draw(n, nd, g);
+		nd.stencil.setPosition(n, nd);
 		
 		/* if it hasn't already been done, resolve label stencil name
 		   to the actual stencil object */
@@ -120,7 +130,7 @@ JSDot.View.prototype = {
 		nd.labelStencil.setPosition(n, nd);
 		
 		/* now that the label has been drawn we can set the size of the node */
-		n.stencil.setSize(n, nd, nd.labelStencil.getSize(n, nd));
+		nd.stencil.setSize(n, nd, nd.labelStencil.getSize(n, nd));
 	},
 	
 	/** Move node to a new position.
@@ -128,7 +138,7 @@ JSDot.View.prototype = {
 	*/
 	updateNodePos: function(n) {
 		var nd = this.nodeData[n.name];
-		n.stencil.setPosition(n, nd);
+		nd.stencil.setPosition(n, nd);
 		nd.labelStencil.setPosition(n, nd);
 	},
 	
@@ -166,6 +176,16 @@ JSDot.View.prototype = {
 			this.edgeData[e.id] = ed;
 		}
 		
+		/* resolve edge stencil */
+		ed.stencil = JSDot.edge_stencils[e.stencil];
+		if (!ed.stencil) {
+			/* get a fallback */
+			for (var i in JSDot.edge_stencils) {
+				ed.stencil = JSDot.edge_stencils[i];
+				break;
+			}
+		}
+		
 		/* create a group for the edge */
 		var g = JSDot.helper.cesvg('g');
 		g.jsdot_edge = e;
@@ -175,8 +195,8 @@ JSDot.View.prototype = {
 		this.computeEdgePosition(e);
 		
 		/* draw the edge */
-		e.stencil.draw(e, ed, g);
-		e.stencil.setPosition(e, ed);
+		ed.stencil.draw(e, ed, g);
+		ed.stencil.setPosition(e, ed);
 		
 		/* draw label only if it exists */
 		if (e.label) {
@@ -199,7 +219,7 @@ JSDot.View.prototype = {
 	updateEdgePos: function(e) {
 		this.computeEdgePosition(e);
 		var ed = this.edgeData[e.id];
-		e.stencil.setPosition(e, ed);
+		ed.stencil.setPosition(e, ed);
 		if (e.label) ed.labelStencil.setPosition(e, ed);
 	},
 	
@@ -213,8 +233,10 @@ JSDot.View.prototype = {
 	*/
 	computeEdgePosition: function(e) {
 		var ed = this.edgeData[e.id];
-		ed.start = e.src.stencil.getBoundaryTo(e.src, this.nodeData[e.src.name], e.dst.position);
-		ed.end = e.dst.stencil.getBoundaryTo(e.dst, this.nodeData[e.dst.name], e.src.position);
+		var srcD = this.nodeData[e.src.name];
+		var dstD = this.nodeData[e.dst.name];
+		ed.start = srcD.stencil.getBoundaryTo(e.src, srcD, e.dst.position);
+		ed.end = dstD.stencil.getBoundaryTo(e.dst, dstD, e.src.position);
 	},
 	
 	/** Remove an edge from the drawing.
@@ -235,7 +257,8 @@ JSDot.View.prototype = {
 	*/
 	getBBox: function(v) {
 		if (v.isNode) {
-			return v.stencil.getBBox(v, this.nodeData[v.name]);
+			var d = this.nodeData[v.name];
+			return d.stencil.getBBox(v, d);
 		} else {
 			return {'height': 0, 'width': 0, 'x': 0, 'y': 0 };
 		}
@@ -256,7 +279,7 @@ JSDot.View.prototype = {
 			} else {
 				d = view.edgeData[n.id];
 			}
-			n.stencil.highlight(n, d, s);
+			d.stencil.highlight(n, d, s);
 			d.highlight = s; /* needed to make highlighting survive a 'changed' event */
 		};
 		
