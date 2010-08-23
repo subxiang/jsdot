@@ -41,14 +41,26 @@ JSDot.Node_impl = function(graph, name) {
 	/** Name identifying the node inside the graph. */
 	this.name = name;
 	
+	/** Label of the node.
+		@see setLabel
+	*/
 	this.label = {'type': 'plain', 'value': name};
+	
+	/** Position of the node.
+		Array [x,y].
+		@see setPosition
+	*/
 	this.position = [0,0];
 	
 	/** Name of the stencil to be used to represent the node.
 		@type String
+		@see setStencil
 	*/
 	this.stencil = graph.defaultNodeStencil;
 	
+	/** List of edges connected to this node.
+		Elements are {@link JSDot.Edge_impl} instances indexed by their id.
+	*/
 	this.edges = {};
 	
 	/** This can be arbitrary data attached to the node.

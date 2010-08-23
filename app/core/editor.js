@@ -29,9 +29,49 @@
 	@constructor
 */
 JSDot.Editor = function(jsdot, view, sel) {
+
+	/** Associated JSDot instance. */
 	this.jsdot = jsdot;
+	
+	/** Associated view. */
 	this.view = view;
+	
+	/** Selection on the view. */
 	this.selection = sel;
+
+	/** Toolbar container.
+		Div element containig the toolbar elements.
+		@type {DOM Element}
+	*/
+	this.tbContainer = null;
+
+	/** Current node stencil name.
+		The stencil that will be given to the new noded created by this editor.<br>
+		Note that this is the name of a stencil in {@link JSDot.stencils} and not
+		the stencil itself.
+		@type String
+	*/
+	this.currentNodeStencil = null;
+	
+	/** Current edge stencil name.
+		The stencil that will be given to the new edges created by this editor.<br>
+		Note that this is the name of a stencil in {@link JSDot.edge_stencils} and not
+		the stencil itself.
+		@type String
+	*/
+	this.currentEdgeStencil = null;
+	
+	/** Instance of the dialog.
+		Instance of {@link JSDot.Editor.EditDialog} created by
+		{@link JSDot.Editor} constructor.
+	*/
+	this.editDialog = null;
+	
+	/** The nested bar currently shown */
+	this.activeNested = null;
+	
+	/** List of registered nested bars. */
+	this.nestedBars = {};
 	
 	var tb = document.createElement('div');
 	tb.setAttribute('class', 'ui-widget-header ui-corner-all jsdot-toolbar');
@@ -44,34 +84,6 @@ JSDot.Editor = function(jsdot, view, sel) {
 };
 
 JSDot.Editor.prototype = {
-
-	/** Toolbar container.
-		Div element containig the toolbar elements.
-		@type {DOM Element}
-	*/
-	tbContainer: null,
-	
-	/** Current node stencil name.
-		The stencil that will be given to the new noded created by this editor.<br>
-		Note that this is the name of a stencil in {@link JSDot.stencils} and not
-		the stencil itself.
-		@type String
-	*/
-	currentNodeStencil: null,
-	
-	/** Current edge stencil name.
-		The stencil that will be given to the new edges created by this editor.<br>
-		Note that this is the name of a stencil in {@link JSDot.edge_stencils} and not
-		the stencil itself.
-		@type String
-	*/
-	currentEdgeStencil: null,
-	
-	/** Instance of the dialog.
-		Instance of {@link JSDot.Editor.EditDialog} created by
-		{@link JSDot.Editor} constructor.
-	*/
-	editDialog: null,
 
 	/** Set selected button.
 		Change tool icon highlighting to show which button is selected
@@ -90,12 +102,6 @@ JSDot.Editor.prototype = {
 		$(b).addClass('jsdot-tb-selected');
 		tb.selected = b;
 	},
-	
-	/** The nested bar currently shown */
-	activeNested: null,
-	
-	/** List of registered nested bars. */
-	nestedBars: {},
 
 	/** Register a new nested bar. */
 	addNestedBar: function(bar) {
@@ -125,14 +131,49 @@ JSDot.Editor.prototype = {
 	@param {Object} p parent DOM element where to insert button elements
 */
 JSDot.Editor.MainBar = function(editor, p) {
-	tb = this; // no need for closure actually, but use as shorthand
+	var tb = this; // no need for closure actually, but use as shorthand
+	
+	/** Attached editor.
+		Editor to which this toolbar is attached.
+		@type JSDot.Editor
+	*/
 	this.editor = editor;
 	
+	/** Handler for drag&drop.
+		@type JSDot.Drag
+	*/
 	this.dragH = new JSDot.Drag(editor.jsdot, editor.view, editor.selection);
+	
+	/** Handler for creating edges.
+		@type JSDot.EdgeViz
+	*/
 	this.createEdgeH = new JSDot.EdgeViz(editor.jsdot, editor.view, editor);
+	
+	/** Nested bar for layout operations.
+		@type JSDot.Editor.LayoutBar
+	*/
 	this.layoutBar = new JSDot.Editor.LayoutBar(editor);
+	
+	/** Nested bar for creating nodes.
+		@type JSDot.Editor.CreateNodeBar
+	*/
 	this.createNodeBar = new JSDot.Editor.CreateNodeBar(editor);
+	
+	/** Nested bar for creating edges.
+		@type JSDot.Editor.CreateEdgeBar
+	*/
 	this.createEdgeBar = new JSDot.Editor.CreateEdgeBar(editor);
+
+	/** Selected tool.
+		This is used to keep track of which tool icon is highlighted.
+		@see JSDot.Editor.setSelected
+	*/
+	selected = null;
+	
+	
+	/****************************************************************
+		Now create the UI part of the toolbar.
+	****************************************************************/
 	
 	var spc = document.createElement('div');
 	spc.setAttribute('class', 'jsdot-tb-handleL');
@@ -255,29 +296,6 @@ JSDot.Editor.MainBar = function(editor, p) {
 
 JSDot.Editor.MainBar.prototype = {
 
-	/** Selected tool.
-		This is used to keep track of which tool icon is highlighted.
-		@see jsdot_Editor#setSelected
-	*/
-	selected: null,
-	
-	/** Attached editor.
-		Editor to which this toolbar is attached.
-		@type jsdot_Editor
-	*/
-	editor: null,
-	
-	/** Nested bar or layout operations.
-		Created in {@link #MainBar}.
-		@type JSDot.Editor.LayoutBar
-	*/
-	layoutBar: null,
-	
-	/** Handler for drag&drop.
-		This is a {@link jsdot_Drag} created in {@link #MainBar} constructor.
-	*/
-	dragH: null,
-	
 	/** Construct handler for creating nodes.
 		@param {JSDot.jsdot_Impl} jsdot jsdot instance
 		@return {doc_Handler} handler
@@ -294,12 +312,6 @@ JSDot.Editor.MainBar.prototype = {
 		};
 	},
 	
-	/** Handler for creating edges.
-		This is created in {@link #MainBar} constructor.
-		@type JSDot.EdgeViz
-	*/
-	createEdgeH: null,
-	
 	/** Construct handler for removing nodes and edges.
 		@param {jsdot_Impl} jsdot jsdot instance
 		@return {doc_Handler} handler
@@ -315,7 +327,7 @@ JSDot.Editor.MainBar.prototype = {
 			}
 		};
 	},
-	
+
 };
 
 /** @class Layout toolbar.

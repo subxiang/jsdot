@@ -28,13 +28,68 @@
 	Handles selection and dragging of nodes and edges in a view.
 
 	@constructor
-	@param {JSDot} jsdot JSDot instance
-	@param {jsdot_View} view JSDot view
+	@param {JSDot.jsdot_Impl} jsdot JSDot instance
+	@param {JSDot.View} view JSDot view
 */
 JSDot.Selection = function(jsdot, view) {
 
+	/** Associated JSDot instance. */
 	this.jsdot = jsdot;
+	
+	/** View on which the selection is represented. */
 	this.view = view;
+	
+	/** Allow nodes to be selected.
+		@note Be sure to call {@link deselectAll} when changing this to false.
+	*/
+	this.allowNodes = true;
+	
+	/** Allow edges to be selected.
+		@note Be sure to call {@link deselectAll} when changing this to false.
+	*/
+	this.allowEdges = true;
+	
+	/** Allow multiple elements to be selected */
+	this.allowMultiple = true;
+	
+	/** Allow dragging */
+	this.allowDrag = true;
+	
+	/** Selected elements.
+		Array of selected nodes and edges.
+		@see select
+		@see deselect
+		@see deselectAll
+	*/
+	this.selection = [];
+	
+	/** True when dragging something
+		@private
+		@see svgMousemove_impl
+	*/
+	this.moving = false;
+	
+	/** Event which started a move.
+		@private
+	*/
+	this.moveStart = null;
+	
+	/** Target object of an event.
+		@private
+		@see setEvtTarget
+	*/
+	this.evtTarget = null;
+	
+	/** Type of an event's target.
+		@private
+		@see setEvtTarget
+	*/
+	this.evtTargetType = '';
+
+
+	/****************************************************************
+		Register event listeners.
+	****************************************************************/
 
 	view.svgroot.addEventListener('mousedown',
 			function(obj) {
@@ -42,8 +97,14 @@ JSDot.Selection = function(jsdot, view) {
 					return obj.svgMousedown.apply(obj, arguments);
 				};
 			}(this), false);
-			
-	/* create closure for mousemove listener */
+	
+	/** Handler for mousemove event on the SVG.
+		Does dragging when it is enabled.
+		
+		The actual implementation is in {@link svgMousemove_impl},
+		this is a closure.
+		@see svgMousemove_impl
+	*/
 	this.svgMousemove =
 			function(obj) {
 				return function() {
@@ -61,59 +122,6 @@ JSDot.Selection = function(jsdot, view) {
 
 JSDot.Selection.prototype = {
 
-	/** Associated JSDot instance */
-	jsdot: null,
-	
-	/** Associated view */
-	view: null,
-	
-	/** Allow nodes to be selected.
-		@note Be sure to call {@link deselectAll} when changing this to false.
-	*/
-	allowNodes: true,
-	
-	/** Allow edges to be selected.
-		@note Be sure to call {@link deselectAll} when changing this to false.
-	*/
-	allowEdges: true,
-	
-	/** Allow multiple elements to be selected */
-	allowMultiple: true,
-	
-	/** Allow dragging */
-	allowDrag: true,
-	
-	/** Selected elements.
-		Array of selected nodes and edges.
-		@see select
-		@see deselect
-		@see deselectAll
-	*/
-	selection: [],
-	
-	/** True when dragging something
-		@private
-		@see svgMousemove_impl
-	*/
-	moving: false,
-	
-	/** Event which started a move.
-		@private
-	*/
-	moveStart: null,
-	
-	/** Target object of an event.
-		@private
-		@see setEvtTarget
-	*/
-	evtTarget: null,
-	
-	/** Type of an event's target.
-		@private
-		@see setEvtTarget
-	*/
-	evtTargetType: '',
-	
 	/** Handler for mousedown event on the SVG.
 		Handles mousedown events.
 		
@@ -205,16 +213,6 @@ JSDot.Selection.prototype = {
 			};
 		};
 	},
-	
-	/** Handler for mousemove event on the SVG.
-		Does dragging when it is enabled.
-		
-		This is replaced on creation with a closure calling
-		{@link svgMousemove_impl}, where the actual implementation resides.
-		@private
-		@see svgMousemove_impl
-	*/
-	svgMousemove: function() {},
 	
 	/** Implementation of the mousemove event handler.
 		Does dragging when it is enabled.

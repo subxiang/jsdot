@@ -32,13 +32,25 @@
 	@param {String} divId id of the div container
 */
 JSDot.View = function(jsdot, divId) {
+
+	/** Associated JSDot instance. */
 	this.jsdot = jsdot;
+	
+	/** Id of the containing div tag. */
 	this.divId = divId;
 	
+	/** Containing div element. */
 	this.container = document.getElementById(divId);
+	
+	/** SVG owning document. */
 	this.svgdoc = this.container.ownerDocument;
+	
 	var div = document.createElement('div'); // used to get the offset of the svg inside the page
 	this.container.appendChild(div);
+	
+	/** SVG element.
+		This is where we draw.
+	*/
 	this.svgroot = JSDot.helper.cesvg("svg"); // create element
 	div.appendChild(this.svgroot);
 	
@@ -57,23 +69,6 @@ JSDot.View = function(jsdot, divId) {
 };
 
 JSDot.View.prototype = {
-
-	/** Associated JSDot instance */
-	jsdot: null,
-	
-	/** Id of the containing div tag. */
-	divId: null,
-	
-	/** Containing div element. */
-	container: null,
-	
-	/** SVG owning document. */
-	svgdoc: null,
-	
-	/** SVG element.
-		This is where we draw.
-	*/
-	svgroot: null,
 	
 	/** View identifier.
 		Returns a string which can be used to build ids for DOM elements
