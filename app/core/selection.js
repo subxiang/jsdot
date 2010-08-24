@@ -184,7 +184,7 @@ JSDot.Selection.prototype = {
 		if (!this.allowEdges && !this.allowNodes) {
 			/* If selection is disabled the event is 'click' */
 			this.view.addRelCoord(evt);
-			this.jsdot.fireEvent('click', this.evtTarget, evt);
+			this.view.fireViewEvent('click', this.evtTarget, evt);
 		} else {
 			/* if selection is enabled we handle it */
 			switch (this.evtTargetType) {
@@ -231,14 +231,14 @@ JSDot.Selection.prototype = {
 			if (Math.abs(dx) > 2 || Math.abs(dy) > 2) {
 				/* start moving */
 				this.moving = true;
-				this.jsdot.fireEvent('pick', this.evtTarget);
+				this.view.fireViewEvent('pick', this.evtTarget);
 			};
 		};
 		
 		if (this.moving) {
 			evt.dx = dx;
 			evt.dy = dy;
-			this.jsdot.fireEvent('drag', this.evtTarget, evt);
+			this.view.fireViewEvent('drag', this.evtTarget, evt);
 		};
 	},
 	
@@ -252,7 +252,7 @@ JSDot.Selection.prototype = {
 		} else {
 			evt.dx = evt.pageX - this.moveStart.pageX;
 			evt.dy = evt.pageY - this.moveStart.pageY;
-			this.jsdot.fireEvent('drop', this.evtTarget, evt);
+			this.view.fireViewEvent('drop', this.evtTarget, evt);
 		};
 		this.moving = false;
 		this.moveStart = null;
@@ -281,7 +281,7 @@ JSDot.Selection.prototype = {
 			   or it is a node and they are allowed. */
 			if (!this.allowMultiple) this.deselectAll();
 			this.selection.push(n);
-			this.jsdot.fireEvent('selectionchg', n, true);
+			this.view.fireViewEvent('selectionchg', n, true);
 		};
 	},
 	
@@ -291,7 +291,7 @@ JSDot.Selection.prototype = {
 	deselect: function(n) {
 		if (this.isSelected(n)) {
 			this.selection.splice(this.selection.indexOf(n), 1);
-			this.jsdot.fireEvent('selectionchg', n, false);
+			this.view.fireViewEvent('selectionchg', n, false);
 		};
 	},
 	
@@ -301,7 +301,7 @@ JSDot.Selection.prototype = {
 	deselectAll: function() {
 		var e;
 		while (e = this.selection.pop()) {
-			this.jsdot.fireEvent('selectionchg', e, false);
+			this.view.fireViewEvent('selectionchg', e, false);
 			e = undefined;
 		};
 	},

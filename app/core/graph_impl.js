@@ -103,7 +103,7 @@ JSDot.Graph_impl.prototype = {
 		var n = new JSDot.Node_impl(this, nn);
 		
 		this.nodes[nn] = n;
-		if (fire == undefined || fire) this.jsdot.fireEvent('created', n);
+		if (fire == undefined || fire) this.jsdot.fireEvent(this, 'created', n);
 		return n;
 	},
 	
@@ -124,7 +124,7 @@ JSDot.Graph_impl.prototype = {
 		dst.edges[id] = e;
 		
 		this.edges[id] = e;
-		if (fire == undefined || fire) this.jsdot.fireEvent('created', e);
+		if (fire == undefined || fire) this.jsdot.fireEvent(this, 'created', e);
 		return e;
 	},
 	
@@ -147,7 +147,7 @@ JSDot.Graph_impl.prototype = {
 		}
 		
 		delete this.nodes[n.name];
-		if (fire == undefined || fire) this.jsdot.fireEvent('removed', n);
+		if (fire == undefined || fire) this.jsdot.fireEvent(this, 'removed', n);
 	},
 	
 	/** Remove an edge from current graph.
@@ -158,6 +158,6 @@ JSDot.Graph_impl.prototype = {
 		delete this.edges[e.id];
 		delete e.src.edges[e.id];
 		delete e.dst.edges[e.id];
-		if (fire == undefined || fire) this.jsdot.fireEvent('removed', e);
+		if (fire == undefined || fire) this.jsdot.fireEvent(this, 'removed', e);
 	},
 };

@@ -82,7 +82,7 @@ JSDot.Drag = function(jsdot, view, sel) {
 	this.drop = function(obj, evt) {
 		/* make sure the view is updated up to the last movement */
 		for (i in h.nodes) {
-			jsdot.fireEvent('moved', h.nodes[i]);
+			view.fireViewEvent('moved', h.nodes[i]);
 		}
 		h.nodes = [];
 		h.edges = [];

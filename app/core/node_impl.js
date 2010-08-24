@@ -86,7 +86,7 @@ JSDot.Node_impl.prototype = {
 		} else {
 			this.label = {'type': 'plain', 'value': l};
 		}
-		if (fire == undefined || fire) this.graph.jsdot.fireEvent('changed', this);
+		if (fire == undefined || fire) this.graph.jsdot.fireEvent(this.graph, 'changed', this);
 	},
 	
 	/** Set node's position.
@@ -96,7 +96,7 @@ JSDot.Node_impl.prototype = {
 	*/
 	setPosition: function(p, fire) {
 		this.position = p;
-		if (fire == undefined || fire) this.graph.jsdot.fireEvent('moved', this);
+		if (fire == undefined || fire) this.graph.jsdot.fireEvent(this.graph, 'moved', this);
 	},
 
 	/** Set node stencil.
@@ -108,7 +108,7 @@ JSDot.Node_impl.prototype = {
 	*/
 	setStencil: function(name, fire) {
 		this.stencil = name;
-		if (fire == undefined || fire) this.graph.jsdot.fireEvent('changed', this);
+		if (fire == undefined || fire) this.graph.jsdot.fireEvent(this.graph, 'changed', this);
 	},
 	
 	/** Attach data to the node.

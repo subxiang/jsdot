@@ -267,7 +267,7 @@ JSDot.View.prototype = {
 		var handler = {};
 		var view = this;
 		
-		handler.selectionchg = function(n, s) {
+		var selectionchgH = function(n, s) {
 			var d;
 			if (n.isNode) {
 				d = view.nodeData[n.name];
@@ -324,7 +324,8 @@ JSDot.View.prototype = {
 			}
 		};
 		
-		this.jsdot.addEventHandler('view', handler);
+		this.jsdot.addEventHandler(null, handler); /* graph events */
+		this.jsdot.addEventHandler(this, selectionchgH);
 	},
 	
 	/** DOM Element offset relative to document.
@@ -350,6 +351,16 @@ JSDot.View.prototype = {
 		var offset = this.getOffset(this.svgroot.parentNode);
 		evt.relX = evt.pageX - offset[0];
 		evt.relY = evt.pageY - offset[1];
+	},
+	
+	/** Fire an event affecting this view.
+		This is a shorthand to call {@link JSDot.jsdot_Impl.fireEvent} with this
+		view as first argument.
+		@see JSDot.jsdot_Impl.fireEvent
+	*/
+	fireViewEvent: function() {
+		Array.prototype.unshift.call(arguments, this);
+		return this.jsdot.fireEvent.apply(this.jsdot, arguments);
 	},
 	
 };

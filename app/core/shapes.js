@@ -57,7 +57,7 @@ JSDot.shapes = {
 		},
 		
 		getBBox: function(n, d) {
-			return d.shape.getBBox(n);
+			return d.shape.getBBox();
 		},
 		
 		setSize: function(n, d, s) {
@@ -135,7 +135,7 @@ JSDot.shapes = {
 		},
 		
 		getBBox: function(n, d) {
-			return d.shape.getBBox(n);
+			return d.shape.getBBox();
 		},
 		
 		setSize: function(n, d, s) {
@@ -222,7 +222,7 @@ JSDot.shapes = {
 		},
 		
 		getBBox: function(n, d) {
-			return d.shape.getBBox(n);
+			return d.shape.getBBox();
 		},
 		
 		setSize: function(n, d, s) {
@@ -317,7 +317,7 @@ JSDot.shapes = {
 		},
 		
 		getBBox: function(n, d) {
-			return d.shape.getBBox(n);
+			return d.shape.getBBox();
 		},
 		
 		setSize: function(n, d, s) {

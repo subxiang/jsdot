@@ -61,7 +61,7 @@ function JSDot() {
 				s.allowEdges = true;
 				s.allowMultiple = true;
 				s.allowDrag = true;
-				jsdot.addEventHandler('drag', new JSDot.Drag(jsdot, v, s));
+				jsdot.addEventHandler(v, new JSDot.Drag(jsdot, v, s));
 				break;
 			case 'editor':
 				/* selection is set up by the editor itself */
