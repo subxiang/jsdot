@@ -73,10 +73,18 @@ JSDot.Editor = function(jsdot, view, sel) {
 	/** List of registered nested bars. */
 	this.nestedBars = {};
 	
+	
+	/* create toolbar container */
 	var tb = document.createElement('div');
 	tb.setAttribute('class', 'ui-widget-header ui-corner-all jsdot-toolbar');
 	this.view.container.appendChild(tb);
 	this.tbContainer = tb;
+	
+	/* set toolbar's initial position */
+	var off = view.getOffset(view.container);
+	if (off[1] > 25) off[1] -= 25;
+	tb.style.top = off[1] + 'px';
+	
 	for (var i in JSDot.stencils) { this.currentNodeStencil = i; break; };
 	for (var i in JSDot.edge_stencils) { this.currentEdgeStencil = i; break; };
 	new JSDot.Editor.MainBar(this, tb);
@@ -707,5 +715,5 @@ JSDot.Editor.EditDialog = function(editor) {
 	};
 	
 	editor.jsdot.addEventHandler('editdialog', handler);
-	this.toggleOpen();
+	//this.toggleOpen(); // closed on startup
 };
