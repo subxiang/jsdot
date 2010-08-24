@@ -87,7 +87,7 @@ JSDot.Edge_impl.prototype = {
 		} else {
 			this.label = {'type': 'plain', 'value': l};
 		}
-		if (fire == undefined || fire) this.graph.jsdot.fireEvent('changed', this);
+		if (fire == undefined || fire) this.graph.jsdot.fireEvent(this.graph, 'changed', this);
 	},
 
 	/** Set edge stencil.
@@ -98,7 +98,7 @@ JSDot.Edge_impl.prototype = {
 	*/
 	setStencil: function(name, fire) {
 		this.stencil = name;
-		if (fire == undefined || fire) this.graph.jsdot.fireEvent('changed', this);
+		if (fire == undefined || fire) this.graph.jsdot.fireEvent(this.graph, 'changed', this);
 	},
 	
 	/** Attach data to the edge.

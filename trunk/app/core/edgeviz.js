@@ -34,6 +34,8 @@ THE SOFTWARE.
 */
 JSDot.EdgeViz = function(jsdot, view, editor) {
 	
+	var my = this; /* closure for handlers */
+	
 	/** Starting node for the edge. */
 	this.start = null;
 	
@@ -59,29 +61,29 @@ JSDot.EdgeViz = function(jsdot, view, editor) {
 		if (!obj || !obj.isNode) return;
 		
 		/* selection of first node */
-		if (!this.start) {
-			this.start = obj;
-			this.line = JSDot.helper.cesvg('line');
-			this.line.setAttribute('class', 'jsdot_edgeviz_line');
-			this.view.svgroot.appendChild(this.line);
-			this.line.setAttribute('x1', evt.relX);
-			this.line.setAttribute('y1', evt.relY);
-			this.line.setAttribute('x2', evt.relX);
-			this.line.setAttribute('y2', evt.relY);
-			this.moveH = this.mousemove(this.view, this.line);
-			this.view.svgroot.addEventListener('mousemove', this.moveH, false);
-			this.cancelH = function(o) { return function(e) { if (e.keyCode == 27) o.cancel(); }; }(this);
-			document.addEventListener('keydown', this.cancelH, false);
+		if (!my.start) {
+			my.start = obj;
+			my.line = JSDot.helper.cesvg('line');
+			my.line.setAttribute('class', 'jsdot_edgeviz_line');
+			my.view.svgroot.appendChild(my.line);
+			my.line.setAttribute('x1', evt.relX);
+			my.line.setAttribute('y1', evt.relY);
+			my.line.setAttribute('x2', evt.relX);
+			my.line.setAttribute('y2', evt.relY);
+			my.moveH = my.mousemove(my.view, my.line);
+			my.view.svgroot.addEventListener('mousemove', my.moveH, false);
+			my.cancelH = function(o) { return function(e) { if (e.keyCode == 27) o.cancel(); }; }(my);
+			document.addEventListener('keydown', my.cancelH, false);
 			window.focus();
 			return;
 		}
 		
 		/* selection of second node */
 		
-		var e = this.jsdot.graph.createEdge(this.start, obj, false);
-		if (this.editor) e.setStencil(this.editor.currentEdgeStencil, false);
-		this.cancel(); /* remove line and handlers */
-		this.jsdot.fireEvent('created', e);
+		var e = my.jsdot.graph.createEdge(my.start, obj, false);
+		if (my.editor) e.setStencil(my.editor.currentEdgeStencil, false);
+		my.cancel(); /* remove line and handlers */
+		my.jsdot.fireEvent(my.jsdot.graph, 'created', e);
 	};
 	
 	/** Creates the mousemove handler. */
@@ -95,13 +97,13 @@ JSDot.EdgeViz = function(jsdot, view, editor) {
 	
 	/** Stop drawing. */
 	this.cancel = function() {
-		if (this.moveH) this.view.svgroot.removeEventListener('mousemove', this.moveH, false);
-		if (this.cancelH) document.removeEventListener('keydown', this.cancelH, false);
-		if (this.line) this.view.svgroot.removeChild(this.line);
-		this.moveH = null;
-		this.cancelH = null;
-		this.line = null;
-		this.start = null;
+		if (my.moveH) my.view.svgroot.removeEventListener('mousemove', my.moveH, false);
+		if (my.cancelH) document.removeEventListener('keydown', my.cancelH, false);
+		if (my.line) my.view.svgroot.removeChild(my.line);
+		my.moveH = null;
+		my.cancelH = null;
+		my.line = null;
+		my.start = null;
 	};
 
 };

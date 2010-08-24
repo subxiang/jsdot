@@ -52,36 +52,83 @@ JSDot.jsdot_Impl = function() {
 JSDot.jsdot_Impl.prototype = {
 
 	/** Registers an event handler.
-		When an event is triggered the function
-		handler['event name'] will be called.
+		When an event 'name' is triggered the function
+		'handler' will be called.
 		
-		The name of the handler is NOT the name of the event!
-		A single handler may define functions for more events.
-		@param {String} name name of the event handler
-		@param {Handler} handler object with handler functions
+		May also be called as addEventHandler(obj, handler_obj),
+		in this case handler_obj may define functions for more events.
+		
+		@param {Object} obj object generating events
+		@param {String} name name of the event
+		@param {Handler} handler handler function
 	*/
-	addEventHandler: function(name, handler) {
-		this.handlers[name] = handler;
+	addEventHandler: function(obj, name, handler) {
+		if (typeof name == "string") {
+			/* use case 1: single handler function */
+			
+			if (typeof handler != "function") return;
+
+			/* create the entry for the event if it doesn't exist */
+			if (!this.handlers[name]) this.handlers[name] = [];
+			
+			/* add handler */
+			this.handlers[name].push([obj, handler]);
+			
+		} else {
+			/* use case 2: handler object in 'name' */
+			for (var i in name) {
+				this.addEventHandler(obj, i, name[i]);
+			}
+		}
 	},
 	
 	/** Removes an event handler.
-		@param {String} name name of the event hadler to remove
+		The handler function (or object) must be exactly the same
+		instance used when registering the event.
+		
+		May also be called as addEventHandler(obj, handler_obj),
+		in this case handler_obj may define functions for more events.
+		
+		@param {Object} obj object generating events
+		@param {String} name name of the event
+		@param {Handler} handler handler function to remove
 	*/
-	removeEventHandler: function(name) {
-		if (this.handlers[name]) delete this.handlers[name]
+	removeEventHandler: function(obj, name, handler) {
+		if (typeof name == "string") {
+			if (typeof handler != "function") return;
+			if (!this.handlers[name]) return;
+			var h = this.handlers[name];
+			for (var i in h) {
+				if (h[i][0] == obj && h[i][1] == handler) {
+					delete h[i];
+					return;
+				}
+			}
+		} else {
+			/* 'name' is the handler object */
+			for (var i in name) {
+				this.removeEventHandler(obj, i, name[i]);
+			}
+		}
 	},
 
 	/** Triggers an event.
 		Calls all registered event handlers for event 'name'.
+		@param {Object} obj source of the event
 		@param {String} name name of the events
 		@param {Object} arguments any following arguments will be passed on to the handler
 	*/
 	fireEvent: function() {
+		var obj = Array.prototype.shift.apply(arguments);
 		var name = Array.prototype.shift.apply(arguments); // remove name
-		for (var e in this.handlers) {
-			var h = this.handlers[e];
-			if (h[name]) h[name].apply(h, arguments);
-		};
+		
+		if (!this.handlers[name]) return;
+		for (var i in this.handlers[name]) {
+			var e = this.handlers[name][i];
+			if (obj == null || e[0] == null || e[0] == obj) {
+				e[1].apply(obj, arguments);
+			}
+		}
 	},
 
 };

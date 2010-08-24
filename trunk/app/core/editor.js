@@ -152,10 +152,22 @@ JSDot.Editor.MainBar = function(editor, p) {
 	*/
 	this.dragH = new JSDot.Drag(editor.jsdot, editor.view, editor.selection);
 	
+	/** Handler for creating nodes.
+		@type function
+		@see createNodeH_T
+	*/
+	this.createNodeH = this.createNodeH_T(editor.jsdot);
+	
 	/** Handler for creating edges.
 		@type JSDot.EdgeViz
 	*/
 	this.createEdgeH = new JSDot.EdgeViz(editor.jsdot, editor.view, editor);
+	
+	/** Handler for removing nodes and edges
+		@type function
+		@see removeH_T
+	*/
+	this.removeH = this.removeH_T(editor.jsdot);
 	
 	/** Nested bar for layout operations.
 		@type JSDot.Editor.LayoutBar
@@ -176,7 +188,7 @@ JSDot.Editor.MainBar = function(editor, p) {
 		This is used to keep track of which tool icon is highlighted.
 		@see JSDot.Editor.setSelected
 	*/
-	selected = null;
+	this.selected = null;
 	
 	
 	/****************************************************************
@@ -204,7 +216,7 @@ JSDot.Editor.MainBar = function(editor, p) {
 	})
 	.click(function() {
 		editor.setSelected(tb, btnSel);
-		editor.jsdot.addEventHandler('drag', tb.dragH);
+		editor.jsdot.addEventHandler(editor.view, tb.dragH);
 		var s = editor.selection;
 		s.allowNodes = true;
 		s.allowEdges = true;
@@ -213,7 +225,7 @@ JSDot.Editor.MainBar = function(editor, p) {
 		editor.showNestedBar('layout');
 	});
 	btnSel.onDeselect = function() {
-		editor.jsdot.removeEventHandler('drag');
+		editor.jsdot.removeEventHandler(editor.view, tb.dragH);
 		editor.hideNestedBar('layout');
 	};
 	
@@ -232,11 +244,11 @@ JSDot.Editor.MainBar = function(editor, p) {
 		s.allowMultiple = false;
 		s.allowDrag = false;
 		s.deselectAll();
-		editor.jsdot.addEventHandler('create', tb.createNodeH(editor.jsdot));
+		editor.jsdot.addEventHandler(editor.view, 'click', tb.createNodeH);
 		editor.showNestedBar('createnode');
 	});
 	btnAddN.onDeselect = function() {
-		editor.jsdot.removeEventHandler('create');
+		editor.jsdot.removeEventHandler(editor.view, 'click', tb.createNodeH);
 		editor.hideNestedBar('createnode');
 	};
 	
@@ -255,11 +267,11 @@ JSDot.Editor.MainBar = function(editor, p) {
 		s.allowMultiple = false;
 		s.allowDrag = false;
 		s.deselectAll();
-		editor.jsdot.addEventHandler('create', tb.createEdgeH);
+		editor.jsdot.addEventHandler(editor.view, tb.createEdgeH);
 		editor.showNestedBar('createedge');
 	});
 	btnAddE.onDeselect = function() {
-		editor.jsdot.removeEventHandler('create');
+		editor.jsdot.removeEventHandler(editor.view, tb.createEdgeH);
 		tb.createEdgeH.cancel(); /* stop if you were drawing */
 		editor.hideNestedBar('createedge');
 	};
@@ -279,10 +291,10 @@ JSDot.Editor.MainBar = function(editor, p) {
 		s.allowMultiple = false;
 		s.allowDrag = false;
 		s.deselectAll();
-		editor.jsdot.addEventHandler('remove', tb.removeH(editor.jsdot));
+		editor.jsdot.addEventHandler(editor.view, 'click', tb.removeH);
 	});
 	btnRm.onDeselect = function() {
-		editor.jsdot.removeEventHandler('remove');
+		editor.jsdot.removeEventHandler(editor.view, 'click', tb.removeH);
 	};
 	
 	var btnED = document.createElement('button');
@@ -306,34 +318,30 @@ JSDot.Editor.MainBar.prototype = {
 
 	/** Construct handler for creating nodes.
 		@param {JSDot.jsdot_Impl} jsdot jsdot instance
-		@return {doc_Handler} handler
+		@return {function} handler
 	*/
-	createNodeH: function(jsdot) {
+	createNodeH_T: function(jsdot) {
 		var editor = this.editor;
-		return {
-			click: function(obj, evt) {
+		return function(obj, evt) {
 				var n = jsdot.graph.createNode(null, false);
 				n.setPosition([evt.relX, evt.relY], false);
 				if (editor.currentNodeStencil) n.setStencil(editor.currentNodeStencil, false);
-				jsdot.fireEvent('created', n);
-			}
-		};
+				jsdot.fireEvent(jsdot.graph, 'created', n);
+			};
 	},
 	
 	/** Construct handler for removing nodes and edges.
 		@param {jsdot_Impl} jsdot jsdot instance
-		@return {doc_Handler} handler
+		@return {function} handler
 	*/
-	removeH: function(jsdot) {
-		return {
-			click: function(obj, evt) {
+	removeH_T: function(jsdot) {
+		return function(obj, evt) {
 				if (obj && obj.isNode) { /* node */
 					jsdot.graph.removeNode(obj);
 				} else if (obj && obj.isEdge) { /* edge */
 					jsdot.graph.removeEdge(obj);
 				}
-			}
-		};
+			};
 	},
 
 };
@@ -714,6 +722,6 @@ JSDot.Editor.EditDialog = function(editor) {
 		},
 	};
 	
-	editor.jsdot.addEventHandler('editdialog', handler);
+	editor.jsdot.addEventHandler(editor.view, handler);
 	//this.toggleOpen(); // closed on startup
 };
