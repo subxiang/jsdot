@@ -100,7 +100,7 @@ JSDot.jsdot_Impl.prototype = {
 			var h = this.handlers[name];
 			for (var i in h) {
 				if (h[i][0] == obj && h[i][1] == handler) {
-					delete h[i];
+					h.splice(i, 1);
 					return;
 				}
 			}

@@ -325,7 +325,7 @@ JSDot.View.prototype = {
 		};
 		
 		this.jsdot.addEventHandler(null, handler); /* graph events */
-		this.jsdot.addEventHandler(this, selectionchgH);
+		this.jsdot.addEventHandler(this, 'selectionchg', selectionchgH);
 	},
 	
 	/** DOM Element offset relative to document.
