@@ -81,9 +81,11 @@ JSDot.Editor = function(jsdot, view, sel) {
 	this.tbContainer = tb;
 	
 	/* set toolbar's initial position */
-	var off = view.getOffset(view.container);
-	if (off[1] > 25) off[1] -= 25;
-	tb.style.top = off[1] + 'px';
+	// see [ Issue 22 ] for absolute positioned containers
+	var offTop = view.getOffset(view.container)[1];
+	if (offTop > 25) offTop -= 25;
+	offTop -= view.getOffset(tb.offsetParent)[1];
+	tb.style.top = offTop + 'px';
 	
 	for (var i in JSDot.stencils) { this.currentNodeStencil = i; break; };
 	for (var i in JSDot.edge_stencils) { this.currentEdgeStencil = i; break; };
