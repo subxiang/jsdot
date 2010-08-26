@@ -286,14 +286,26 @@ JSDot.Editor.MainBar = function(editor, p) {
 		icons: { primary: 'jsdot-icon jsdot-icon-removenode' }
 	})
 	.click(function() {
-		editor.setSelected(tb, btnRm);
 		var s = editor.selection;
-		s.allowNodes = false;
-		s.allowEdges = false;
-		s.allowMultiple = false;
-		s.allowDrag = false;
-		s.deselectAll();
-		editor.jsdot.addEventHandler(editor.view, 'click', tb.removeH);
+		if (s.selection.length > 0) {
+			/* something is selected, then delete selection */
+			/* we need a copy of the selection, since it will change while
+			   we iterate on it */
+			var l = [];
+			s.forNodes(function(n) { l.push(n); });
+			for (var i in l) { editor.jsdot.graph.removeNode(l[i]); };
+			l = [];
+			s.forEdges(function(e) { l.push(e); });
+			for (var i in l) { editor.jsdot.graph.removeEdge(l[i]); };
+		} else {
+			/* noting selected, then switch to delete tool */
+			editor.setSelected(tb, btnRm);
+			s.allowNodes = false;
+			s.allowEdges = false;
+			s.allowMultiple = false;
+			s.allowDrag = false;
+			editor.jsdot.addEventHandler(editor.view, 'click', tb.removeH);
+		}
 	});
 	btnRm.onDeselect = function() {
 		editor.jsdot.removeEventHandler(editor.view, 'click', tb.removeH);

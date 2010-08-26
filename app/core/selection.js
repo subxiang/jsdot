@@ -101,6 +101,9 @@ JSDot.Selection = function(jsdot, view) {
 	/** Handler for mousemove event on the SVG.
 		Does dragging when it is enabled.
 		
+		We need to keep a reference to the handler in order to remove
+		it when it is not needed anymore.
+		
 		The actual implementation is in {@link svgMousemove_impl},
 		this is a closure.
 		@see svgMousemove_impl
@@ -118,6 +121,13 @@ JSDot.Selection = function(jsdot, view) {
 					return obj.svgMouseup.apply(obj, arguments);
 				};
 			}(this), false);
+			
+	jsdot.addEventHandler(jsdot.graph, 'removed',
+			function(obj) {
+				return function() {
+					return obj.removedH.apply(obj, arguments);
+				};
+			}(this) );
 };
 
 JSDot.Selection.prototype = {
@@ -258,6 +268,27 @@ JSDot.Selection.prototype = {
 		this.moveStart = null;
 	},
 	
+	/** Handler for JSDot 'removed' event.
+		When a node or an edge gets removed from the graph and it was
+		selected, then it must be removed from the selection in order
+		to keep it consistent.
+		
+		If an element is being removed it is implied that it won't be
+		selected anymore, therefore no 'selectionchg' event is fired.
+		@see doc_Handler.removed
+	*/
+	removedH: function(w) {
+		if (w.isNode) {
+			/* even if the node itself is not selected one of its edges
+			   might be selected and must be removed */
+			for (var e in w.edges) {
+				this.deselect(w.edges[e], false);
+				/* if it's not selected this doesn't do anything */
+			}
+		}
+		this.deselect(w, false);
+	},
+	
 	/** Adds an element to the selection.
 		If the given element cannot be added to the
 		selection it will be ignored.
@@ -286,12 +317,16 @@ JSDot.Selection.prototype = {
 	},
 	
 	/** Remove an element from selection.
+		If the element is not selected this doesn't do anything.
 		Fires a 'selectionchg' event.
+		@param {Object} n the element (node/edge) to remove from selection
+		@param {boolean} fire whether to fire the event or not, default is yes
+		@see doc_Handler.selectionchg
 	*/
-	deselect: function(n) {
+	deselect: function(n, fire) {
 		if (this.isSelected(n)) {
 			this.selection.splice(this.selection.indexOf(n), 1);
-			this.view.fireViewEvent('selectionchg', n, false);
+			if (fire !== false) this.view.fireViewEvent('selectionchg', n, false);
 		};
 	},
 	
@@ -311,7 +346,7 @@ JSDot.Selection.prototype = {
 		@return {Boolean} True if v is selected, false otherwise
 	*/
 	isSelected: function (v) {
-		return (v in this.selection);
+		return (this.selection.indexOf(v) >= 0);
 	},
 	
 	/** First node in selection.
@@ -329,6 +364,7 @@ JSDot.Selection.prototype = {
 	
 	/** Apply a function to selected node.
 		For each selected node f(n) is called.
+		f() must not change the selection!
 	*/
 	forNodes: function(f) {
 		for (var i in this.selection) {
@@ -340,6 +376,7 @@ JSDot.Selection.prototype = {
 	
 	/** Apply a function to selected edges.
 		For each selected edge f(n) is called.
+		f() must not change the selection!
 	*/
 	forEdges: function(f) {
 		for (var i in this.selection) {
