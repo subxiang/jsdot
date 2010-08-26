@@ -65,6 +65,7 @@ JSDot.View = function(jsdot, divId) {
 	/** View data associated to edges. */
 	this.edgeData = {};
 	
+	this.redrawAll();
 	this.addHandler(); /* add listener to receive graph updates */
 };
 
@@ -242,6 +243,34 @@ JSDot.View.prototype = {
 		if (ed.group) {
 			this.svgroot.removeChild(ed.group);
 			delete this.edgeData[e.id];
+		}
+	},
+	
+	/** Redraw the whole graph.
+		Remove all drawn nodes and edges and redraw the graph of the
+		attached jsdot instance.
+		
+		Note: this will not erase the whole contentent of the svg,
+		but only those elements for which the view has kept data.
+		E.g. the svg defs for markers are left unchanged.
+	*/
+	redrawAll: function() {
+		for (var i in this.edgeData) {
+			this.svgroot.removeChild(this.edgeData[i].group);
+		}
+		for (var i in this.nodeData) {
+			this.svgroot.removeChild(this.nodeData[i].group);
+		}
+		this.edgeData = {};
+		this.nodeData = {};
+		
+		var ns = this.jsdot.graph.nodes;
+		for (var i in ns) {
+			this.drawNode(ns[i]);
+		}
+		ns = this.jsdot.graph.edges;
+		for (var i in ns) {
+			this.drawEdge(ns[i]);
 		}
 	},
 
