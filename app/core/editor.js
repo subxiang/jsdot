@@ -248,10 +248,12 @@ JSDot.Editor.MainBar = function(editor, p) {
 		s.deselectAll();
 		editor.jsdot.addEventHandler(editor.view, 'click', tb.createNodeH);
 		editor.showNestedBar('createnode');
+		editor.view.addClass('jsdot-cursor-addnode');
 	});
 	btnAddN.onDeselect = function() {
 		editor.jsdot.removeEventHandler(editor.view, 'click', tb.createNodeH);
 		editor.hideNestedBar('createnode');
+		editor.view.removeClass('jsdot-cursor-addnode');
 	};
 	
 	var btnAddE = document.createElement('button');
@@ -271,11 +273,13 @@ JSDot.Editor.MainBar = function(editor, p) {
 		s.deselectAll();
 		editor.jsdot.addEventHandler(editor.view, tb.createEdgeH);
 		editor.showNestedBar('createedge');
+		editor.view.addClass('jsdot-cursor-addedge');
 	});
 	btnAddE.onDeselect = function() {
 		editor.jsdot.removeEventHandler(editor.view, tb.createEdgeH);
 		tb.createEdgeH.cancel(); /* stop if you were drawing */
 		editor.hideNestedBar('createedge');
+		editor.view.removeClass('jsdot-cursor-addedge');
 	};
 	
 	var btnRm = document.createElement('button');
@@ -305,10 +309,12 @@ JSDot.Editor.MainBar = function(editor, p) {
 			s.allowMultiple = false;
 			s.allowDrag = false;
 			editor.jsdot.addEventHandler(editor.view, 'click', tb.removeH);
+			editor.view.addClass('jsdot-cursor-removenode');
 		}
 	});
 	btnRm.onDeselect = function() {
 		editor.jsdot.removeEventHandler(editor.view, 'click', tb.removeH);
+		editor.view.removeClass('jsdot-cursor-removenode');
 	};
 	
 	var btnED = document.createElement('button');
@@ -736,6 +742,11 @@ JSDot.Editor.EditDialog = function(editor) {
 		},
 	};
 	
+	var removeH = function() {
+		handler.selectionchg();
+	};
+	
 	editor.jsdot.addEventHandler(editor.view, handler);
+	editor.jsdot.addEventHandler(editor.graph, 'removed', removeH);
 	//this.toggleOpen(); // closed on startup
 };
