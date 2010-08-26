@@ -363,4 +363,28 @@ JSDot.View.prototype = {
 		return this.jsdot.fireEvent.apply(this.jsdot, arguments);
 	},
 	
+	/** Add a class to the SVG element.
+		This is needed because JQuery doesn't work on the svg.
+		@param {String} class class to add
+	*/
+	addClass: function(class) {
+		var c = (this.svgroot.getAttribute('class') || '').split(' ');
+		if (c.indexOf(class) < 0) {
+			c.push(class);
+			this.svgroot.setAttribute('class', c.join(' '));
+		}
+	},
+	
+	/** Remove a class from the SVG element.
+		This is needed because JQuery doesn't work on the svg.
+		@param {String} class class to remove
+	*/
+	removeClass: function(class) {
+		var c = (this.svgroot.getAttribute('class') || '').split(' ');
+		var i = c.indexOf(class);
+		if (i < 0) return;
+		c.splice(i, 1);
+		this.svgroot.setAttribute('class', c.join(' '));
+	},
+	
 };

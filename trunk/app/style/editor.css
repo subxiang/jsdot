@@ -4,8 +4,8 @@
 .jsdot-tb-main { display: inline; float: left; background-color: #FACB7E; border: 1px solid orange; }
 .jsdot-tb-nested { display: inline; float: right; background-color: #FACB7E; border: 1px solid orange; margin-left: 8px; }
 .jsdot-tb-hiddentb { display: none; }
-.jsdot-tb-handleL { display: block; background-color: #E78F08; width: 8px; height: 100%; margin-right: 2px; position: absolute; left: 0; }
-.jsdot-tb-handleR { display: block; background-color: #E78F08; width: 8px; height: 100%; margin-left: 2px; position: absolute; right: 0; }
+.jsdot-tb-handleL { display: block; background-color: #E78F08; width: 8px; height: 100%; margin-right: 2px; position: absolute; left: 0; cursor: move; }
+.jsdot-tb-handleR { display: block; background-color: #E78F08; width: 8px; height: 100%; margin-left: 2px; position: absolute; right: 0; cursor: move; }
 .jsdot_edgeviz_line { stroke: black; stroke-width: 1; stroke-dasharray: 8, 5; pointer-events: none; }
 
 .jsdot-editdialog .ui-widget-content select { display: block; margin: 0 0 8px 0; }
@@ -22,3 +22,7 @@
 .jsdot-icon-alignbottom { background-position: -224px -624px; }
 .jsdot-icon-alignvcenter { background-position: -272px -624px; }
 .jsdot-icon-editdialog { background-position: -208px 0px; }
+
+.jsdot-cursor-addnode { cursor: url("../img/caddn.png"), copy; }
+.jsdot-cursor-addedge { cursor: url("../img/cadde.png"), alias; }
+.jsdot-cursor-removenode { cursor: url("../img/crm.png"), crosshair; }
