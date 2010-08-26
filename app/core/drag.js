@@ -42,8 +42,20 @@ JSDot.Drag = function(jsdot, view, sel) {
 		h.nodes = [];
 		h.edges = [];
 		
-		/* if the selection is empty, but pick was on a node, drag that one. */
-		var s = (sel.selection.length == 0 ? (obj ? [obj] : []) : sel.selection);
+		/* drag only nodes, and not background or edges */
+		if (!obj || !obj.isNode) return;
+		
+		/* if the picked node is selected then drag selection, if not then
+		   drag only the picked one */
+		var s = [];
+		if (!sel.isSelected(obj)) {
+			// uncomment the following two lines to change selection to the dragged object
+			//sel.deselectAll();
+			//sel.select(obj);
+			s = [obj];
+		} else {
+			s = sel.selection;
+		}
 		
 		for (var i in s) {
 			if (s[i].isNode) {
