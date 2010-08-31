@@ -73,6 +73,17 @@ JSDot.Graph_impl = function(jsdot) {
 
 JSDot.Graph_impl.prototype = {
 
+	/** Clear graph.
+		<p>Removes all content of current graph.</p>
+		<p>This is different than creating a new graph in that all references
+		to this graph will still point to the cleared one, instead of pointing
+		to the old (unchanged) instance.</p>
+	*/
+	clear: function() {
+		JSDot.Graph_impl.call(this, this.jsdot);
+		this.fireGraphEvent('newgraph');
+	},
+	
 	/** Returns a node by name.
 		@param {String} name name of the node
 		@return {Node} the node or undefined
