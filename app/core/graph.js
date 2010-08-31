@@ -63,5 +63,12 @@ JSDot.Graph = function(jsdot, graph) {
 		var e = graph.createEdge(graph.nodes[src], graph.nodes[dst]);
 		return new JSDot.Edge(jsdot, e);
 	};
+	
+	/** Clear graph.
+		Removes all content of the graph.
+	*/
+	this.clear = function() {
+		graph.clear();
+	};
 
 };
