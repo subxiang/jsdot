@@ -128,6 +128,13 @@ JSDot.Selection = function(jsdot, view) {
 					return obj.removedH.apply(obj, arguments);
 				};
 			}(this) );
+			
+	jsdot.addEventHandler(jsdot.graph, 'newgraph',
+			function(obj) {
+				return function() {
+					return obj.newgraphH.apply(obj, arguments);
+				};
+			}(this) );
 };
 
 JSDot.Selection.prototype = {
@@ -287,6 +294,13 @@ JSDot.Selection.prototype = {
 			}
 		}
 		this.deselect(w, false);
+	},
+	
+	/** Handler for the {@link doc_Handler.newgraph} event.
+		Clears the selection without firing any event.
+	*/
+	newgraphH: function() {
+		this.selection.length = 0;
 	},
 	
 	/** Adds an element to the selection.

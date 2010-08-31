@@ -353,6 +353,10 @@ JSDot.View.prototype = {
 			}
 		};
 		
+		handler.newgraph = function() {
+			view.redrawAll();
+		};
+		
 		this.jsdot.addEventHandler(null, handler); /* graph events */
 		this.jsdot.addEventHandler(this, 'selectionchg', selectionchgH);
 	},

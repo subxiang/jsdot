@@ -171,5 +171,16 @@ JSDot.Graph_impl.prototype = {
 		if (node && JSDot.stencils[node]) this.defaultNodeStencil = node;
 		if (edge && JSDot.edge_stencils[edge]) this.defaultEdgeStencil = edge;
 	},
+	
+	/** Fire an event affecting this graph.
+		This is a shorthand to call {@link JSDot.jsdot_Impl.fireEvent} with this
+		graph as first argument.
+		@see JSDot.jsdot_Impl.fireEvent
+		@see doc_Handler
+	*/
+	fireGraphEvent: function() {
+		Array.prototype.unshift.call(arguments, this);
+		return this.jsdot.fireEvent.apply(this.jsdot, arguments);
+	},
 
 };
