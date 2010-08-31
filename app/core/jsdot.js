@@ -77,4 +77,17 @@ function JSDot() {
 				break;
 		};
 	};
+	
+	var t = jsdot.getTool('json', {});
+	if (t) {
+		this.importJSON = function(obj) { t.import(obj); };
+		this.exportJSON = function() { return t.export(); };
+	}
 };
+
+/** This is where available tools are added.
+	This is a namespace, tools will be defined as properties of this object.
+*/
+JSDot.GraphTools = {};
+JSDot.ViewTools = {};
+JSDot.EditTools = {};

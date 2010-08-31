@@ -160,4 +160,16 @@ JSDot.Graph_impl.prototype = {
 		delete e.dst.edges[e.id];
 		if (fire == undefined || fire) this.jsdot.fireEvent(this, 'removed', e);
 	},
+	
+	/** Change the default stencils of this graph.
+		If the new stencil given as argument doesn't exist the default
+		will not be changed.
+		@param {String} node stencil name for nodes
+		@param {String} edge stencil name for edges
+	*/
+	setDefaultStencils: function(node, edge) {
+		if (node && JSDot.stencils[node]) this.defaultNodeStencil = node;
+		if (edge && JSDot.edge_stencils[edge]) this.defaultEdgeStencil = edge;
+	},
+
 };
