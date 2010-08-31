@@ -748,5 +748,6 @@ JSDot.Editor.EditDialog = function(editor) {
 	
 	editor.jsdot.addEventHandler(editor.view, handler);
 	editor.jsdot.addEventHandler(editor.graph, 'removed', removeH);
+	editor.jsdot.addEventHandler(editor.graph, 'newgraph', removeH); /* reuse handler */
 	//this.toggleOpen(); // closed on startup
 };

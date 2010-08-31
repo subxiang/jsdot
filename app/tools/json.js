@@ -62,6 +62,8 @@ JSDot.GraphTools.json.prototype = {
 			if (t.label) c.setLabel(t.label.value, false);
 			if (typeof t.stencil == "string") c.setStencil(t.stencil, false);
 		}
+		
+		this.graph.fireGraphEvent('newgraph');
 		return 0;
 	},
 	

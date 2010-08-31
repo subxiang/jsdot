@@ -114,3 +114,14 @@ doc_Handler.moved = function(node) {};
 	@param {Object} what element whose style changed
 */
 doc_Handler.changed = function(what) {};
+
+/** The whole graph changed.
+	<p>A consistent part of the graph has changed or a new one has been loaded.</p>
+	<p>All the state information concerning the old graph should be discarded and newly
+	created. No assumpion can be done on the resulting state of the graph based on
+	the previous state.</p>
+	<p>Anyway, if a node or edge survives the graph changes its attached userData
+	(see {@link JSDot.Node_impl.setData}, {@link JSDot.Node_impl.getData}) is left
+	in place.</p>
+*/
+doc_Handler.newgraph = function() {};
