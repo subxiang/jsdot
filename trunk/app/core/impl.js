@@ -46,6 +46,12 @@ JSDot.jsdot_Impl = function() {
 		@type Graph_impl
 	*/
 	this.graph = new JSDot.Graph_impl(this);
+	
+	/** Tool instances.
+		This is a pool where instantiated tools are stored.
+		@see getTool
+	*/
+	this.tools = {};
 
 };
 
@@ -129,6 +135,56 @@ JSDot.jsdot_Impl.prototype = {
 				e[1].apply(obj, arguments);
 			}
 		}
+	},
+	
+	/** Get a tool.
+		@private
+		@param {String} src one of ViewTools, EditTools or GraphTools
+		@param {String} tool name of the tool
+		@param {Object} params parameters passed to the tool's init function, if it exists
+	*/
+	getToolI: function(src, tool, params) {
+		var r = this.tools[src];
+		if (!r) r = this.tools[src] = {};
+		
+		/* if there is already an instance return it */
+		if (r[tool]) return r[tool];
+		
+		var t = JSDot[src][tool];
+		
+		/* tool is not defined */
+		if (!t) return null;
+		
+		if (typeof t == 'function') {
+			/* it has a constructor, so use it */
+			var i = new t;
+			if (typeof i.init == 'function') {
+				/* there is an init function, and we call it with parameters */
+				if (!i.init(params)) {
+					return null;
+				}
+			}
+			r[tool] = i;
+			return i;
+			
+		} else if (typeof t == 'object') {
+			/* use it directly */
+			r[tool] = t;
+			return t;
+		}
+		
+		return null;
+	},
+	
+	/** Return an instance of a tool for the current graph.
+		If 'params' exists, a reference to the graph will be added to it.
+		@param {String} tool name of the tool
+		@param {Object} params parameters passed to the tool's init function, if it exists
+		@return {Object} the requested tool or null
+	*/
+	getTool: function(tool, params) {
+		if (params) params.graph = this.graph;
+		return this.getToolI('GraphTools', tool, params);
 	},
 
 };

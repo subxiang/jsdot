@@ -61,6 +61,9 @@ var f = function() {
 		"../lib/jquery-ui-1.8.2.custom.min.js",
 		"edgeviz.js",
 		"editor.js",
+		
+/* tools */
+		"../tools/json.js",
 	];
 
 	var styles = [
