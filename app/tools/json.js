@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-JSDot.GraphTools.json = function(params) {
+JSDot.GraphTools.json = function() {
 };
 
 JSDot.GraphTools.json.prototype = {

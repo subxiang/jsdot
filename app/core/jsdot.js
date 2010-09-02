@@ -54,6 +54,7 @@ function JSDot() {
 		var v = new JSDot.View(jsdot, divId);
 		JSDot.load_svg_shapes(v, 'shapes.svg');
 		views[divId] = v;
+		v.getTool('Layout.SpringEmbedder', {}); // FIXME: shouldn't be here
 		var s = new JSDot.Selection(jsdot, v);
 		switch (mode) {
 			case 'drag':
@@ -77,17 +78,40 @@ function JSDot() {
 				break;
 		};
 	};
+
+	/** Get a tool.
+		It must already have been instantiated.
+	*/
+	this.getTool = function(src, name) {
+		var t = null;
+		switch(src) {
+			case 'graph':
+				if (jsdot.tools['GraphTools'])
+					t = jsdot.tools['GraphTools'][name];
+				break;
+			case 'view':
+				if (jsdot.tools['ViewTools'])
+					t = jsdot.tools['ViewTools'][name];
+				break;
+			case 'edit':
+				if (jsdot.tools['EditTools'])
+					t = jsdot.tools['EditTools'][name];
+				break;
+		}
+		return t;
+	};
 	
 	var t = jsdot.getTool('json', {});
 	if (t) {
 		this.importJSON = function(obj) { t.import(obj); };
 		this.exportJSON = function() { return t.export(); };
 	}
+
 };
 
 /** This is where available tools are added.
 	This is a namespace, tools will be defined as properties of this object.
 */
 JSDot.GraphTools = {};
-JSDot.ViewTools = {};
+JSDot.ViewTools = { 'Layout': {} };
 JSDot.EditTools = {};

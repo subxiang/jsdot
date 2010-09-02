@@ -64,6 +64,7 @@ var f = function() {
 		
 /* tools */
 		"../tools/json.js",
+		"../tools/springlayout.js",
 	];
 
 	var styles = [

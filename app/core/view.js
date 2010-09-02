@@ -420,4 +420,18 @@ JSDot.View.prototype = {
 		this.svgroot.setAttribute('class', c.join(' '));
 	},
 	
+	/** Return an instance of a tool for the current view.
+		If 'params' exists, a reference to the graph and view will be added to it.
+		@param {String} tool name of the tool
+		@param {Object} params parameters passed to the tool's init function, if it exists
+		@return {Object} the requested tool or null
+	*/
+	getTool: function(tool, params) {
+		if (params) {
+			params.graph = this.jsdot.graph;
+			params.view = this;
+		}
+		return this.jsdot.getToolI('ViewTools', tool, params);
+	},
+	
 };
