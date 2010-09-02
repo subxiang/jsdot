@@ -81,6 +81,9 @@ JSDot.ViewTools.Layout.SpringEmbedder.prototype = {
 		
 		delete this.nodes;
 		delete this.edges;
+		
+		/* not connected nodes tend to fly off, so we scale and center */
+		this.view.getTool('Layout.Center', {}).doLayout();
 	
 	},
 	
