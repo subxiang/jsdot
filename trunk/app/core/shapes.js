@@ -222,7 +222,10 @@ JSDot.shapes = {
 		},
 		
 		getBBox: function(n, d) {
-			return d.shape.getBBox();
+			var b = d.shape.getBBox();
+			b.x += n.position[0];
+			b.y += n.position[1];
+			return b;
 		},
 		
 		setSize: function(n, d, s) {
@@ -317,7 +320,10 @@ JSDot.shapes = {
 		},
 		
 		getBBox: function(n, d) {
-			return d.shape.getBBox();
+			var b = d.shape.getBBox();
+			b.x += n.position[0];
+			b.y += n.position[1];
+			return b;
 		},
 		
 		setSize: function(n, d, s) {
