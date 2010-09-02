@@ -64,6 +64,7 @@ var f = function() {
 		
 /* tools */
 		"../tools/json.js",
+		"../tools/centerlayout.js",
 		"../tools/springlayout.js",
 	];
 
