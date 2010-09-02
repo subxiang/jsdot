@@ -150,7 +150,13 @@ JSDot.jsdot_Impl.prototype = {
 		/* if there is already an instance return it */
 		if (r[tool]) return r[tool];
 		
-		var t = JSDot[src][tool];
+		/* resolve tool names like 'Layout.Spring' */
+		var t = JSDot[src];
+		var tpath = tool.split('.');
+		for (var i in tpath) {
+			t = t[tpath[i]];
+			if (!t) return null;
+		}
 		
 		/* tool is not defined */
 		if (!t) return null;
