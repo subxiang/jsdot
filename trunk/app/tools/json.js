@@ -33,9 +33,16 @@ JSDot.GraphTools.json.prototype = {
 		return this;
 	},
 
-	import: function(obj) {
+	import: function(str) {
 		var g = this.graph;
 		var map = {};
+		
+		var obj = str;
+		if (typeof str === 'string') {
+			try { obj = JSON.parse(str); }
+			catch (e) { return 1; }
+		}
+		if (!obj) return 1;
 		
 		g.setDefaultStencils(obj.defaultNodeStencil, obj.defaultEdgeStencil);
 		if (typeof obj.nodes != "object" || typeof obj.edges != "object") {
@@ -94,7 +101,7 @@ JSDot.GraphTools.json.prototype = {
 				stencil: n.stencil,
 			});
 		}
-		return res;
+		return JSON.stringify(res);
 	},
 	
 };
