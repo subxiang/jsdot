@@ -635,6 +635,41 @@ JSDot.Editor.EditDialog = function(editor) {
 	editor.view.container.appendChild(dialog);
 	$(dialog).dialog({ autoOpen: false, closeOnEscape: false,
 			position: 'right', dialogClass: 'jsdot-editdialog' });
+			
+	var accordion = document.createElement('div');
+	accordion.setAttribute('class',
+		'ui-accordion ui-widget ui-helper-reset ui-accordion-icons');
+	accordion.setAttribute('role', 'tablist');
+	dialog.appendChild(accordion);
+			
+	function addSection(name) {
+		var header = document.createElement('h3');
+		header.appendChild(document.createTextNode(name));
+		header.setAttribute('class',
+			'ui-accordion-header ui-helper-reset ui-state-default ui-corner-all');
+		header.setAttribute('role', 'tab');
+		accordion.appendChild(header);
+		var content = document.createElement('div');
+		content.setAttribute('class',
+			'ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom');
+		content.setAttribute('role', 'tabpanel');
+		accordion.appendChild(content);
+		header.addEventListener('click', function () {
+				$(content).toggleClass('ui-accordion-content-active');
+				$(header).toggleClass('ui-corner-all ui-corner-top');
+				//$(content).toggle('normal');
+			}, false);
+		return {
+			'name': name,
+			'header': header,
+			'content': content
+		};
+	};
+	
+	var selection = addSection('Selection').content;
+	
+	var plh = addSection('Placeholder').content;
+	plh.innerHTML = 'something usefull here';
 	
 	var msg = document.createElement('p');
 	msg.innerHTML = 'edit dialog';
@@ -646,7 +681,7 @@ JSDot.Editor.EditDialog = function(editor) {
 			}, false);
 	
 	var nodeForm = document.createElement('div');
-	dialog.appendChild(nodeForm);
+	selection.appendChild(nodeForm);
 	var nodeFStcl = document.createElement('select');
 	nodeForm.appendChild(nodeFStcl);
 	nodeFStcl.addEventListener('change', function() {
@@ -661,7 +696,7 @@ JSDot.Editor.EditDialog = function(editor) {
 			}, false);
 	
 	var edgeForm = document.createElement('div');
-	dialog.appendChild(edgeForm);
+	selection.appendChild(edgeForm);
 	var edgeFStcl = document.createElement('select');
 	edgeForm.appendChild(edgeFStcl);
 	edgeFStcl.addEventListener('change', function() {
@@ -674,6 +709,7 @@ JSDot.Editor.EditDialog = function(editor) {
 			var n = editor.selection.selection[0];
 			n.setLabel(this.value);
 			}, false);
+
 	
 	/** Toggle dialog.
 		If it's closed open it, if it's open close it.
