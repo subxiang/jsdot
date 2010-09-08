@@ -69,7 +69,7 @@ var f = function() {
 	];
 
 	var styles = [
-		"main.css",
+//		"main.css",
 		"shapes.css",
 		"editor.css",
 		"ui-lightness/jquery-ui-1.8.2.custom.css",

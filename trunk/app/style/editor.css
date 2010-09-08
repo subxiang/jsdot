@@ -3,11 +3,14 @@
 .jsdot-tb-selected { border: 2px dotted black !important; }
 .jsdot-tb-main { display: inline; float: left; background-color: #FACB7E; border: 1px solid orange; }
 .jsdot-tb-nested { display: inline; float: right; background-color: #FACB7E; border: 1px solid orange; margin-left: 8px; }
+.jsdot-tb-nested select { padding: 8px; }
 .jsdot-tb-hiddentb { display: none; }
 .jsdot-tb-handleL { display: block; background-color: #E78F08; width: 8px; height: 100%; margin-right: 2px; position: absolute; left: 0; cursor: move; }
 .jsdot-tb-handleR { display: block; background-color: #E78F08; width: 8px; height: 100%; margin-left: 2px; position: absolute; right: 0; cursor: move; }
 .jsdot_edgeviz_line { stroke: black; stroke-width: 1; stroke-dasharray: 8, 5; pointer-events: none; }
 
+.jsdot-editdialog .ui-dialog-content { padding: 0.2em 0 !important; }
+.jsdot-editdialog .ui-accordion-header { padding-left: 1em; }
 .jsdot-editdialog .ui-widget-content select { display: block; margin: 0 0 8px 0; }
 
 .jsdot-icon { width: 16px; height: 16px; background-image: url(../img/icons-all.png) !important; }
