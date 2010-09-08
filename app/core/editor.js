@@ -132,6 +132,21 @@ JSDot.Editor.prototype = {
 		if (this.activeNested) $(this.activeNested.container).addClass('jsdot-tb-hiddentb');
 		this.activeNested = null;
 	},
+	
+	/** Return an instance of a tool for the current editor.
+		If 'params' exists, a reference to the graph, view and editor will be added to it.
+		@param {String} tool name of the tool
+		@param {Object} params parameters passed to the tool's init function, if it exists
+		@return {Object} the requested tool or null
+	*/
+	getTool: function(tool, params) {
+		if (params) {
+			params.graph = this.jsdot.graph;
+			params.view = this.view;
+			params.editor = this;
+		}
+		return this.jsdot.getToolI('EditTools', tool, params);
+	},
 };
 
 /** @class Main toolbar.
@@ -672,10 +687,10 @@ JSDot.Editor.EditDialog = function(editor) {
 		};
 	};
 	
+	/*********************/
+	/* Selection section */
+	/*********************/
 	var selection = addSection('Selection', {'expanded': true}).content;
-	
-	var plh = addSection('Placeholder', {'expanded': true}).content;
-	plh.innerHTML = 'something usefull here';
 	
 	var msg = document.createElement('p');
 	msg.innerHTML = 'edit dialog';
@@ -723,6 +738,20 @@ JSDot.Editor.EditDialog = function(editor) {
 					break;
 			} }, false);
 
+
+	/***********************/
+	/* Extra tools section */
+	/***********************/
+	var extra = addSection('Tools', {'expanded': false}).content;
+	
+	var jsonBtn = document.createElement('button');
+	jsonBtn.appendChild(document.createTextNode('Edit JSON'));
+	extra.appendChild(jsonBtn);
+	$(jsonBtn).button().click(function () {
+			var jsonTool = editor.getTool('jsonDialog', {});
+			if (jsonTool) jsonTool.show(editor.jsdot);
+			});
+	
 	
 	/** Toggle dialog.
 		If it's closed open it, if it's open close it.
