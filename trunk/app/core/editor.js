@@ -739,6 +739,29 @@ JSDot.Editor.EditDialog = function(editor) {
 			} }, false);
 
 
+	/******************/
+	/* Layout section */
+	/******************/
+	var layout = addSection('Layout', {'expanded': false}).content;
+	var layoutSelect = document.createElement('select');
+	for (var i in JSDot.ViewTools.Layout) {
+		layoutSelect.add(new Option(i), null);
+	}
+	layout.appendChild(layoutSelect);
+	var layoutBtnApply = document.createElement('button');
+	//layoutBtnApply.innerHTML = 'Apply';
+	layout.appendChild(layoutBtnApply);
+	$(layoutBtnApply).button({
+		//'text': false,
+		'icons': {'primary': 'ui-icon-check'},
+		'label': 'Apply',
+		}).click(function() {
+			var tool = editor.view.getTool('Layout.'+layoutSelect.value, {});
+			if (tool) tool.doLayout();
+			$(this).blur();
+		});
+
+
 	/***********************/
 	/* Extra tools section */
 	/***********************/
