@@ -11,6 +11,7 @@
 
 .jsdot-editdialog .ui-dialog-content { padding: 0.2em 0 !important; }
 .jsdot-editdialog .ui-accordion-header { padding-left: 1em; }
+.jsdot-editdialog .ui-accordion-content p { margin: 0 auto 17px; }
 .jsdot-editdialog .ui-widget-content select { display: block; margin: 0 0 8px 0; }
 
 .jsdot-icon { width: 16px; height: 16px; background-image: url(../img/icons-all.png) !important; }

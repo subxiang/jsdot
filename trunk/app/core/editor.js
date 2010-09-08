@@ -642,7 +642,8 @@ JSDot.Editor.EditDialog = function(editor) {
 	accordion.setAttribute('role', 'tablist');
 	dialog.appendChild(accordion);
 			
-	function addSection(name) {
+	/** Add a new section to the edit dialog. */
+	function addSection(name, options) {
 		var header = document.createElement('h3');
 		header.appendChild(document.createTextNode(name));
 		header.setAttribute('class',
@@ -654,11 +655,16 @@ JSDot.Editor.EditDialog = function(editor) {
 			'ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom');
 		content.setAttribute('role', 'tabpanel');
 		accordion.appendChild(content);
-		header.addEventListener('click', function () {
+		$(header).click(function () {
 				$(content).toggleClass('ui-accordion-content-active');
 				$(header).toggleClass('ui-corner-all ui-corner-top');
 				//$(content).toggle('normal');
-			}, false);
+			});
+			
+		if (options && options.expanded) {
+			$(header).click();
+		}
+		
 		return {
 			'name': name,
 			'header': header,
@@ -666,19 +672,14 @@ JSDot.Editor.EditDialog = function(editor) {
 		};
 	};
 	
-	var selection = addSection('Selection').content;
+	var selection = addSection('Selection', {'expanded': true}).content;
 	
-	var plh = addSection('Placeholder').content;
+	var plh = addSection('Placeholder', {'expanded': true}).content;
 	plh.innerHTML = 'something usefull here';
 	
 	var msg = document.createElement('p');
 	msg.innerHTML = 'edit dialog';
-	dialog.appendChild(msg);
-	dialog.addEventListener('keypress', function(evt) {
-			if (evt.keyCode == 27) { /* escape */
-				handler.selectionchg(); /* reload values in dialog */
-			}
-			}, false);
+	selection.appendChild(msg);
 	
 	var nodeForm = document.createElement('div');
 	selection.appendChild(nodeForm);
@@ -690,10 +691,16 @@ JSDot.Editor.EditDialog = function(editor) {
 			}, false);
 	var nodeFLabel = document.createElement('input');
 	nodeForm.appendChild(nodeFLabel);
-	nodeFLabel.addEventListener('change', function() {
-			var n = editor.selection.selection[0];
-			n.setLabel(this.value);
-			}, false);
+	nodeFLabel.addEventListener('keypress', function(evt) {
+			switch(evt.keyCode) {
+				case 27: /* escape */
+					handler.selectionchg(); /* reload values in dialog */
+					break;
+				case 13: /* enter */
+					var n = editor.selection.selection[0];
+					n.setLabel(this.value);
+					break;
+			} }, false);
 	
 	var edgeForm = document.createElement('div');
 	selection.appendChild(edgeForm);
@@ -705,10 +712,16 @@ JSDot.Editor.EditDialog = function(editor) {
 			}, false);
 	var edgeFLabel = document.createElement('input');
 	edgeForm.appendChild(edgeFLabel);
-	edgeFLabel.addEventListener('change', function() {
-			var n = editor.selection.selection[0];
-			n.setLabel(this.value);
-			}, false);
+	edgeFLabel.addEventListener('keypress', function(evt) {
+			switch(evt.keyCode) {
+				case 27: /* escape */
+					handler.selectionchg(); /* reload values in dialog */
+					break;
+				case 13: /* enter */
+					var n = editor.selection.selection[0];
+					n.setLabel(this.value);
+					break;
+			} }, false);
 
 	
 	/** Toggle dialog.
@@ -755,6 +768,7 @@ JSDot.Editor.EditDialog = function(editor) {
 						nodeFStcl.add(new Option(i, i, i == e.stencil), null);
 					}
 					
+					$(nodeFLabel).blur(); /* if it has focus the value doesn't change */
 					nodeFLabel.value = e.label.value;
 					
 					$(edgeForm).hide();
@@ -769,11 +783,19 @@ JSDot.Editor.EditDialog = function(editor) {
 						edgeFStcl.add(new Option(i, i, i == e.stencil), null);
 					}
 					
+					$(edgeFLabel).blur(); /* if it has focus the value doesn't change */
 					edgeFLabel.value = (e.label ? e.label.value : '');
 					
 					$(nodeForm).hide();
 					$(edgeForm).show();
 				}
+			}
+		},
+		
+		changed: function(w) {
+			if (w == editor.selection.selection[0]) {
+				/* the style of the selected node has changed */
+				handler.selectionchg(); /* update form content */
 			}
 		},
 	};
@@ -785,5 +807,5 @@ JSDot.Editor.EditDialog = function(editor) {
 	editor.jsdot.addEventHandler(editor.view, handler);
 	editor.jsdot.addEventHandler(editor.graph, 'removed', removeH);
 	editor.jsdot.addEventHandler(editor.graph, 'newgraph', removeH); /* reuse handler */
-	//this.toggleOpen(); // closed on startup
+	this.toggleOpen(); // closed on startup
 };

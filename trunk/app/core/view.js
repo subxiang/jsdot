@@ -340,12 +340,12 @@ JSDot.View.prototype = {
 				var sel = view.edgeData[n.id].highlight;
 				view.removeEdge(n);
 				view.drawEdge(n);
-				if (sel) this.selectionchg(n, sel);
+				if (sel) selectionchgH(n, sel);
 			} else { /* node */
 				var sel = view.nodeData[n.name].highlight;
 				view.removeNode(n);
 				view.drawNode(n);
-				if (sel) this.selectionchg(n, sel);
+				if (sel) selectionchgH(n, sel);
 				/* edges do not need to be redrawn, just update them */
 				for (i in n.edges) {
 					view.updateEdgePos(n.edges[i]);
