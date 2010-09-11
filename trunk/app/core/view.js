@@ -77,7 +77,8 @@ JSDot.View.prototype = {
 		@return {String} identifier
 	*/
 	getViewId: function() {
-		return 'jsdot-v'+this.divId;
+		//return 'jsdot-v'+this.divId;
+		return this.divId;
 	},
 	
 	/** Draw a node.
@@ -96,6 +97,7 @@ JSDot.View.prototype = {
 		/* create group for this node */
 		var g = JSDot.helper.cesvg('g');
 		g.jsdot_node = n;
+		g.setAttribute('id', this.getViewId()+'+'+n.name);
 		this.svgroot.appendChild(g);
 		nd.group = g;
 		
@@ -185,6 +187,7 @@ JSDot.View.prototype = {
 		/* create a group for the edge */
 		var g = JSDot.helper.cesvg('g');
 		g.jsdot_edge = e;
+		g.setAttribute('id', this.getViewId()+'+edge+'+e.id);
 		this.svgroot.appendChild(g);
 		ed.group = g;
 		
