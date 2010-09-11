@@ -77,15 +77,14 @@ JSDot.Editor = function(jsdot, view, sel) {
 	/* create toolbar container */
 	var tb = document.createElement('div');
 	tb.setAttribute('class', 'ui-widget-header ui-corner-all jsdot-toolbar');
-	this.view.container.appendChild(tb);
+	document.body.appendChild(tb);
 	this.tbContainer = tb;
 	
 	/* set toolbar's initial position */
-	// see [ Issue 22 ] for absolute positioned containers
-	var offTop = view.getOffset(view.container)[1];
-	if (offTop > 25) offTop -= 25;
-	offTop -= view.getOffset(tb.offsetParent)[1];
-	tb.style.top = offTop + 'px';
+	var offset = view.getOffset(view.container);
+	if (offset[1] > 25) offset[1] -= 25;
+	tb.style.top = offset[1] + 'px';
+	tb.style.left = offset[0] + 'px';
 	
 	for (var i in JSDot.stencils) { this.currentNodeStencil = i; break; };
 	for (var i in JSDot.edge_stencils) { this.currentEdgeStencil = i; break; };
