@@ -41,6 +41,8 @@ JSDot.View = function(jsdot, divId) {
 	
 	/** Containing div element. */
 	this.container = document.getElementById(divId);
+	this.container.setAttribute('class',
+		(this.container.getAttribute('class')||'') + 'jsdot-container');
 	
 	/** SVG owning document. */
 	this.svgdoc = this.container.ownerDocument;
@@ -54,7 +56,9 @@ JSDot.View = function(jsdot, divId) {
 	this.svgroot = JSDot.helper.cesvg("svg"); // create element
 	div.appendChild(this.svgroot);
 	
-	div.setAttribute('style', 'height: 100%; width: 100%;'); // fills container size
+	// gives size of the drawing, see svgFitSize
+	div.setAttribute('style', 'height: 100%; width: 100%;');
+	
 	this.svgroot.setAttribute("id", divId+"_svg");
 	this.svgroot.setAttribute("xmlns", JSDot.helper.svgns);
 	this.svgroot.setAttribute("xmlns:xlink", JSDot.helper.xlinkns);
@@ -129,6 +133,8 @@ JSDot.View.prototype = {
 		
 		/* now that the label has been drawn we can set the size of the node */
 		nd.stencil.setSize(n, nd, nd.labelStencil.getSize(n, nd));
+		
+		this.svgFitSize();
 	},
 	
 	/** Move node to a new position.
@@ -138,6 +144,8 @@ JSDot.View.prototype = {
 		var nd = this.nodeData[n.name];
 		nd.stencil.setPosition(n, nd);
 		nd.labelStencil.setPosition(n, nd);
+		
+		this.svgFitSize();
 	},
 	
 	/** Draw a node and its edges.
@@ -378,15 +386,37 @@ JSDot.View.prototype = {
 		return [l, t];
 	},
 	
+	/** Accumulated scrolling offset of the parent nodes.
+		@param {DOM Element} e
+		@return {Array(left, top)} scroll offset
+	*/
+	getScrollOffset: function(e) {
+		var l = 0, t = 0;
+		/* we need to stop before the Document, since it doesn't have
+		   any scroll* attribute.
+		   But we take into account the html scroll, which is the outermost
+		   scrollbar (the one for the whole page). */
+		while ((e = e.parentNode).parentNode) {
+			l += e.scrollLeft;
+			t += e.scrollTop;
+		}
+		return [l, t];
+	},
+	
 	/** Add relative coordinates to an event.
 		Takes an event and add to it .relX and .relY which are the coordinates
 		relative to this view.
 		@param {DOM Event} evt event for which the relative coordinates are computed
 	*/
 	addRelCoord: function(evt) {
+		/*
 		var offset = this.getOffset(this.svgroot.parentNode);
-		evt.relX = evt.pageX - offset[0];
-		evt.relY = evt.pageY - offset[1];
+		var scroll = this.getScrollOffset(this.svgroot.parentNode);
+		evt.relX = evt.clientX - offset[0] + scroll[0];
+		evt.relY = evt.clientY - offset[1] + scroll[1];
+		//*/
+		evt.relX = evt.layerX;
+		evt.relY = evt.layerY;
 	},
 	
 	/** Fire an event affecting this view.
@@ -421,6 +451,23 @@ JSDot.View.prototype = {
 		if (i < 0) return;
 		c.splice(i, 1);
 		this.svgroot.setAttribute('class', c.join(' '));
+	},
+	
+	/** Adapt div size to svg size.
+		Give to the parent div of the svg the size of the svg.
+		This make the scrolling on the container working.
+	*/
+	svgFitSize: function() {
+		var svgbb = this.svgroot.getBoundingClientRect();
+		var cnt = this.container;
+		var p = this.svgroot.parentNode;
+		var pbb = p.getBoundingClientRect();
+		
+		var w = svgbb.left - pbb.left + svgbb.width;
+		var h = svgbb.top - pbb.top + svgbb.height;
+		
+		p.style.width = Math.max(cnt.clientWidth, w) + 'px';
+		p.style.height = Math.max(cnt.clientHeight, h) + 'px';
 	},
 	
 	/** Return an instance of a tool for the current view.
