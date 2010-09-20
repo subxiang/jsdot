@@ -27,9 +27,16 @@ THE SOFTWARE.
 */
 
 /** @class This is JSDot!
-	This is the interface you use to create views and editors.
+	<p>This is the interface you use to create views and editors.</p>
+	
+	<p>Arguments are optional, and can be used to create a view in
+	just one line of code.</p>
+	
+	@param {String} divId id of a div tag where the view will be placed
+	@param {String} options.mode type of view to create
+	@param {String} options.json JSON representation of a graph to be loaded
 */
-function JSDot() {
+function JSDot(divId, options) {
 	
 	var views = [];
 	var editors = [];
@@ -105,6 +112,19 @@ function JSDot() {
 	if (t) {
 		this.importJSON = function(obj) { t.importGraph(obj); };
 		this.exportJSON = function() { return t.exportGraph(); };
+	}
+
+
+	/****************************************/
+	/* Handle constructor arguments, if any */
+	/****************************************/
+	
+	if (typeof divId === 'string') {
+		this.addView(divId, (options ? options.mode || '' : ''));
+	}
+	
+	if (options && options.json && this.importJSON) {
+		this.importJSON(options.json);
 	}
 
 };
