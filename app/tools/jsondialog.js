@@ -31,17 +31,17 @@ JSDot.EditTools.jsonDialog = {
 
 	show: function(jsdot) {
 		var jsonTool = jsdot.getTool('json', {});
-		var g = jsonTool.export();
+		var g = jsonTool.exportGraph();
 		//var dialog = document.createElement('div');
 		var text = document.createElement('textarea');
 		text.value = g;
 		var container = document.createElement('div');
 		container.appendChild(text);
 		
-		function import(clear) {
+		function importGraph(clear) {
 			if (clear) jsdot.graph.clear();
 			var msg = null;
-			switch (jsonTool.import(text.value)) {
+			switch (jsonTool.importGraph(text.value)) {
 				case 0: /* ok */
 					break;
 				case 1:
@@ -89,8 +89,8 @@ JSDot.EditTools.jsonDialog = {
 					},
 				'buttons': {
 					'Cancel': function () { $(container).dialog('close'); },
-					'Import': function () { import(false); },
-					'Load': function () { import(true); },
+					'Import': function () { importGraph(false); },
+					'Load': function () { importGraph(true); },
 					},
 				});
 	},

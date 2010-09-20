@@ -103,8 +103,8 @@ function JSDot() {
 	
 	var t = jsdot.getTool('json', {});
 	if (t) {
-		this.importJSON = function(obj) { t.import(obj); };
-		this.exportJSON = function() { return t.export(); };
+		this.importJSON = function(obj) { t.importGraph(obj); };
+		this.exportJSON = function() { return t.exportGraph(); };
 	}
 
 };

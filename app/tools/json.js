@@ -33,7 +33,7 @@ JSDot.GraphTools.json.prototype = {
 		return this;
 	},
 
-	import: function(str) {
+	importGraph: function(str) {
 		var g = this.graph;
 		var map = {};
 		
@@ -74,7 +74,7 @@ JSDot.GraphTools.json.prototype = {
 		return 0;
 	},
 	
-	export: function() {
+	exportGraph: function() {
 		var res = {
 			nodes: [],
 			edges: [],
