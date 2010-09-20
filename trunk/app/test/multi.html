@@ -54,8 +54,7 @@ Aenean rhoncus nisi sit amet eros tempus vitae euismod dolor convallis. Curabitu
 	n.setStencil('box');
 	
 	
-	var j = new JSDot();
-	j.addView('graph2', 'editor');
+	var j = new JSDot('graph2', {mode: 'editor'});
 	
 	var g = j.getGraph();
 	var n = g.createNode();
@@ -65,12 +64,14 @@ Aenean rhoncus nisi sit amet eros tempus vitae euismod dolor convallis. Curabitu
 	n.setStencil('box');
 	
 	
-	var j = new JSDot();
-	j.addView('graph3', 'drag');
+	var j = new JSDot('graph3', {
+		mode: 'drag',
+		json: '{"nodes":[{"name":1,"label":{"type":"plain","value":"box node"},"position":[100,80],"stencil":"box"}],"edges":[]}'
+	});
 	
 	var g = j.getGraph();
 	var n = g.createNode();
-	n.setPosition([100, 80]);
+	n.setPosition([150, 100]);
 	//n.setStencil('box');
 	n.setLabel('box node');
 	n.setStencil('box');
