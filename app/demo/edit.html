@@ -2,26 +2,21 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
-		<title>Untitled Document</title>
-		<link type="text/css" rel="stylesheet" href="main.css"/>
-		<script type="text/javascript" src="jsdot-min.js"></script>
-		<script type="text/javascript" src="../core/grid_layout.js"></script>
-	</head>
-	<body>
-	<div id="dest" style="height:100%"></div>
+		<title>JSDot Editor Demo</title>
+		<link type="text/css" rel="stylesheet" href="../style/ui-lightness/jquery-ui-1.8.2.custom.css"/>
+		<link type="text/css" rel="stylesheet" href="../style/shapes.css"/>
+		<link type="text/css" rel="stylesheet" href="../style/editor.css"/>
+		<script type="text/javascript" src="../lib/jquery-1.4.2.js"></script>
+		<script type="text/javascript" src="../lib/jquery-ui-1.8.2.custom.min.js"></script>
+		<script type="text/javascript" src="jsdot.min.js"></script>
+
 		<script type="text/javascript">
-			var g = new JSDot({
-				targetId: "dest",
-				leftMenu:true
-			});
-			g.layout = new JSDotGridLayout(g, 50, 50, 500, 500);
-			g.layout.setColumns(4);
-			var n1 = g.newNode("a");
-			n1.setPos(250,100);
-			var n2 = g.newNode("b");
-			n2.setPos(400,100);
-			g.newEdge(n1, n2).setLabel("edge");
-			g.draw();
+			function load() {
+				JSDot("mygraph", {mode: "editor", json: '{"nodes":[{"name":"n1","position":[50,50]}],"edges":[]}'});
+			}
 		</script>
+	</head>
+	<body onload="load()">
+		<div id="mygraph" style="height:10cm; width:10cm;"></div>
 	</body>
 </html>
