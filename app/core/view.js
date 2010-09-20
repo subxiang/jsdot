@@ -42,7 +42,7 @@ JSDot.View = function(jsdot, divId) {
 	/** Containing div element. */
 	this.container = document.getElementById(divId);
 	this.container.setAttribute('class',
-		(this.container.getAttribute('class')||'') + 'jsdot-container');
+		(this.container.getAttribute('class')||'') + ' jsdot-container');
 	
 	/** SVG owning document. */
 	this.svgdoc = this.container.ownerDocument;
