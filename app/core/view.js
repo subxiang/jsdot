@@ -467,7 +467,7 @@ JSDot.View.prototype = {
 		var h = svgbb.top - pbb.top + svgbb.height;
 		
 		p.style.width = Math.max(cnt.clientWidth, w) + 'px';
-		p.style.height = Math.max(cnt.clientHeight, h) + 'px';
+		p.style.height = Math.max(cnt.clientHeight-5, h) + 'px';
 	},
 	
 	/** Return an instance of a tool for the current view.
