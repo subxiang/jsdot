@@ -10,9 +10,11 @@ $(YUI_BIN):
 	wget -O lib/$(YUI).zip http://yuilibrary.com/downloads/yuicompressor/$(YUI).zip
 	unzip -j -d lib/ lib/$(YUI).zip $(YUI)/build/$(YUI).jar
 
-demo/jsdot-min.js: $(YUI_BIN) core/*.js style/*.css
-	((cd core; cat `cat jsdot-dev.js | awk '/var files = \[/{i=1;next}/\];/{if(i){exit}}{if(i){sub(/^"/,"",$$1);sub(/",?[ \t\n\f\r]*$$/," ",$$1);printf "%s",$$1}}'`)) | java -jar $(YUI_BIN) --type js -o $@
-	cp style/main.css demo/
+demo/jsdot-min.js: $(YUI_BIN) core/*.js
+	echo "" > $@.tmp
+	((cd core; cat `cat jsdot-dev.js | awk '/var files_view = \[/,/\];/{if(/^[ \t\n\f\r]*\/\*/ || /^[ \t\n\f\r]*\/\//){next}else{match($$1,/^[ \t\n\f\r]*"(.*)",?[ \t\n\f\r]*$$/,a);printf "%s ",a[1]}}'`)) >> $@.tmp
+	((cd core; cat `cat jsdot-dev.js | awk '/var files_editor = \[/,/\];/{if(/^[ \t\n\f\r]*\/\*/ || /^[ \t\n\f\r]*\/\//){next}else{match($$1,/^[ \t\n\f\r]*"(.*)",?[ \t\n\f\r]*$$/,a);printf "%s ",a[1]}}'`)) >> $@.tmp
+	java -jar $(YUI_BIN) --type js -v -o $@ $@.tmp
 
 demo: demo/jsdot-min.js
 

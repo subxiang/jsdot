@@ -34,7 +34,7 @@ THE SOFTWARE.
  */
 var f = function() {
 
-	var files = [
+	var files_view = [
 //		"../lib/json_sans_eval.js",
 
 /* jsdot */
@@ -56,17 +56,27 @@ var f = function() {
 		"selection.js",
 		"drag.js",
 
-/* editor */
-		"../lib/jquery-1.4.2.js",
-		"../lib/jquery-ui-1.8.2.custom.min.js",
-		"edgeviz.js",
-		"editor.js",
-		
 /* tools */
 		"../tools/json.js",
-		"../tools/jsondialog.js",
 		"../tools/centerlayout.js",
 		"../tools/springlayout.js",
+	];
+
+
+	var files_editor = [
+
+/* editor */
+		"edgeviz.js",
+		"editor.js",
+
+/* tools */
+		"../tools/jsondialog.js",
+	];
+
+
+	var files_extra = [
+		"../lib/jquery-1.4.2.js",
+		"../lib/jquery-ui-1.8.2.custom.min.js",
 	];
 
 	var styles = [
@@ -91,6 +101,7 @@ var f = function() {
 	}
 
 	/* add scritps */
+	files = files_view.concat(files_editor, files_extra);
 	for (var i = 0; i < files.length; i++) {
 		var e = document.createElement("script");
 		e.setAttribute("type", "text/javascript");
