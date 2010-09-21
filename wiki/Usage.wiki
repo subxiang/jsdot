@@ -41,7 +41,7 @@ Now we need to define a place where the graph will be drawn, and draw it!
     ...
     <script type="text/javascript">
         function load() {
-            JSDot("mygraph", {mode: "view", json: '{"nodes":[{"name":"n1","position":[50,50]}],"edges":[]}'});
+            JSDot("mygraph", {mode: "editor", json: '{"nodes":[{"name":"n1","position":[50,50]}],"edges":[]}'});
         }
     </script>
 </head>
