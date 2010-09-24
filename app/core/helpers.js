@@ -52,7 +52,7 @@ JSDot.helper = {
 		@return {Object} stencil
 	*/
 	makeCssStencil: function(options){
-		res = {};
+		var res = {};
 		options = options || {};
 		if (typeof options.shape == "string") {
 			res.shape = JSDot.shapes[options.shape] || JSDot.shapes.circle;
@@ -94,4 +94,46 @@ JSDot.helper = {
 		
 		return res;
 	},
+	
+	/** Create a shape for edges.
+		@param {Object} options options collection
+		@param {String} options.markerStart link to arrow marker
+		@param {String} options.markerEnd link to arrow marker
+		@param {Function} options.draw function drawing the shape
+		@param {Function} options.setPosition function updating edge position
+		@return {Object} edge shape
+	*/
+	makeEdgeShape: function(options) {
+		var res = {};
+		options = options || {};
+		
+		res.markerStart = options.markerStart;
+		res.markerEnd = options.markerEnd;
+		
+		res.draw = options.draw || function(e, d, p) {
+			var l = JSDot.helper.cesvg('path');
+			d.line = l;
+			if (this.markerStart) l.setAttribute('marker-start', this.markerStart);
+			if (this.markerEnd) l.setAttribute('marker-end', this.markerEnd);
+			p.appendChild(l);
+			l = JSDot.helper.cesvg('path');
+			d.handle = l;
+			l.setAttribute('class', 'jsdot-edge-handle');
+			p.appendChild(l);
+			return l;
+		};
+		
+		res.setPosition = options.setPosition || function(e, d) {
+			var p1 = d.start;
+			var p2 = d.end;
+			d.line.setAttribute(
+				'd', 'M'+p1[0]+','+p1[1]+'L'+p2[0]+','+p2[1]
+			);
+			d.handle.setAttribute(
+				'd', 'M'+p1[0]+','+p1[1]+'L'+p2[0]+','+p2[1]
+			);
+		};
+		
+		return res;
+	}
 };

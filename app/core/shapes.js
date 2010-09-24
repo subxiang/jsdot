@@ -374,69 +374,16 @@ JSDot.stencils = {
 */
 JSDot.edge_shapes = {
 
-	'line': {
-	
-		draw: function(e, d, p) {
-			var l = JSDot.helper.cesvg('path');
-			d.line = l;
-			p.appendChild(l);
-			l = JSDot.helper.cesvg('path');
-			d.handle = l;
-			l.setAttribute('class', 'jsdot-edge-handle');
-			p.appendChild(l);
-			return l;
-		},
-		
-		setPosition: function(e, d) {
-			var p1 = d.start;
-			var p2 = d.end;
-			d.line.setAttribute(
-				'd', 'M'+p1[0]+','+p1[1]+'L'+p2[0]+','+p2[1]
-			);
-			d.handle.setAttribute(
-				'd', 'M'+p1[0]+','+p1[1]+'L'+p2[0]+','+p2[1]
-			);
-		}
-	},
+	'line': JSDot.helper.makeEdgeShape(),
 
-	'directed line': {
-	
-		draw: function(e, d, p) {
-			var l = JSDot.helper.cesvg('path');
-			d.line = l;
-			l.setAttribute('marker-end', 'url(#Arrow)');
-			p.appendChild(l);
-			return l;
-		},
-		
-		setPosition: function(e, d) {
-			var p1 = d.start;
-			var p2 = d.end;
-			d.line.setAttribute(
-				'd', 'M'+p1[0]+','+p1[1]+'L'+p2[0]+','+p2[1]
-			);
-		}
-	},
+	'directed line': JSDot.helper.makeEdgeShape({
+		markerEnd: 'url(#Arrow)'
+		}),
 
-	'bidi line': {
-	
-		draw: function(e, d, p) {
-			var l = JSDot.helper.cesvg('path');
-			d.line = l;
-			l.setAttribute('marker-start', 'url(#ArrowS)');
-			l.setAttribute('marker-end', 'url(#Arrow)');
-			p.appendChild(l);
-			return l;
-		},
-		
-		setPosition: function(e, d) {
-			var p1 = d.start;
-			var p2 = d.end;
-			d.line.setAttribute(
-				'd', 'M'+p1[0]+','+p1[1]+'L'+p2[0]+','+p2[1]
-			);
-		}
-	},
+	'bidi line': JSDot.helper.makeEdgeShape({
+		markerStart: 'url(#ArrowS)',
+		markerEnd: 'url(#Arrow)'
+		}),
 };
 
 /** Edge stencils.
