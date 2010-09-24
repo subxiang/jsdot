@@ -8,7 +8,7 @@ To include a JSDot graph into your page follow these simple steps. All the neces
 Copy the files in a structure like the following one:
 {{{
 scripts/jquery-1.4.2.js
-jquery-ui-1.8.2.custom.min.js
+scripts/jquery-ui-1.8.2.custom.min.js
 scripts/jsdot-min.js
 style/ui-lightness/*
 style/jsdot/editor.css
