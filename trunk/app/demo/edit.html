@@ -10,13 +10,17 @@
 		<script type="text/javascript" src="../lib/jquery-ui-1.8.2.custom.min.js"></script>
 		<script type="text/javascript" src="jsdot.min.js"></script>
 
+		<style type="text/css">
+			html, body, #mygraph {height:100%; width:100%}
+		</style>
+		
 		<script type="text/javascript">
 			function load() {
-				JSDot("mygraph", {mode: "editor", json: '{"nodes":[{"name":"n1","position":[50,50]}],"edges":[]}'});
+				JSDot("mygraph", {mode: "editor"});
 			}
 		</script>
 	</head>
 	<body onload="load()">
-		<div id="mygraph" style="height:10cm; width:10cm;"></div>
+		<div id="mygraph"></div>
 	</body>
 </html>
