@@ -391,80 +391,17 @@ JSDot.edge_shapes = {
 */
 JSDot.edge_stencils = {
 
-	'line': {
-	
-		shape: JSDot.edge_shapes['line'],
-		
-		cssClass: 'jsdot_line_edge',
-		cssHl: 'jsdot_def_hl',
-	
-		draw: function(e, d, p) {
-			this.shape.draw(e, d, p);
-			p.setAttribute('class', this.cssClass);
-		},
-		
-		setPosition: function(e, d) {
-			this.shape.setPosition(e, d);
-		},
-		
-		highlight: function(e, d, y) {
-			if (y) {
-				d.group.setAttribute('class', this.cssClass+' '+this.cssHl);
-			} else {
-				d.group.setAttribute('class', this.cssClass);
-			};
-		}
-	},
+	'line': JSDot.helper.makeEdgeStencil(),
 
-	'directed line': {
-	
+	'directed line': JSDot.helper.makeEdgeStencil({
 		shape: JSDot.edge_shapes['directed line'],
-		
-		cssClass: 'jsdot_dirline_edge',
-		cssHl: 'jsdot_def_hl',
-	
-		draw: function(e, d, p) {
-			this.shape.draw(e, d, p);
-			p.setAttribute('class', this.cssClass);
-		},
-		
-		setPosition: function(e, d) {
-			this.shape.setPosition(e, d);
-		},
-		
-		highlight: function(e, d, y) {
-			if (y) {
-				d.group.setAttribute('class', this.cssClass+' '+this.cssHl);
-			} else {
-				d.group.setAttribute('class', this.cssClass);
-			};
-		}
-	},
+		cssClass: 'jsdot_dirline_edge'
+		}),
 
-	'bidi line': {
-	
+	'bidi line': JSDot.helper.makeEdgeStencil({
 		shape: JSDot.edge_shapes['bidi line'],
-		
-		cssClass: 'jsdot_bidiline_edge',
-		cssHl: 'jsdot_def_hl',
-	
-		draw: function(e, d, p) {
-			this.shape.draw(e, d, p);
-			p.setAttribute('class', this.cssClass);
-		},
-		
-		setPosition: function(e, d) {
-			this.shape.setPosition(e, d);
-		},
-		
-		highlight: function(e, d, y) {
-			if (y) {
-				d.group.setAttribute('class', this.cssClass+' '+this.cssHl);
-			} else {
-				d.group.setAttribute('class', this.cssClass);
-			};
-		}
-	},
+		cssClass: 'jsdot_bidiline_edge'
+		}),
 };
 
 /** Insert external SVG elements.

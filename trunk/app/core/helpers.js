@@ -135,5 +135,48 @@ JSDot.helper = {
 		};
 		
 		return res;
+	},
+	
+	/** Create an edge stencil.
+		@param {Object} options options collection
+		@param {Object, String} options.shape shape to draw, must be in {@link JSDot.edge_shapes}
+		@param {String} options.cssClass css class of the edge
+		@param {String} options.cssHl css class for highlighting
+		@param {Function} options.draw function for drawing
+		@param {Function} options.setPosition function for setting position
+		@param {Function} options.highlight function called when the shape must be highlit
+		@return {Object} stencil
+	*/
+	makeEdgeStencil: function(options) {
+		var res = {};
+		options = options || {};
+		
+		if (typeof options.shape == 'string') {
+			res.shape = JSDot.edge_shapes[options.shape] || JSDot.edge_shapes.line;
+		} else {
+			res.shape = options.shape || JSDot.edge_shapes.line;
+		}
+		
+		res.cssClass = options.cssClass || 'jsdot_line_edge';
+		res.cssHl = options.cssHl || 'jsdot_def_hl';
+		
+		res.draw = options.draw || function(e, d, p) {
+			this.shape.draw(e, d, p);
+			p.setAttribute('class', this.cssClass);
+		};
+		
+		res.setPosition = options.setPosition || function(e, d) {
+			this.shape.setPosition(e, d);
+		};
+		
+		res.highlight = options.highlight || function(e, d, y) {
+			if (y) {
+				d.group.setAttribute('class', this.cssClass+' '+this.cssHl);
+			} else {
+				d.group.setAttribute('class', this.cssClass);
+			};
+		};
+		
+		return res;
 	}
 };
