@@ -352,153 +352,22 @@ JSDot.shapes = {
 */
 JSDot.stencils = {
 
-	'circle': {
+	'circle': JSDot.helper.makeCssStencil(),
 	
-		shape: JSDot.shapes.circle,
-		
-		cssClass: 'jsdot_circle',
-		cssHl: 'jsdot_def_hl',
-		
-		draw: function(n, d, g) {
-			this.shape.draw(n, d, g);
-			g.setAttribute('class', this.cssClass);
-		},
-		
-		setPosition: function(n, d) {
-			this.shape.setPosition(n, d);
-		},
-		
-		setSize: function(n, d, s) {
-			this.shape.setSize(n, d, s);
-		},
-		
-		getBoundaryTo: function(n, d, p) {
-			return this.shape.getBoundaryTo(n, d, p);
-		},
-		
-		getBBox: function(n, d) {
-			return this.shape.getBBox(n, d);
-		},
-		
-		highlight: function(n, d, y) {
-			if (y) {
-				d.group.setAttribute('class', this.cssClass+' '+this.cssHl);
-			} else {
-				d.group.setAttribute('class', this.cssClass);
-			};
-		}
-	},
-	
-	'box': {
-	
+	'box': JSDot.helper.makeCssStencil({
 		shape: JSDot.shapes.box,
-		
-		cssClass: 'jsdot_box',
-		cssHl: 'jsdot_def_hl',
-		
-		draw: function(n, d, g) {
-			this.shape.draw(n, d, g);
-			g.setAttribute('class', this.cssClass);
-		},
-		
-		setPosition: function(n, d) {
-			this.shape.setPosition(n, d);
-		},
-		
-		setSize: function(n, d, s) {
-			this.shape.setSize(n, d, s);
-		},
-		
-		getBoundaryTo: function(n, d, p) {
-			return this.shape.getBoundaryTo(n, d, p);
-		},
-		
-		getBBox: function(n, d) {
-			return this.shape.getBBox(n, d);
-		},
-		
-		highlight: function(n, d, y) {
-			if (y) {
-				d.group.setAttribute('class', this.cssClass+' '+this.cssHl);
-			} else {
-				d.group.setAttribute('class', this.cssClass);
-			};
-		}
-	},
+		cssClass: 'jsdot_box'
+		}),
 	
-	'hexagon': {
-	
+	'hexagon': JSDot.helper.makeCssStencil({
 		shape: JSDot.shapes.hexagon,
-		
-		cssClass: 'jsdot_hexagon',
-		cssHl: 'jsdot_def_hl',
-		
-		draw: function(n, d, g) {
-			this.shape.draw(n, d, g);
-			g.setAttribute('class', this.cssClass);
-		},
-		
-		setPosition: function(n, d) {
-			this.shape.setPosition(n, d);
-		},
-		
-		setSize: function(n, d, s) {
-			this.shape.setSize(n, d, s);
-		},
-		
-		getBoundaryTo: function(n, d, p) {
-			return this.shape.getBoundaryTo(n, d, p);
-		},
-		
-		getBBox: function(n, d) {
-			return this.shape.getBBox(n, d);
-		},
-		
-		highlight: function(n, d, y) {
-			if (y) {
-				d.group.setAttribute('class', this.cssClass+' '+this.cssHl);
-			} else {
-				d.group.setAttribute('class', this.cssClass);
-			};
-		}
-	},
+		cssClass: 'jsdot_hexagon'
+		}),
 	
-	'concave hexagon': {
-	
+	'concave hexagon': JSDot.helper.makeCssStencil({
 		shape: JSDot.shapes['concave hexagon'],
-		
-		cssClass: 'jsdot_concave_hexagon',
-		cssHl: 'jsdot_def_hl',
-		
-		draw: function(n, d, g) {
-			this.shape.draw(n, d, g);
-			g.setAttribute('class', this.cssClass);
-		},
-		
-		setPosition: function(n, d) {
-			this.shape.setPosition(n, d);
-		},
-		
-		setSize: function(n, d, s) {
-			this.shape.setSize(n, d, s);
-		},
-		
-		getBoundaryTo: function(n, d, p) {
-			return this.shape.getBoundaryTo(n, d, p);
-		},
-		
-		getBBox: function(n, d) {
-			return this.shape.getBBox(n, d);
-		},
-		
-		highlight: function(n, d, y) {
-			if (y) {
-				d.group.setAttribute('class', this.cssClass+' '+this.cssHl);
-			} else {
-				d.group.setAttribute('class', this.cssClass);
-			};
-		}
-	},
+		cssClass: 'jsdot_concave_hexagon'
+		}),
 };
 
 /** Edge shapes.
