@@ -25,7 +25,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-
+/** @class Helpers for JSDot
+	Sort of globally available functions and properties.
+*/
 JSDot.helper = {
 
 	svgns: "http://www.w3.org/2000/svg",
@@ -36,4 +38,60 @@ JSDot.helper = {
 	/** Create element in the SVG namespace. */
 	cesvg: function(i){ return document.createElementNS(JSDot.helper.svgns, i); },
 
+	/** Create a new stencil with a css class.
+		@param {Object} options options collection
+		@param {Object, String} options.shape shape to draw, must be in {@link JSDot.shapes}
+		@param {String} options.cssClass css class of the node
+		@param {String} options.cssHl css class for highlighting
+		@param {Function} options.draw function for drawing
+		@param {Function} options.setPosition function for setting position
+		@param {Function} options.setSize function for updating size
+		@param {Function} options.getBoundaryTo function calculating intersection between the shape and a line
+		@param {Function} options.getBBox function calculating the bounding box of the shape
+		@param {Function} options.highlight function called when the shape must be highlit
+		@return {Object} stencil
+	*/
+	makeCssStencil: function(options){
+		res = {};
+		options = options || {};
+		if (typeof options.shape == "string") {
+			res.shape = JSDot.shapes[options.shape] || JSDot.shapes.circle;
+		} else {
+			res.shape = options.shape || JSDot.shapes.circle;
+		}
+		
+		res.cssClass = options.cssClass || 'jsdot_circle';
+		res.cssHl = 'jsdot_def_hl';
+		
+		res.draw = options.draw || function(n, d, g) {
+			this.shape.draw(n, d, g);
+			g.setAttribute('class', this.cssClass);
+		};
+		
+		res.setPosition = options.setPosition || function(n, d) {
+			this.shape.setPosition(n, d);
+		};
+		
+		res.setSize = options.setSize || function(n, d, s) {
+			this.shape.setSize(n, d, s);
+		};
+		
+		res.getBoundaryTo = options.getBoundaryTo || function(n, d, p) {
+			return this.shape.getBoundaryTo(n, d, p);
+		};
+		
+		res.getBBox = options.getBBox || function(n, d) {
+			return this.shape.getBBox(n, d);
+		};
+		
+		res.highlight = options.highlight || function(n, d, y) {
+			if (y) {
+				d.group.setAttribute('class', this.cssClass+' '+this.cssHl);
+			} else {
+				d.group.setAttribute('class', this.cssClass);
+			};
+		};
+		
+		return res;
+	},
 };
