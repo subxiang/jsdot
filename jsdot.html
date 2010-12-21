@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"> 
+<head> 
+  <title>JSDot - Graphs for the Browser</title> 
+  <meta name="copyright" 
+   content="Copyright &#169; 2010 Carlo Vanini" /> 
+  <link rel="stylesheet" type="text/css" media="screen, projection, print" 
+   href="slidy.css" /> 
+  <script src="slidy.js" 
+   charset="utf-8" type="text/javascript"></script>
+   
+	<link type="text/css" rel="stylesheet" href="../../tags/jsdot-0.9/style/shapes.css"/>
+	<script type="text/javascript" src="../../tags/jsdot-0.9/lib/jquery-1.4.2.min.js"></script>
+	<script type="text/javascript" src="../../tags/jsdot-0.9/demo/jsdot.min.js"></script>
+	
+  <style type="text/css">
+	body {
+		background-color: #777788;
+	}
+	/* slide size */
+	div.background div.gradient,
+	div.slide {
+		width: 900px;
+		height: 700px;
+	}
+	div.background {
+		width: 100%;
+		position: absolute;
+		margin: -350px auto auto; top: 50%;
+		overflow: hidden;
+	}
+    div.background div.gradient {
+		margin: auto;
+		background: -moz-linear-gradient(center bottom , #BBBBDD, #FFFFFF) repeat scroll 0 0 transparent;
+		-moz-border-radius:0 20px 0 20px;
+	}
+	div.slide {
+		margin: auto;
+		display: table-cell;
+		text-align: center;
+		vertical-align: middle;
+	}
+	div.slide h1 {
+		background: url("spherebg.png") 50% 50% no-repeat;
+		line-height: 120px;
+		margin: 0;
+		padding: 0;
+	}
+	.titlepage h1 {
+		background: none !important;
+		font-size: 400% !important;
+		padding: 20% 0 0.5em 0 !important;
+	}
+	.titlepage h2 {
+		font-size: 120%;
+		text-align: left;
+		padding-left: 15%;
+	}
+	.titlepage h3 {
+		font-size: 70%;
+	}
+	.slide .center ul {
+		text-align: left;
+	}
+	.slide pre {
+		text-align: left;
+	}
+	div.center {
+		width: -moz-max-content;
+		margin: auto;
+	}
+	.jsdot-container {
+		font-size: 18pt;
+	}
+	div.demo h3 {
+		margin-top: 80px;
+	}
+  </style> 
+  <meta name="duration" content="30" />
+</head>
+<body>
+	<div class="background">
+		<div class="gradient"></div>
+	</div>
+	
+	<div class="slide titlepage">
+		<h1>JSDot</h1>
+		<h2>Carlo Vanini</h2>
+		<h2>Prof. Cesare Pautasso</h2>
+		<h3>September 2010</h3>
+	</div>
+
+	<div class="slide">
+		<h1>Graphs on the Web</h1>
+		<p>Server-side generated images.</p>
+		<img src="graphviz.png" alt="The graph is sent as an image from the server to the client."/>
+	</div>
+
+	<div class="slide">
+		<h1>JSDot</h1>
+		<p>Draw and visualize graphs in a web browser.</p>
+		<div class="center"><ul>
+			<li>Javascript + SVG</li>
+			<li>Completely client-side</li>
+			<li>Interactive!</li>
+		</ul></div>
+	</div>
+	
+	<div class="slide">
+		<style type="text/css">
+			#viewdemo {
+				margin-top: 50px;
+				width: 700px;
+				height: 400px;
+				background: rgba(255, 0, 0, 0.05);
+				border: 1px solid rgba(255, 0, 0, 0.2);
+				-moz-border-radius: 10px 10px 10px 10px;
+				-moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+			}
+		</style>
+		<h1>JSDot View</h1>
+		<div class="center">
+			<div id="viewdemo"></div>
+		</div>
+		<script type="text/javascript">
+			JSDot("viewdemo", {mode: "drag", json: '{"nodes":[{"name":"n1","label":{"type":"plain","value":"n1"},"position":[91,67],"stencil":"circle"},{"name":1,"label":{"type":"plain","value":1},"position":[222,131],"stencil":"box"},{"name":2,"label":{"type":"plain","value":"Hello"},"position":[211,265],"stencil":"hexagon"},{"name":3,"label":{"type":"plain","value":3},"position":[193,70],"stencil":"concave hexagon"},{"name":4,"label":{"type":"plain","value":4},"position":[95,178],"stencil":"circle"},{"name":5,"label":{"type":"plain","value":"D"},"position":[330,129],"stencil":"circle"},{"name":6,"label":{"type":"plain","value":"T"},"position":[327,265],"stencil":"circle"},{"name":7,"label":{"type":"plain","value":"O"},"position":[325,202],"stencil":"circle"}],"edges":[{"src":3,"dst":"n1","label":null,"stencil":"line"},{"src":3,"dst":1,"label":null,"stencil":"line"},{"src":1,"dst":"n1","label":null,"stencil":"bidi line"},{"src":1,"dst":2,"label":null,"stencil":"directed line"},{"src":"n1","dst":2,"label":null,"stencil":"directed line"},{"src":4,"dst":"n1","label":null,"stencil":"line"},{"src":2,"dst":7,"label":null,"stencil":"directed line"},{"src":2,"dst":6,"label":null,"stencil":"directed line"},{"src":2,"dst":5,"label":null,"stencil":"line"},{"src":5,"dst":1,"label":null,"stencil":"line"},{"src":5,"dst":7,"label":null,"stencil":"line"}],"defaultNodeStencil":"circle","defaultEdgeStencil":"line"}'});
+			
+			/* do not change slide */
+			document.getElementById("viewdemo").addEventListener("click", function(evt){
+				evt.cancelBubble = true;
+			}, false);
+		</script>
+	</div>
+	
+	<div class="slide">
+		<h1>Loading Graphs</h1>
+		<pre>&lt;div id="graph1"&gt;&lt;/div&gt;</pre>
+		<pre> 
+JSDot("graph1", {mode: "drag",
+      json: '{"nodes":[
+               {"name":"n1","position":[50,50]}],
+               "edges":[]}'});
+		</pre>
+		<pre> 
+var j = new JSDot("graph1");
+j.importJSON('{"nodes":[
+               {"name":"n1","position":[50,50]}],
+               "edges":[]}');
+var s = j.exportJSON();
+	</div>
+	
+	<div class="slide">
+		<style type="text/css">
+			#graph1 {
+				margin-top: 50px;
+				width: 700px;
+				height: 400px;
+				background: rgba(255, 0, 0, 0.05);
+				border: 1px solid rgba(255, 0, 0, 0.2);
+				-moz-border-radius: 10px 10px 10px 10px;
+				-moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+			}
+		</style>
+		<h1>JSDot View</h1>
+		<div class="center">
+			<div id="graph1"></div>
+		</div>
+		<script type="text/javascript">
+			JSDot("graph1", {mode: "drag", json: '{"nodes":[{"name":"n1","position":[50,50]}],"edges":[]}'});
+			
+			/* do not change slide */
+			document.getElementById("graph1").addEventListener("click", function(evt){
+				evt.cancelBubble = true;
+			}, false);
+		</script>
+	</div>
+	
+	<div class="slide">
+		<h1>API</h1>
+		<p>Changing graphs through the API.</p>
+		<pre style="line-height: 1.5em;"> 
+	1:	var j = new JSDot();
+	2:	var g = j.getGraph();
+	3:	var n = g.createNode();
+	4:	n.setPosition([100, 80]);
+	5:	n.setLabel('box node');
+	6:	n.setStencil('box');
+	</div>
+	
+	<div class="slide">
+		<h1>Editor</h1>
+		<div class="center">
+		<ul>
+			<li>Add/Remove nodes and edges</li>
+			<li>Drag nodes</li>
+			<li>Change stencils</li>
+			<li>Apply layouts</li>
+			<li>Import/Export JSON</li>
+		</ul>
+		</div>
+	</div>
+	
+	<div class="slide demo">
+		<h1>Demo</h1>
+		<h3><a href="../demo/handler.html">Adding an event handler.</a></h3>
+		<div class="center">
+		<ul>
+			<li>click</li>
+			<li>selectionchg</li>
+			<li>moved</li>
+			<li>created</li>
+			<li>removed</li>
+			<li>...and more</li>
+		</ul>
+		</div>
+	</div>
+	
+	<div class="slide demo">
+		<h1>Demo</h1>
+		<h3><a href="../demo/diamond.html">Adding a new stencil.</a></h3>
+	</div>
+	
+	<div class="slide">
+		<h1>Credits</h1>
+		<br style="line-height: 20px;"/>
+		<p><a href="http://jquery.com">JQuery</a>, <a href="http://jqueryui.com">JQueryUI</a></p>
+		<p><a href="http://www.famfamfam.com/lab/icons/silk/">Silk Icons</a></p>
+		<br style="line-height: 20px;"/>
+		<p>
+			<div class="center" style="text-align: left;">
+			For the slides:
+			<ul>
+				<li><a href="http://www.w3.org/Talks/Tools/Slidy2">Slidy</a></li>
+				<li><a href="http://slides.html5rocks.com/">html5rocks presentation</a></li>
+			</ul></div>
+		</p>
+	</div>
+	
+	<div class="slide">
+		<h1>&nbsp;</h1><br/>
+		<p>Thank you for you attention.</p><br/>
+		<p>Get <a href="http://code.google.com/p/jsdot">http://code.google.com/p/jsdot</a></p>
+		<br/><h1 style="background-position: 540px 0; background-repeat: repeat-x;">&nbsp;</h1>
+	</div>
+</body>
+</html>
